@@ -29,9 +29,14 @@ class ProposalsItem  extends React.Component<Props, State>{
 
 
 	getDate = () => {
-		const created_at_timestamp = Math.floor(new Date(this.props.item.created_at).valueOf()/1000);
-		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
-		return date;
+		if(
+			this.props.item 
+			&& this.props.item.proposal 
+			&& this.props.item.proposal.created_at){
+			const created_at_timestamp = Math.floor(new Date(this.props.item.proposal.created_at).valueOf()/1000);
+			const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
+			return date;
+		}
 	}
 
 
@@ -80,6 +85,7 @@ class ProposalsItem  extends React.Component<Props, State>{
 					<Text style={styles.username}>{conversationUser && conversationUser.email}</Text>
 				</TouchableOpacity>
 				<View style={styles.row2}>
+					<Text style={styles.date}>{this.getDate()}</Text>
 					<Text style={styles.proposalText}>{proposal && proposal.text}</Text>
 				</View>
 			</View>
@@ -128,5 +134,8 @@ const styles = StyleSheet.create({
 	username:{
 		fontWeight:'bold',
 		paddingHorizontal:10,
+	},
+	date:{
+		fontSize:10,
 	}
 	})
