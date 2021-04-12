@@ -226,7 +226,7 @@ class AddJobStep1 extends React.Component<Props, State>{
             <View style={styles.buttonContainer}>
                 <CButton
                   onPress={this._continue}
-                  label='Continer' 
+                  label='Continuer' 
                 />
               </View>
           </ScrollView>
