@@ -5,6 +5,8 @@ import Toast from '../../components/toasts'
 import { mailFormatIsValid } from '../../utils/mail'
 import CButton from '../../components/CButton';
 import CTextInput from '../../components/CTextInput';
+import { signUp } from '../../backend/requests/auth'
+import { SignUpRequestType } from '../../backend/requests/types'
 import { colors } from '../../assets/colors/main'
 import { connect } from 'react-redux'
 
@@ -55,7 +57,7 @@ class SignUp extends React.Component<Props, State> {
 				&& 	this.password.trim().length >=5
 			){
 				// can register
-				this.setState({requestIsLoading:true})
+				this._signUp()
 			}
 			else if(!mailFormatIsValid(this.email)){
 				Toast._show_bottom_toast('Entrer un email valide');
@@ -71,6 +73,62 @@ class SignUp extends React.Component<Props, State> {
 			Toast._show_bottom_toast('Entrer votre mot de passe');
 		}
 	}
+
+    // User login method 
+    _signUp = () => {
+        // Check if loging request is loading already or not
+        if(!this.state.requestIsLoading
+			&& this.email
+			&& this.password){     
+            	// Start the loading
+            	this.setState({requestIsLoading:true})
+
+				let data:SignUpRequestType = {
+					email:this.email,
+					password:this.password
+				}
+				signUp(data)
+				.then((response:any) => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+					}
+				})
+				.catch(error => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						//console.log(error.response.status);
+						//console.log(error.response.headers);
+						if (error.response) {
+						  // The request was made and the server responded with a status code
+						  // that falls out of the range of 2xx
+						  console.log(error.response.data);
+						  let errorData = error.response.data;
+						  if(errorData.code == 'auth/invalid-credential'){
+								Toast._show_bottom_toast("nom d'utilisateur/email ou mot de passe incorrect");	
+						  }
+						  else if(errorData.code == 'auth/username-and-password-required'){
+								Toast._show_bottom_toast("Entrer votre nom d'utlisateur et mot de passe pour continuer");	
+						  }
+						  else if(errorData.code == 'auth/email-and-password-required'){
+							 Toast._show_bottom_toast("Entrer votre email et mot de passe pour continuer");	
+
+						  }
+						} else if (error.request) {
+						  // The request was made but no response was received
+						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+						  // http.ClientRequest in node.js
+						  console.log(error.request);
+						} else {
+						  // Something happened in setting up the request that triggered an Error
+						  console.log('Error', error.message);
+						}
+						console.log(error.config);
+					}
+				  });
+			}
+	 	}
+        
+    
 
 	componentDidMount() { 
 		// Enable the component mount state
