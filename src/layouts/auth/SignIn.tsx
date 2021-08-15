@@ -4,6 +4,8 @@ import { ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, Touc
 import MainHeader from '../../components/MainHeader';
 import Toast from '../../components/toasts'
 import { mailFormatIsValid } from '../../utils/mail'
+import { signIn } from '../../backend/requests/auth'
+import { SignInRequestType } from '../../backend/requests/types'
 import CButton from '../../components/CButton';
 import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
@@ -48,14 +50,13 @@ class SignIn extends React.Component<Props, State> {
 			/>
 		  ),
         });
-
     }
 
 	onSubmit = () => {
 		if(this.email && this.password){
 			if(mailFormatIsValid(this.email)){
-				// can login
-				this.setState({requestIsLoading:true})
+				// can sign in
+				this._signIn()
 
 			}
 			else if(!mailFormatIsValid(this.email)){
@@ -68,8 +69,63 @@ class SignIn extends React.Component<Props, State> {
 		else if (!this.password){
 			Toast._show_bottom_toast('Entrer votre mot de passe');
 		}
-
 	}
+
+    // User login method 
+    _signIn = () => {
+        // Check if loging request is loading already or not
+        if(!this.state.requestIsLoading
+			&& this.email
+			&& this.password){     
+            	// Start the loading
+            	this.setState({requestIsLoading:true})
+
+				let data:SignInRequestType = {
+					email:this.email,
+					password:this.password
+				}
+				signIn(data)
+				.then((response:any) => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+					}
+				})
+				.catch(error => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						//console.log(error.response.status);
+						//console.log(error.response.headers);
+						if (error.response) {
+						  // The request was made and the server responded with a status code
+						  // that falls out of the range of 2xx
+						  console.log(error.response.data);
+						  let errorData = error.response.data;
+						  if(errorData.code == 'auth/invalid-credential'){
+								Toast._show_bottom_toast("nom d'utilisateur/email ou mot de passe incorrect");	
+						  }
+						  else if(errorData.code == 'auth/username-and-password-required'){
+								Toast._show_bottom_toast("Entrer votre nom d'utlisateur et mot de passe pour continuer");	
+						  }
+						  else if(errorData.code == 'auth/email-and-password-required'){
+							 Toast._show_bottom_toast("Entrer votre email et mot de passe pour continuer");	
+
+						  }
+						} else if (error.request) {
+						  // The request was made but no response was received
+						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+						  // http.ClientRequest in node.js
+						  console.log(error.request);
+						} else {
+						  // Something happened in setting up the request that triggered an Error
+						  console.log('Error', error.message);
+						}
+						console.log(error.config);
+						}
+				  });
+			}
+	 	}
+        
+    
 
 	componentDidMount() { 
 		// Enable the component mount state
