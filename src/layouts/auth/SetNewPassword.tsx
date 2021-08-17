@@ -8,12 +8,15 @@ import CButton from '../../components/CButton';
 import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
 import { connect } from 'react-redux'
+import { verifyPasswordResetCode } from '../../backend/requests/auth'
+import { VerifyPasswordResetCodeRequestType } from '../../backend/requests/types'
 
 type Props = {
 	navigation:any,
 	authUser: any,
 	authUserToken:string,
-	dispatch:any
+	dispatch:any,
+	route:any,
 }
 
 type State = {
@@ -25,6 +28,8 @@ class SignIn extends React.Component<Props, State> {
 	_isMounted:boolean;
 	confirmation:string = '';
 	password:string = '';
+	code:string = '';
+	email:string = '';
 	constructor(props:Props) {
 		super(props);
 		// Set the component mount state to false
@@ -35,6 +40,8 @@ class SignIn extends React.Component<Props, State> {
 		};
 		this.confirmation = ''
 		this.password = ''
+      	this.code = this.props.route.params.code
+      	this.email = this.props.route.params.email
  	}
 
    _customNavHeader = () => {
@@ -56,8 +63,7 @@ class SignIn extends React.Component<Props, State> {
 			if( this.confirmation.length >= 5
 				&& this.confirmation == this.password){
 				// can login
-				this.setState({requestIsLoading:true})
-				this.navigateToSignIn()
+				this._verifyPasswordResetCode()
 			}
 			else if( this.confirmation != this.password ){
 				Toast._show_bottom_toast('Les mots de passe ne sont pas identiques');
@@ -74,6 +80,53 @@ class SignIn extends React.Component<Props, State> {
 		}
 
 	}
+
+    // User login method 
+    _verifyPasswordResetCode = () => {
+        // Check if loging request is loading already or not
+        if(!this.state.requestIsLoading
+			&& this.email
+			&& this.password){     
+            	// Start the loading
+            	this.setState({requestIsLoading:true})
+				let data:VerifyPasswordResetCodeRequestType = {
+					password:this.password,
+					email:this.email,
+					code:this.code,
+				}
+				verifyPasswordResetCode(data)
+				.then((response:any) => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						this.navigateToSignIn()
+					}
+				})
+				.catch(error => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						//console.log(error.response.status);
+						//console.log(error.response.headers);
+						if (error.response) {
+						  // The request was made and the server responded with a status code
+						  // that falls out of the range of 2xx
+						  console.log(error.response.data);
+						  let errorData = error.response.data;
+						} else if (error.request) {
+						  // The request was made but no response was received
+						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+						  // http.ClientRequest in node.js
+						  console.log(error.request);
+						} else {
+						  // Something happened in setting up the request that triggered an Error
+						  console.log('Error', error.message);
+						}
+						console.log(error.config);
+						}
+				  });
+			}
+	 	}
+        
+    
 
 	componentDidMount() { 
 		// Enable the component mount state
