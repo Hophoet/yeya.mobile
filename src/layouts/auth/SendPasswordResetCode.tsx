@@ -11,6 +11,8 @@ import CButton from '../../components/CButton';
 import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
 import { connect } from 'react-redux'
+import { sendPasswordResetCode } from '../../backend/requests/auth'
+import { SendPasswordResetCodeRequestType, SignUpRequestType } from '../../backend/requests/types'
 
 type Props = {
 	navigation:any,
@@ -57,7 +59,7 @@ class ResetPassword extends React.Component<Props, State> {
 			if(mailFormatIsValid(this.email)){
 				// can send code 
 				this.setState({requestIsLoading:true})
-				this.navigateToVerifyPasswordResetCode()
+				this._sendPasswordResetCode()
 
 			}
 			else if(!mailFormatIsValid(this.email)){
@@ -69,6 +71,55 @@ class ResetPassword extends React.Component<Props, State> {
 		}
 	}
 
+    // send  method 
+    _sendPasswordResetCode = () => {
+        // Check if loging request is loading already or not
+        if(!this.state.requestIsLoading
+			&& this.email
+			){     
+            	// Start the loading
+            	this.setState({requestIsLoading:true})
+				let data:SendPasswordResetCodeRequestType = {
+					email:this.email
+				}
+				sendPasswordResetCode(data)
+				.then((response:any) => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						this.navigateToVerifyPasswordResetCode(
+							{
+								email:this.email,
+								correctCode:'39384'
+							}
+						)
+					}
+				})
+				.catch(error => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						//console.log(error.response.status);
+						//console.log(error.response.headers);
+						if (error.response) {
+						  // The request was made and the server responded with a status code
+						  // that falls out of the range of 2xx
+						  console.log(error.response.data);
+						  let errorData = error.response.data;
+						} else if (error.request) {
+						  // The request was made but no response was received
+						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+						  // http.ClientRequest in node.js
+						  console.log(error.request);
+						} else {
+						  // Something happened in setting up the request that triggered an Error
+						  console.log('Error', error.message);
+						}
+						console.log(error.config);
+						}
+				  });
+			}
+	 	}
+        
+
 	componentDidMount() { 
 		// Enable the component mount state
 		this._isMounted = true;
@@ -78,8 +129,8 @@ class ResetPassword extends React.Component<Props, State> {
 	navigateToSignIn = ()=>{
 		this.props.navigation.navigate('SignIn')
 	}
- 	navigateToVerifyPasswordResetCode = ()=>{
-		this.props.navigation.navigate('VerifyPasswordResetCode')
+ 	navigateToVerifyPasswordResetCode = (data:any)=>{
+		this.props.navigation.navigate('VerifyPasswordResetCode', data)
 	}
 
 
