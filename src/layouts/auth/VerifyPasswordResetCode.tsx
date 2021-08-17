@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 
 type Props = {
 	navigation:any,
+	route:any,
 	authUser: any,
 	authUserToken:string,
 	dispatch:any
@@ -24,7 +25,9 @@ class VerifyPasswordResetCode extends React.Component<Props, State> {
 
 	_isMounted:boolean;
 	code:string = '';
+	correctCode:string = '';
 	password:string = '';
+	email:string = '';
 	constructor(props:Props) {
 		super(props);
 		// Set the component mount state to false
@@ -34,6 +37,8 @@ class VerifyPasswordResetCode extends React.Component<Props, State> {
 			requestIsLoading:false
 		};
 		this.code = ''
+      	this.correctCode = this.props.route.params.correctCode
+      	this.email = this.props.route.params.email
  	}
 
    _customNavHeader = () => {
@@ -54,7 +59,10 @@ class VerifyPasswordResetCode extends React.Component<Props, State> {
 			if(parseInt(this.code)){
 				// can send code 
 				this.setState({requestIsLoading:true})
-				this.navigateToSetNewPassword()
+				this.navigateToSetNewPassword({
+					'code':this.code,
+					'email':this.email
+				})
 			}
 			else {
 				Toast._show_bottom_toast('Entrer votre valide code de verification');
@@ -71,8 +79,8 @@ class VerifyPasswordResetCode extends React.Component<Props, State> {
 		this._customNavHeader();
 	}
 
- 	navigateToSetNewPassword = ()=>{
-		this.props.navigation.navigate('SetNewPassword')
+ 	navigateToSetNewPassword = (data:any)=>{
+		this.props.navigation.navigate('SetNewPassword', data)
 	}
 
 	navigateToHome = ()=>{
