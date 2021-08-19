@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     container:{
         justifyContent:'center',
 		backgroundColor:'white',
+		paddingHorizontal:10,
 		//backgroundColor:'red',
 		//height:width/7
 	
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
 	row2Title:{
 		fontSize:30,
 		fontWeight:'bold',
-		color:'gray',
+		color:'blue',
 	},
 	row2Description:{
 		fontSize:15,
