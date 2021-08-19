@@ -6,8 +6,13 @@ import {AuthNavigator} from './auth.navigator';
 const Stack = createStackNavigator();
 
 export const Nav = (): React.ReactElement => (
-  <Stack.Navigator headerMode='none'>
-    <Stack.Screen name='Auth' component={AuthNavigator}/>
+  <Stack.Navigator>
+    <Stack.Screen 
+			options={{
+				headerShown:false,
+			}}
+      name='Auth' 
+      component={AuthNavigator}/>
   </Stack.Navigator>
 );
 
