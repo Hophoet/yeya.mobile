@@ -3,10 +3,12 @@ import React, {useState} from 'react';
 import {ImageBackground, StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
 import Icon from "react-native-vector-icons/Ionicons";
 
+import MainHeader from '../../components/MainHeader';
 import AuthNavHeader from '../../components/AuthNavHeader';
 import CButton from '../../components/CButton';
 import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
+import { connect } from 'react-redux'
 
 type Props = {
 	navigation:any,
@@ -31,8 +33,27 @@ class SignIn extends React.Component<Props, State> {
 		this.state = {
 			requestIsLoading:false
 		};
- 		}
+ 	}
 
+   _customNavHeader = () => {
+        this.props.navigation.setOptions({
+          header: () => (
+            <MainHeader 
+				title="Connectez-vous"
+				description="améliorer l'application en nous laissant votre message l'application en nous laissant votre message"
+				// firstAction={()=>{}}	
+				navigateTo={()=> {}}
+			/>
+          ),
+        });
+
+    }
+
+	componentDidMount() { 
+		// Enable the component mount state
+		this._isMounted = true;
+		this._customNavHeader();
+	}
 
 	navigateToSignUp = ()=>{
 		this.props.navigation.navigate('SignUp')
@@ -47,66 +68,70 @@ class SignIn extends React.Component<Props, State> {
 
 
 	render(){
-
-
-	return(
-		<View style={styles.container}>
-			<StatusBar 
-				hidden={false}
-				backgroundColor={colors.main}
-			/>
-			<AuthNavHeader/>
-			<View
-				style={styles.contentContainer}
-			>
-				<View style={styles.row1}>
-					<Text style={styles.row1Title}>Sign In to Your Account</Text>
-				</View>
-				<View style={styles.row2}>
-					<View style={styles.textInputsContainer}>
-						<View style={styles.textInputContainer}>
-							<CTextInput
-								icon='mail'	
-								placeholder='Email'
-							/>
-						</View>
-						<View style={styles.textInputContainer}>
-							<CTextInput
-								icon='lock-closed'	
-								placeholder='Password'
-							/>
+		return(
+			<View style={styles.container}>
+				<StatusBar 
+					hidden={false}
+					backgroundColor={'black'}
+				/>
+				<View
+					style={styles.contentContainer}
+				>
+					<View style={styles.row1}>
+						<View style={styles.textInputsContainer}>
+							<View style={styles.textInputContainer}>
+								<CTextInput
+									icon='mail'	
+									placeholder='Email'
+								/>
+							</View>
+							<View style={styles.textInputContainer}>
+								<CTextInput
+									icon='lock-closed'	
+									placeholder='Password'
+								/>
+							</View>
 						</View>
 					</View>
-					<CButton 
-						buttonStyle={{backgroundColor:colors.main}}
-						textStyle={{color:'white'}}
-						onPress={navigateToHome}	
-						iconPosition='right'
-						label='Sign In'
-					/>
-					<View style={styles.formBottomContainer}>
+					<View style={styles.row2}>
 						<CButton 
-							onPress={() => navigation.navigate('SendPasswordResetCode')}	
-							buttonStyle={{backgroundColor:'white'}}
-							textStyle={{color:'black', fontWeight:'bold'}}
-							label='forgot password'
+							textStyle={{color:'white'}}
+							onPress={this.navigateToHome}	
+							iconPosition='right'
+							label='Connexion'
 						/>
-						<CButton 
-							buttonStyle={{backgroundColor:'white'}}
-							textStyle={{color:'black', fontWeight:'bold'}}
-							onPress={() => navigation.navigate('SignUp')}	
-							label='SIGN UP'
-						/>
-					</View>
+						<TouchableOpacity
+							style={styles.signUpButton}	
+						>
+							<Text style={styles.signUpButtonLabel}>Vous n'avez pas de compte yeya ?</Text>
+						</TouchableOpacity>
 
+					</View>
+					<View style={styles.row3}>
+						<TouchableOpacity>
+							<Text>Vous n'avez pas de compte yeya ?</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
-		</View>
-	)
+		)
 	}
 
 }
-export default SignIn;
+//maps with the state global
+const mapDispatchToProps = (dispatch:any) => {
+    return {
+        dispatch: (action:any) => {dispatch(action)}
+    }
+}
+
+const mapStateToProps = (state:any) => {
+    return {
+        authUserToken:state.authUserToken,
+        authUser:state.authUser
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -119,7 +144,7 @@ const styles = StyleSheet.create({
 		fontSize:20,
 		fontWeight:'bold',
 		color:'black',
-		alignSelf:'center',
+		// alignSelf:'center',
 	},
 	contentContainer:{
 		flex:1,
@@ -127,11 +152,23 @@ const styles = StyleSheet.create({
 		paddingHorizontal:20,
 	},
 	row1:{
-		justifyContent:'center',
-		margin:30,
+		flex:4,
+		paddingTop:20,
+		//backgroundColor:'red',
+		// justifyContent:'center',
+		// justifyContent:'center',
+		// margin:30,
 	},
 	row2:{
 		flex:3,
+		//backgroundColor:'gray',
+		justifyContent:'center',
+	},
+	row3:{
+		flex:1,
+		//backgroundColor:'gray',
+		alignItems:'center',
+		justifyContent:'center',
 	},
 	textInputContainer:{
 		paddingBottom:10,
@@ -170,6 +207,12 @@ const styles = StyleSheet.create({
 	},
 	textInputsContainer:{
 		paddingBottom:20,
-}
+	},
+	signUpButton:{
+		//backgroundColor:'red',
+		alignItems:'flex-end',
+		justifyContent:'center',
+		paddingVertical:10,
+	}
 
 })
