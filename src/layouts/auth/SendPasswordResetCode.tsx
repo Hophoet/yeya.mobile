@@ -85,11 +85,14 @@ class ResetPassword extends React.Component<Props, State> {
 				sendPasswordResetCode(data)
 				.then((response:any) => {
 					if(this._isMounted){
+						Toast._show_bottom_toast('Code de verification envoyé a votre adresse email');
             			this.setState({requestIsLoading:false})
+						console.log(response.data)
+						let code = response.data.code
 						this.navigateToVerifyPasswordResetCode(
 							{
 								email:this.email,
-								correctCode:'39384'
+								correctCode:code
 							}
 						)
 					}
@@ -102,8 +105,11 @@ class ResetPassword extends React.Component<Props, State> {
 						if (error.response) {
 						  // The request was made and the server responded with a status code
 						  // that falls out of the range of 2xx
-						  console.log(error.response.data);
+						  //console.log(error.response.data);
 						  let errorData = error.response.data;
+						  if(errorData.code = 'password-reset/user-not-found'){
+								Toast._show_bottom_toast('Votre adresse email ne correspond à aucun compte ');
+						  }
 						} else if (error.request) {
 						  // The request was made but no response was received
 						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
