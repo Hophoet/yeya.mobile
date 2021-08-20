@@ -97,6 +97,7 @@ class SignIn extends React.Component<Props, State> {
 				verifyPasswordResetCode(data)
 				.then((response:any) => {
 					if(this._isMounted){
+						Toast._show_bottom_toast('Mot de passé changé avec succes');
             			this.setState({requestIsLoading:false})
 						this.navigateToSignIn()
 					}
@@ -111,6 +112,9 @@ class SignIn extends React.Component<Props, State> {
 						  // that falls out of the range of 2xx
 						  console.log(error.response.data);
 						  let errorData = error.response.data;
+						  if (errorData.code == 'password-verification/code-expired'){
+								Toast._show_bottom_toast('Votre code de verification est expirée');
+						  }
 						} else if (error.request) {
 						  // The request was made but no response was received
 						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -132,6 +136,7 @@ class SignIn extends React.Component<Props, State> {
 		// Enable the component mount state
 		this._isMounted = true;
 		this._customNavHeader();
+		console.log(this.email, this.code)
 	}
 
 	navigateToSignIn = ()=>{
