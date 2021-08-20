@@ -91,6 +91,8 @@ class SignUp extends React.Component<Props, State> {
 				.then((response:any) => {
 					if(this._isMounted){
             			this.setState({requestIsLoading:false})
+						Toast._show_bottom_toast("Inscription reussie avec success, veuiller vous connectez");	
+						this.navigateToSign()
 					}
 				})
 				.catch(error => {
@@ -103,8 +105,8 @@ class SignUp extends React.Component<Props, State> {
 						  // that falls out of the range of 2xx
 						  console.log(error.response.data);
 						  let errorData = error.response.data;
-						  if(errorData.code == 'auth/invalid-credential'){
-								Toast._show_bottom_toast("nom d'utilisateur/email ou mot de passe incorrect");	
+						  if(errorData.detail == 'REGISTER_USER_ALREADY_EXISTS'){
+								Toast._show_bottom_toast("votre email est déja utilisé");	
 						  }
 						  else if(errorData.code == 'auth/username-and-password-required'){
 								Toast._show_bottom_toast("Entrer votre nom d'utlisateur et mot de passe pour continuer");	
