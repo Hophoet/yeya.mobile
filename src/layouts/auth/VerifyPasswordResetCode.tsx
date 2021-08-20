@@ -57,12 +57,18 @@ class VerifyPasswordResetCode extends React.Component<Props, State> {
 	onSubmit = () => {
 		if(this.code){
 			if(parseInt(this.code)){
-				// can send code 
-				this.setState({requestIsLoading:true})
-				this.navigateToSetNewPassword({
-					'code':this.code,
-					'email':this.email
-				})
+				if(this.code == this.correctCode){
+					// can send code 
+					this.setState({requestIsLoading:true})
+					this.navigateToSetNewPassword({
+						'code':this.code,
+						'email':this.email
+					})
+				}
+				else{
+					Toast._show_bottom_toast('Votre code de verification est incorrecte');
+
+				}
 			}
 			else {
 				Toast._show_bottom_toast('Entrer votre valide code de verification');
