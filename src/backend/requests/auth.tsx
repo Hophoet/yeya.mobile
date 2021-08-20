@@ -41,14 +41,20 @@ function signUp(data:SignUpRequestType){
 }
 
 function signIn(data:SignInRequestType){
+	let formData = new FormData();
+	formData.append('username', data.email);
+	formData.append('password', data.password);
+
 	return new Promise( (resolve, reject) => {
-		axios.post(
-			SIGN_IN_URL,
-			{
-					email:data.email,
-					password:data.password
+		axios({
+			url: SIGN_IN_URL,
+			method: 'POST',
+			data: formData,
+			headers:{
+				Accept: 'application/json',
+                'Content-Type': 'multipart/form-data'
 			}
-		)
+		})
 		.then((response:any) => {
 			resolve(response);
 		})
@@ -62,9 +68,14 @@ function signIn(data:SignInRequestType){
 function sendPasswordResetCode(data:SendPasswordResetCodeRequestType){
 	return new Promise( (resolve, reject) => {
 		axios.post(
-			SIGN_IN_URL,
+			SEND_PASSWORD_RESET_CODE_URL,
 			{
 					email:data.email
+			},
+			{
+				headers:{
+					'Content-Type': 'application/json', 
+				}
 			}
 		)
 		.then((response:any) => {
@@ -79,11 +90,16 @@ function sendPasswordResetCode(data:SendPasswordResetCodeRequestType){
 function verifyPasswordResetCode(data:VerifyPasswordResetCodeRequestType){
 	return new Promise( (resolve, reject) => {
 		axios.post(
-			SIGN_IN_URL,
+			VERIFIY_PASSWORD_RESET_CODE_URL,
 			{
 					email:data.email,
 					password:data.password,
 					code:data.code,
+			},
+			{
+				headers:{
+					'Content-Type': 'application/json', 
+				}
 			}
 		)
 		.then((response:any) => {
