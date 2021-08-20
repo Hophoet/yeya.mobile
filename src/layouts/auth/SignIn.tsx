@@ -88,6 +88,9 @@ class SignIn extends React.Component<Props, State> {
 				.then((response:any) => {
 					if(this._isMounted){
             			this.setState({requestIsLoading:false})
+						Toast._show_bottom_toast("Connexion avec success");	
+						console.log('LOGIN')
+						console.log(response.data)
 					}
 				})
 				.catch(error => {
@@ -100,8 +103,8 @@ class SignIn extends React.Component<Props, State> {
 						  // that falls out of the range of 2xx
 						  console.log(error.response.data);
 						  let errorData = error.response.data;
-						  if(errorData.code == 'auth/invalid-credential'){
-								Toast._show_bottom_toast("nom d'utilisateur/email ou mot de passe incorrect");	
+						  if(errorData.detail == 'LOGIN_BAD_CREDENTIALS'){
+								Toast._show_bottom_toast("email ou mot de passe incorrecte");	
 						  }
 						  else if(errorData.code == 'auth/username-and-password-required'){
 								Toast._show_bottom_toast("Entrer votre nom d'utlisateur et mot de passe pour continuer");	
