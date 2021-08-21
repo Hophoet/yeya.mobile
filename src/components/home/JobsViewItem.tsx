@@ -4,46 +4,145 @@ import {Image, StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'reac
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main'
 import moment from 'moment';
+import { toggleJobFavorite } from '../../backend/requests/job'
+import { ToggleJobFavoriteRequestType } from '../../backend/requests/types'
+import { connect } from 'react-redux'
 
-const JobsViewItem = ({item, width, height, navigate}:any) => {
-  const [isFavorite, toggleFavorite] = useState(true);
+type Props = {
+	navigation:any,
+	authUser: any,
+	item: any,
+	authUserToken:string,
+	getUserFavoriteJobs?:Function,
+	getJobs?:Function,
+	dispatch:any
+}
 
-	const getDate = () => {
-		const created_at_timestamp = Math.floor(new Date(item.created_at).valueOf()/1000);
+type State = {
+	isFavorite:boolean,
+}
+
+class JobsViewItem  extends React.Component<Props, State>{
+	constructor(props:Props){
+		super(props)
+		this.state = {
+			isFavorite:this._isUserFavorite()
+		}
+	}
+
+
+
+	_isUserFavorite = () => {
+		let user_ids = this.props.item.favorite_users_ids
+		let authUser = this.props.authUser
+		if (user_ids && authUser){
+			//console.log(user_ids, authUser)
+			for(let user_id of user_ids){
+				//console.log(user_id, authUser.id)
+				if(user_id == authUser.id){
+					return true
+				}
+			}
+		}
+		return false
+	}
+
+	getDate = () => {
+		const created_at_timestamp = Math.floor(new Date(this.props.item.created_at).valueOf()/1000);
 		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
 		return date;
 	}
 
-	return(
-		<View style={[styles.container]}>
-			<View style={styles.row1}>
-				<View style={styles.row1Row1}>
-					<Text style={styles.emoji}>📅</Text>
+	// Method to get the products categories
+	_toggleJobFavorite = () => {
+		let data:ToggleJobFavoriteRequestType = {
+			authToken:this.props.authUserToken,
+			jobId:this.props.item.id
+		}
+		toggleJobFavorite(data)
+		.then((response:any) => {
+			//console.log(response.data)
+			//this.setState({isFavorite:!this.state.isFavorite})
+			if(this.props.getUserFavoriteJobs){
+				this.props.getUserFavoriteJobs()
+			}
+			else if(this.props.getJobs){
+				this.props.getJobs()
+			}
+		})
+		.catch( (error:any)=>  {
+			if(error.response) {
+			  // The request was made and the server responded with a status code
+			  // that falls out of the range of 2xx
+			  console.log(error.response.data);
+			  console.log(error.response.status);
+			  console.log(error.response.headers);
+			} else if (error.request) {
+			  // The request was made but no response was received
+			  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+			  // http.ClientRequest in node.js
+			  console.log(error.request);
+			} else {
+			  // Something happened in setting up the request that triggered an Error
+			  console.log('Error', error.message);
+			}
+			console.log(error.config);
+		  });
+	}
+
+
+
+
+	render() {
+
+		let item = this.props.item
+		//console.log(authUser, authUserToken)
+		return(
+			<View style={[styles.container]}>
+				<View style={styles.row1}>
+					<View style={styles.row1Row1}>
+						<Text style={styles.emoji}>📅</Text>
+					</View>
+				</View>
+				<View style={styles.row2}>
+						<Text numberOfLines={2} style={styles.title}>{item.title} title rest</Text>
+						<Text>
+							{ item.price &&
+							<Text style={styles.price}>XOF {item.price} </Text>
+							}
+							{ (item.city )&&`- ${item.city.name}, ${item.city.country}`}</Text>
+				</View>
+				<View style={styles.row3}>
+					<View style={styles.row3Column1}>
+						<TouchableOpacity 
+							onPress={this._toggleJobFavorite}
+							style={styles.favoriteButton}>
+							<Icon size={30} name={this._isUserFavorite()?'heart':'heart-outline'} color='gray'/>
+						</TouchableOpacity>
+					</View>
+					<View style={styles.row3Column2}>
+						<Text style={styles.date}>{this.getDate()}</Text>
+					</View>
 				</View>
 			</View>
-			<View style={styles.row2}>
-					<Text numberOfLines={2} style={styles.title}>{item.title} title rest</Text>
-					<Text>
-						{ item.price &&
-						<Text style={styles.price}>XOF {item.price} </Text>
-						}
-						{ (item.city )&&`- ${item.city.name}, ${item.city.country}`}</Text>
-			</View>
-			<View style={styles.row3}>
-				<View style={styles.row3Column1}>
-					<TouchableOpacity style={styles.favoriteButton}>
-						<Icon size={30} name='heart-outline' color='gray'/>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.row3Column2}>
-					<Text style={styles.date}>{getDate()}</Text>
-				</View>
-			</View>
-		</View>
-	)
+		)
+	}
 }
 
-export default JobsViewItem;
+//maps with the state global
+const mapDispatchToProps = (dispatch:any) => {
+    return {
+        dispatch: (action:any) => {dispatch(action)}
+    }
+}
+
+const mapStateToProps = (state:any) => {
+    return {
+        authUserToken:state.authUserToken,
+        authUser:state.authUser
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(JobsViewItem)
 
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
