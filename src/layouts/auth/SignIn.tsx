@@ -10,12 +10,13 @@ import CButton from '../../components/CButton';
 import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
 import { connect } from 'react-redux'
+import  {SET_AUTH_USER_TOKEN, SET_AUTH_USER} from '../../redux/store/actions'
 
 type Props = {
 	navigation:any,
 	authUser: any,
 	authUserToken:string,
-	dispatch:any
+	dispatch:Function
 }
 
 type State = {
@@ -89,8 +90,15 @@ class SignIn extends React.Component<Props, State> {
 					if(this._isMounted){
             			this.setState({requestIsLoading:false})
 						Toast._show_bottom_toast("Connexion avec success");	
-						console.log('LOGIN')
-						console.log(response.data)
+						//console.log(response.data)
+						let token = response.data.token && response.data.token.value
+						let user = response.data.user
+						console.log(token, user)
+						let authUserTokenAction = {type:SET_AUTH_USER_TOKEN, value:token}
+						let authUserAction = {type:SET_AUTH_USER, value:user}
+						this.props.dispatch(authUserTokenAction)
+						this.props.dispatch(authUserAction)
+						this.props.navigation.navigate('Loader',{});
 					}
 				})
 				.catch(error => {
