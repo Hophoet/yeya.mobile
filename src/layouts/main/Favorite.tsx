@@ -57,7 +57,7 @@ class Favorite extends React.Component<Props, State> {
 		const authUserToken = this.props.authUserToken;
 		this.setState({requestIsLoading:true})
 		let data:GetUserFavoriteJobsRequestType = {
-			authToken:'lksdfjldfjlsdf'
+			authToken:this.props.authUserToken
 		}
 		getUserFavorite(data)
 		.then((response:any) => {
@@ -97,6 +97,14 @@ class Favorite extends React.Component<Props, State> {
 		// Enable the component mount state
 		this._isMounted = true;
 		this._getUserFavoriteJobs()
+		// Add event listener , before the component dismiss
+		this.props.navigation.addListener('focus', (e:any) => {
+			// make products request to get data, like avaible products for the user
+			if(this._isMounted){
+				// request to get the products on the screen focus
+				this._getUserFavoriteJobs()
+			}
+		});
 	}
 
 	navigateToSignUp = ()=>{
@@ -136,7 +144,6 @@ class Favorite extends React.Component<Props, State> {
 					</View>
 				</View>
 				<View style={styles.row2}>
-					{this._renderActivityIndicator()}
 					<FlatList
 						onRefresh={this._getUserFavoriteJobs}
 						refreshing={this.state.requestIsLoading}
@@ -144,6 +151,8 @@ class Favorite extends React.Component<Props, State> {
 						showsVerticalScrollIndicator={false}
 						renderItem={({item, index}:any) => <JobsViewItem
 							item={item}	
+							fromFavorite={true}
+							getUserFavoriteJobs={this._getUserFavoriteJobs}
 						/>}
 						ItemSeparatorComponent={()=><View style={styles.itemsSeparator}/>}
 						keyExtractor={(item)=>item.id.toString()}
