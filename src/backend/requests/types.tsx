@@ -32,6 +32,12 @@ type GetUserFavoriteJobsRequestType = {
 	authToken?:string
 }
 
+// get jobs
+type ToggleJobFavoriteRequestType = {
+	authToken:string,
+	jobId:string,
+}
+
 export type {
 	SignInRequestType,
 	SignUpRequestType,
@@ -39,4 +45,5 @@ export type {
 	VerifyPasswordResetCodeRequestType,
 	GetJobsRequestType,
 	GetUserFavoriteJobsRequestType,
+	ToggleJobFavoriteRequestType
 }
