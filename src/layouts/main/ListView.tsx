@@ -48,8 +48,6 @@ class ListView extends React.Component<Props, State> {
 			]
 
 		};
-		this.email = ''
-		this.password = ''
  	}
 
 	// Method to get the products categories
@@ -57,7 +55,7 @@ class ListView extends React.Component<Props, State> {
 		const authUserToken = this.props.authUserToken;
 		this.setState({requestIsLoading:true})
 		let data:GetJobsRequestType = {
-			authToken:'lksdfjldfjlsdf'
+			authToken:this.props.authUserToken
 		}
 		getJobs(data)
 		.then((response:any) => {
@@ -95,6 +93,15 @@ class ListView extends React.Component<Props, State> {
 		// Enable the component mount state
 		this._isMounted = true;
 		this._getJobs()
+		// Add event listener , before the component dismiss
+		this.props.navigation.addListener('focus', (e:any) => {
+			// make products request to get data, like avaible products for the user
+			if(this._isMounted){
+				// request to get the products on the screen focus
+				this._getJobs()
+			}
+		});
+
 	}
 
 	navigateToSignUp = ()=>{
@@ -157,13 +164,13 @@ class ListView extends React.Component<Props, State> {
 					</View>
 				</View>
 				<View style={styles.row3}>
-					{this._renderActivityIndicator()}
 					<FlatList
 						data={this.state.jobs}
 						onRefresh={this._getJobs}
 						refreshing={this.state.requestIsLoading}
 						showsVerticalScrollIndicator={false}
 						renderItem={({item, index}:any) => <JobsViewItem
+							getJobs={this._getJobs}
 							item={item}	
 						/>}
 						ItemSeparatorComponent={()=><View style={styles.itemsSeparator}/>}
