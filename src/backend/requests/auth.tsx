@@ -10,8 +10,10 @@ import {
 
 import { 
 	SendPasswordResetCodeRequestType,
+	SetUserProfileImageType,
 	SignInRequestType,
 	SignUpRequestType,
+	UpdateUserInfos,
 	VerifyPasswordResetCodeRequestType
 
 } from './types';
@@ -114,20 +116,24 @@ function verifyPasswordResetCode(data:VerifyPasswordResetCodeRequestType){
 	})
 }
 
-function updateUserPersonalInfos(authToken:string, infos:UpdateUserPersonalInfosType){
+function updateUserPersonalInfos(authToken:string, infos:UpdateUserInfos){
 	let formData = new FormData();
-	formData.append('username', infos.username);
 	formData.append('first_name', infos.firstName);
 	formData.append('last_name', infos.lastName);
-	formData.append('email', infos.email);
 	formData.append('phone_number', infos.phoneNumber);
+	formData.append('about', infos.about);
 	return new Promise( (resolve, reject) => {
 		axios({
 			url: UPDATE_USER_PERSONAL_INFOS_URL,
 			method: 'PUT',
-			data: formData,
+			data: {
+				first_name: infos.firstName,
+				last_name: infos.lastName,
+				phone_number: infos.phoneNumber,
+				about: infos.about,
+			},
 			headers:{
-				'Authorization':`Token ${authToken}`
+				'Authorization':`Bearer ${authToken}`
 			}
 		})
 		.then((response:any) => {
@@ -139,12 +145,12 @@ function updateUserPersonalInfos(authToken:string, infos:UpdateUserPersonalInfos
 	})
 }
 
-function setUserProfile(authToken:string, imagePath: string){
+function setUserProfile(data:SetUserProfileImageType){
 	let formData = new FormData();
 	formData.append(
 		'image',
 		{
-			uri:imagePath,
+			uri:data.image,
 			type:'image/jpeg',
 			name:'defaultname.jpg'
 		}
@@ -157,7 +163,7 @@ function setUserProfile(authToken:string, imagePath: string){
 			headers:{
 				Accept: 'application/json',
                 'Content-Type': 'multipart/form-data',
-				'Authorization':`Token ${authToken}`
+				'Authorization':`Bearer ${data.authToken}`
 			}
 		})
 		.then((response:any) => {
