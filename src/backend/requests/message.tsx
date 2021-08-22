@@ -16,7 +16,7 @@ function sendUserMessage(data:SendUserMessageType){
 				text:data.text,
 			},
 				headers:{
-					'Authorization':`Token ${data.authToken}`	
+					'Authorization':`Bearer ${data.authToken}`	
 				}
 		})
 		.then((response:any) => {
