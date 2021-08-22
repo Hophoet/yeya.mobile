@@ -4,6 +4,7 @@ import {Image, StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'reac
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main'
 import moment from 'moment';
+import { create } from 'react-test-renderer';
 
 const ChatMessagesItem = ({item, authUser, width, height, navigate}:any) => {
   const [isFavorite, toggleFavorite] = useState(true);
@@ -20,8 +21,9 @@ const ChatMessagesItem = ({item, authUser, width, height, navigate}:any) => {
 	}
 
 	const getDate = () => {
-		const created_at_timestamp = Math.floor(new Date(item.created_at).valueOf()/1000);
-		const date:string = moment.unix(created_at_timestamp).format('lll')
+		let created_at = item && item.created_at
+		const created_at_timestamp = Math.floor(new Date(created_at).valueOf()/1000);
+		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('lll')
 		return date;
 	}
 
