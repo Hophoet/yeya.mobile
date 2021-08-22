@@ -2,10 +2,22 @@
 const CLEAN: string = 'CLEAN'
 const SET_AUTH_USER_TOKEN: string = 'SET_AUTH_USER_TOKEN'
 const SET_AUTH_USER: string = 'SET_AUTH_USER'
+const SET_JOBS: string = 'SET_JOBS'
+const SET_CATEGORIES: string = 'SET_CATEGOREIS'
+const SET_CITIES: string = 'SET_CITIES'
+const SET_PROPOSALS: string = 'SET_PROPOSALS'
+const SET_CHATS: string = 'SET_CHATS'
+const SET_FAVORITES: string = 'SET_FAVORITES'
 
 
 export  {
     CLEAN,
 	SET_AUTH_USER_TOKEN,
 	SET_AUTH_USER,
+	SET_CATEGORIES,
+	SET_CHATS,
+	SET_CITIES,
+	SET_JOBS,
+	SET_PROPOSALS,
+	SET_FAVORITES,
 }
