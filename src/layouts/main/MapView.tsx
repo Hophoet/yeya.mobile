@@ -1,178 +1,421 @@
-
 import React from 'react';
-import { ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-import MainHeader from '../../components/MainHeader';
-import Toast from '../../components/toasts'
-import { mailFormatIsValid } from '../../utils/mail'
-import { signIn } from '../../backend/requests/auth'
-import { SignInRequestType } from '../../backend/requests/types'
-import CButton from '../../components/CButton';
-import CTextInput from '../../components/CTextInput';
-import { colors } from '../../assets/colors/main'
-import { connect } from 'react-redux'
+import {ActivityIndicator, Image, Dimensions, Animated, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import { getJobs } from '../../backend/requests/job'
+import { GetJobsRequestType } from '../../backend/requests/types'
+import toasts from '../../components/toasts'
+import JobsMapItem from '../../components/home/JobsMapItem'
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/Ionicons'
 
 type Props = {
 	navigation:any,
-	authUser: any,
 	authUserToken:string,
-	dispatch:any
+	dispatch:any,
+	authUser:any,
 }
-
 type State = {
+	region:any,
+	jobs:any[],
 	requestIsLoading:boolean,
 }
 
-class ListView extends React.Component<Props, State> {
 
+class Map extends React.Component<Props, State> {
+	animation:any;
+	map:any;
 	_isMounted:boolean;
-	email:string = '';
-	password:string = '';
+	index:number;
+	regionTimeout?:any;
 	constructor(props:Props) {
 		super(props);
 		// Set the component mount state to false
+		this.index = 0;
+    	this.animation = new Animated.Value(0);
 		this._isMounted = false;
-		// Set the state
+		//
 		this.state = {
-			requestIsLoading:false
-		};
-		this.email = ''
-		this.password = ''
- 	}
+			requestIsLoading:false,
+			  region: {
+				latitude: 33.7866,
+				longitude: -118.2987,
+				latitudeDelta: 0.04864195044303443,
+				longitudeDelta: 0.040142817690068,
+			  },
+			  jobs:[],
+			};
+		}
 
+	getDate = (created_at:string) => {
+		const created_at_timestamp = Math.floor(new Date(created_at).valueOf()/1000);
+		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
+		return date;
+	}
 
 	componentDidMount() { 
 		// Enable the component mount state
 		this._isMounted = true;
+		this._getJobs()
+		this.animation.addListener(({ value }:any) => {
+			if(this.state.jobs.length > 0){
+				let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+				if (index >= this.state.jobs.length) {
+				  index = this.state.jobs.length - 1;
+				}
+				if (index <= 0) {
+				  index = 0;
+				}
+		  
+				clearTimeout(this.regionTimeout);
+				this.regionTimeout = setTimeout(() => {
+				  if (this.index !== index) {
+					this.index = index;
+					if(this.state.jobs[index] 
+						&& this.state.jobs[index].geolocation
+						&& this.state.jobs[index].geolocation.latitude
+						&& this.state.jobs[index].geolocation.longitude
+						){
+						const { latitude, longitude } = this.state.jobs[index].geolocation;
+						// if(latitude && longitude){
+							this.map.animateToRegion(
+							{
+								latitude,
+								longitude,
+								latitudeDelta: this.state.region.latitudeDelta,
+								longitudeDelta: this.state.region.longitudeDelta,
+							},
+							350
+							);
+						// }
+					}
+				  }
+				}, 10);
+			}
+		  });
+
+		 
+		// Add event listener, when the the component on focus
+		this.props.navigation.addListener('focus', (e:any) => {
+			// make products request to get data, like avaible products for the user
+			if(this._isMounted){
+				// request to get the products on the screen focus
+				this._getJobs()
+			}
+		});
+
+	}
+	
+	componentWillUnmount(){
+		// Set tje component mount state to true
+		this._isMounted = false;
 	}
 
-	navigateToSignUp = ()=>{
-		this.props.navigation.navigate('SignUp')
-	}
- 	navigateToSendPasswordResetCode = ()=>{
-		this.props.navigation.navigate('SendPasswordResetCode')
-	}
 
-	navigateToHome = ()=>{
-		this.props.navigation.navigate('App')
+	navigateTo = (screen:any, data:any) => {
+		this.props.navigation.navigate(
+			screen,
+			data
+		);
+
 	}
 
+	_isUserFavorite = (item:any) => {
+		let user_ids = item.favorite_users_ids
+		let authUser = this.props.authUser
+		if (user_ids && authUser){
+			//console.log(user_ids, authUser)
+			for(let user_id of user_ids){
+				//console.log(user_id, authUser.id)
+				if(user_id == authUser.id){
+					return true
+				}
+			}
+		}
+		return false
+	}
 
-	render(){
-		return(
+
+	// Method to get the products categories
+	_getJobs = () => {
+		const authUserToken = this.props.authUserToken;
+		this.setState({requestIsLoading:true})
+		let data:GetJobsRequestType = {
+			authToken:this.props.authUserToken
+		}
+		getJobs(data)
+		.then((response:any) => {
+			if(this._isMounted){
+				//console.log(response.data[3])
+				this.setState({jobs:response.data});
+				this.setState({requestIsLoading:false})
+				//console.log(response.data);
+			}
+		})
+		.catch( (error:any)=>  {
+			if(this._isMounted){
+				this.setState({requestIsLoading:false})
+			}
+			if (error.response) {
+			  // The request was made and the server responded with a status code
+			  // that falls out of the range of 2xx
+			  console.log(error.response.data);
+			  console.log(error.response.status);
+			  console.log(error.response.headers);
+			} else if (error.request) {
+			  // The request was made but no response was received
+			  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+			  // http.ClientRequest in node.js
+			  console.log(error.request);
+			} else {
+			  // Something happened in setting up the request that triggered an Error
+			  console.log('Error', error.message);
+			}
+			console.log(error.config);
+		  });
+	}
+
+
+	render() {
+		const interpolations = this.state.jobs.map((marker, index) => {
+			const inputRange = [
+			  (index - 1) * CARD_WIDTH,
+			  index * CARD_WIDTH,
+			  (index + 1) * CARD_WIDTH,
+			];
+			const scale = this.animation.interpolate({
+			  inputRange,
+			  outputRange: [1, 2.5, 1],
+			  extrapolate: "clamp",
+			});
+			const opacity = this.animation.interpolate({
+			  inputRange,
+			  outputRange: [0.35, 1, 0.35],
+			  extrapolate: "clamp",
+			});
+			return { scale, opacity };
+		  });	
+
+
+
+
+		//console.log(this.props.authUser.store);
+		let userStoreGeolocation = this.props.authUser && this.props.authUser.store && this.props.authUser.store.geolocation;
+		//console.log(userStoreGeolocation);
+		return (
 			<View style={styles.container}>
-				<StatusBar 
-					hidden={false}
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
-				/>
-				<Text >HOME SCREEN</Text>
+				<MapView
+					provider={PROVIDER_GOOGLE}
+					ref={(map) => (this.map = map)}
+					initialRegion={this.state.region}
+					style={styles.mapContainer}
+				>
+
+				{
+					this.state.jobs.map((marker, index) => {
+						const scaleStyle = {
+						transform: [
+							{
+							scale: interpolations[index].scale,
+							},
+						],
+						};
+						const opacityStyle = {
+						opacity: interpolations[index].opacity,
+						};
+						let geolocation = marker.geolocation
+						if(geolocation 
+							&& geolocation.latitude 
+							&& geolocation.longitude){
+
+						//console.log(marker.images[0].url);
+						return (
+							<MapView.Marker 
+								style={styles.markerContainer} 
+								title={marker.title}
+								key={index} 
+								coordinate={
+									{
+										latitude:geolocation.latitude,
+										longitude:geolocation.longitude,
+									}
+								}>
+								 <Animated.View style={[styles.markerWrap, false && opacityStyle]}>
+									{ false &&
+									<Animated.View style={[styles.ring, scaleStyle]} />
+									}
+									<View style={styles.marker} />
+								</Animated.View>
+							</MapView.Marker>
+						);
+						}
+					})
+				}
+
+
+				</MapView>
+
+				<View style={styles.footerContainer}>
+				<Animated.ScrollView
+					  horizontal
+					  scrollEventThrottle={1}
+					  showsHorizontalScrollIndicator={false}
+					  snapToInterval={CARD_WIDTH}
+					  onScroll={Animated.event(
+						[
+						  {
+							nativeEvent: {
+							  contentOffset: {
+								x: this.animation,
+							  },
+							},
+						  },
+						],
+						{ useNativeDriver: true }
+					  )}
+					  style={styles.scrollView}
+					  contentContainerStyle={styles.endPadding}
+					>
+				  {this.state.jobs.map((item, index) => (
+					 <JobsMapItem
+					 	key={index.toString()}
+					 	index={index}
+						getJobs={this._getJobs}
+						item={item}
+					 />
+				  ))}
+        	</Animated.ScrollView>
 			</View>
-		)
+
+			</View>
+		);
 	}
-
 }
-//maps with the state global
+
+
+
+// Map dispath function from redux to the component props
 const mapDispatchToProps = (dispatch:any) => {
-    return {
-        dispatch: (action:any) => {dispatch(action)}
-    }
-}
-
+	return {
+	  dispatch: (action:any) => {
+		dispatch(action);
+	  },
+	};
+  };
+  
+// Map the redux global state to the component props
 const mapStateToProps = (state:any) => {
-    return {
-        authUserToken:state.authUserToken,
-        authUser:state.authUser
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ListView)
+return {
+	authUserToken: state.authUserToken,
+	authUser:state.authUser
+};
+};
+
+// Export the component by connecting the maps to the component
+export default connect(mapStateToProps, mapDispatchToProps)(Map);
 
 const {width, height} = Dimensions.get('window');
+
+const CARD_HEIGHT = width / 5;
+const CARD_WIDTH = width/2;
+
+// Set styles
 const styles = StyleSheet.create({
-	container:{
+  	container: {
 		flex:1,
-		backgroundColor:'white',
-		//backgroundColor:'#6C63FF'
-	},
-	row1Title:{
-		fontSize:20,
-		fontWeight:'bold',
-		color:'black',
-		// alignSelf:'center',
-	},
-	contentContainer:{
-		flex:1,
-		backgroundColor:'white',
-		paddingHorizontal:20,
-	},
-	row1:{
-		flex:4,
-		paddingTop:20,
-		//backgroundColor:'red',
-		// justifyContent:'center',
-		// justifyContent:'center',
-		// margin:30,
-	},
-	row2:{
-		flex:3,
-		//backgroundColor:'gray',
-		justifyContent:'center',
-	},
-	row3:{
-		flex:1,
-		//backgroundColor:'gray',
-		alignItems:'center',
-		justifyContent:'center',
-	},
-	textInputContainer:{
-		paddingBottom:10,
-	},
-	
-	button:{
-		flexDirection:'row',
-		justifyContent:'center',
-		alignItems:'center',
-		backgroundColor:'red',
-		padding:10,
-		borderRadius:width/2,
-		marginHorizontal:width/10,
-	},
-	formBottomContainer:{
-		//paddingVertical:10,
-		justifyContent:'center'
-		
-	},
-	formBottomFirstLabel:{
-		color:'black',	
-		fontWeight:'bold',
-		textTransform:'uppercase',
-	},
-	formBottomFirstButton:{
-		flexDirection:'row',
-		alignItems:'center',
-	},
-	footerLabel:{
-		color:'white',
-	},
-	footerLabelRight:{
-		fontWeight:'bold',
-		fontSize:15,
-	},
-	textInputsContainer:{
-		//paddingBottom:20,
-	},
-	signUpButton:{
-		//backgroundColor:'red',
-		alignItems:'flex-end',
-		justifyContent:'center',
-		paddingVertical:20,
-	},
-	forgotPasswordButton:{
-		alignItems:'flex-end',
-		justifyContent:'center',
-		paddingBottom:20,
-	},
-	activityIncatorContainer:{
 
-	}
+ 	},
+  	mapContainer: {
+		flex:1,
+	   justifyContent: 'flex-end',
+	   alignItems: 'center',
+ 	},
+	map: {
+	   ...StyleSheet.absoluteFillObject,
+    },
+	footerContainer:{
+    position: "absolute",
+    bottom: 5,
+    left: 0,
+    right: 0,
+    paddingVertical: 10,
+	//backgroundColor:'yellow',
+	},
+	scrollView: {
+    paddingVertical: 10,
+	//backgroundColor:'blue',
+  },
+  endPadding: {
+    paddingRight: width - CARD_WIDTH,
+  },
+  card: {
+    padding: 10,
+	borderRadius:10,
+    elevation: 2,
+    backgroundColor: "#FFF",
+    margin: 10,
+    shadowColor: "#000",
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    height: CARD_HEIGHT,
+    width: CARD_WIDTH,
+    overflow: "hidden",
 
-})
+  },
+  imageContainer:{
+    flex: 3,
+  },
+  textContent: {
+    flex: 1,
+  },
+  markerWrap: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  marker: {
+    width: 10,
+    height: 10,
+    borderRadius: 4,
+    backgroundColor: 'black',//"rgba(130,4,150, 0.9)",
+  },
+  ring: {
+    width: 24,
+    height: 24,
+    borderRadius: 100,
+    backgroundColor: "rgba(130,4,150, 0.3)",
+    position: "absolute",
+    borderWidth: 1,
+    borderColor: "rgba(130,4,150, 0.5)",
+  },
+  productImage:{
+	height:width/8,
+	width:width/8,
+	borderRadius:20,
+	padding:30,
+  },
+  markerContainer:{
+	//backgroundColor:'yellow',
+	justifyContent:'center',
+	alignItems:'center',
+
+ },
+ buttonsContainer:{
+	//backgroundColor:'red',
+	justifyContent:'center',
+	alignItems:'center',
+	paddingVertical:10,
+},
+ button:{
+	backgroundColor:'black',
+	paddingVertical:10,
+	paddingHorizontal:20,
+	borderRadius:5,
+	flexDirection:'row',
+
+ },
+ buttonLabel:{
+	color:'white',
+	fontSize:16,
+},
+});
