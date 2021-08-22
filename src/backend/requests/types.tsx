@@ -114,6 +114,19 @@ type GetCitiesType =  {
 	authToken:string
 }
 
+type UpdateUserInfos =  {
+	authToken:string,
+	firstName:string,
+	lastName:string,
+	about:string,
+	phoneNumber:string,
+}
+
+type SetUserProfileImageType =  {
+	authToken:string,
+	image:string
+}
+
 export type {
 	SignInRequestType,
 	SignUpRequestType,
@@ -135,4 +148,6 @@ export type {
 	CreateProposalType,
 	GetCategoriesType,
 	GetCitiesType,
+	UpdateUserInfos,
+	SetUserProfileImageType,
 }
