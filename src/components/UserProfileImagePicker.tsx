@@ -1,15 +1,17 @@
 import React,{useState, useEffect} from 'react'
-import {View, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native'
+import {View, ActivityIndicator, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import  {launchImageLibrary} from 'react-native-image-picker'
+import { colors } from '../assets/colors/main'
 
 
 type Prop = {
     image:any,
+    imageUpdateIsLoading:boolean,
     onImagePicked:Function
 }
 
-const UserProfileImagePicker = ({image, onImagePicked}:Prop) => {
+const UserProfileImagePicker = ({image, onImagePicked, imageUpdateIsLoading}:Prop) => {
     const [selectedUserProfileImage, setSelectedUserProfileImage]:any = useState()
 
     useEffect(() => {
@@ -25,8 +27,11 @@ const UserProfileImagePicker = ({image, onImagePicked}:Prop) => {
                 if(response.error){
                     console.log('error: '+response.error.toString())
                 }else{
-					if(response.uri){
-						onImagePicked(response.uri);
+                    let asset = response && response.assets && response.assets[0]
+                    let uri = asset && asset.uri
+					if(uri){
+                        // console.log('reponse', uri)
+						onImagePicked(uri);
 					}
                 }
             }
@@ -35,16 +40,23 @@ const UserProfileImagePicker = ({image, onImagePicked}:Prop) => {
 
     const showUserProfileImage = () => {
         //if the user picke a new image for the product
-        if(selectedUserProfileImage && selectedUserProfileImage.uri){
+        if(imageUpdateIsLoading){
             return (
-                <Image style={styles.selectedImage} resizeMode='cover' source={selectedUserProfileImage}  />
+                <ActivityIndicator size={'large'} color={colors.main}/>
             )
         }
         else{
-         
-            return (
-                <Icon size={30} name='person' color='white'/>
-            )
+            if(selectedUserProfileImage && selectedUserProfileImage.uri){
+                return (
+                    <Image style={styles.selectedImage} resizeMode='cover' source={selectedUserProfileImage}  />
+                )
+            }
+            else{
+            
+                return (
+                    <Icon size={30} name='person' color='white'/>
+                )
+            }
         }
     }
     
