@@ -14,14 +14,14 @@ export const HomeStack = (): React.ReactElement => (
 			options={{
 				headerShown:false,
 			}}
-      name='ListView' 
-      component={ListView}/>
+      name='MapView' 
+      component={MapView}/>
     <Stack.Screen 
 			options={{
 				headerShown:false,
 			}}
-      name='MapView' 
-      component={MapView}/>
+      name='ListView' 
+      component={ListView}/>
   </Stack.Navigator>
 );
 
