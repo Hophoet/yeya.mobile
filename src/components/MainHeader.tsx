@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 const MainHeader = (
 		{
 			firstAction,
+			iconLabel,
 			firstActionIcon,
 			secondAction,
 			secondActionLabel,
@@ -19,12 +20,15 @@ const MainHeader = (
         <View style={styles.container}>
 			<View style={styles.row1}>
 			{ firstAction &&
-				<TouchableOpacity 
-					onPress={firstAction}
-					style={styles.row1Action1Container}
-				>
-					<Icon name={firstActionIcon?firstActionIcon:'arrow-back'} size={30} color='gray'/>
-				</TouchableOpacity>
+				<View style={styles.iconContainer}>
+					<TouchableOpacity 
+						onPress={firstAction}
+						style={styles.row1Action1Container}
+					>
+						<Icon name={firstActionIcon?firstActionIcon:'arrow-back'} size={30} color='gray'/>
+					</TouchableOpacity>
+					<Text style={styles.iconLabel}>{iconLabel}</Text>
+				</View>
 			}
 			{ secondAction &&
 				<TouchableOpacity 
@@ -91,5 +95,13 @@ const styles = StyleSheet.create({
 		fontSize:15,
 		opacity:.5,
 		color:'gray',
+	},
+	iconContainer:{
+		flexDirection:'row',
+		alignItems:'center',
+	},
+	iconLabel:{
+		fontSize:20,
+		fontWeight:'bold'
 	}
 })
