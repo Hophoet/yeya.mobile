@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {AuthNavigator} from './auth.navigator';
 import MainNavigator from './main.navigator'
 import Loader from '../layouts/splash/Loader'
+import ChatDetail from '../layouts/chat/ChatDetail'
 const Stack = createStackNavigator();
 
 export const Nav = (): React.ReactElement => (
@@ -26,6 +27,11 @@ export const Nav = (): React.ReactElement => (
 			}}
       name='Auth' 
       component={AuthNavigator}/>
+		<Stack.Screen 
+			options={{
+			}}
+			name='ChatDetail' 
+			component={ChatDetail}/>
   </Stack.Navigator>
 );
 
