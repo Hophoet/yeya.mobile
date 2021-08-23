@@ -6,6 +6,7 @@ import Home from '../layouts/main/Home'
 import ListView from '../layouts/main/ListView'
 import MapView from '../layouts/main/MapView'
 import Favorite from '../layouts/main/Favorite'
+import Chat from '../layouts/chat/Chat'
 
 const Stack = createStackNavigator();
 export const HomeStack = (): React.ReactElement => (
@@ -81,7 +82,7 @@ const Tab = createBottomTabNavigator();
 		 />
       <Tab.Screen
         name="Chat" 
-        component={Home}
+        component={Chat}
         options = {{
           tabBarLabel:'Favorite',
           tabBarIcon: ({color, size, focused}) => {
