@@ -38,6 +38,33 @@ type ToggleJobFavoriteRequestType = {
 	jobId:string,
 }
 
+// chat
+type SendChatMessageType =  {
+	receiverId:number,
+	text:string,
+	authToken:string,
+}
+type GetUserChatConversationType =  {
+	authToken:string,
+}
+
+
+type GetChatConversationType =  {
+	authToken:string,
+	conversationId:number
+}
+
+type ReadChatConversationMessagesType =  {
+	authToken:string,
+	conversationId:number
+}
+
+type SendUserMessageType =  {
+	authToken:string,
+	text:string
+}
+
+
 export type {
 	SignInRequestType,
 	SignUpRequestType,
@@ -45,5 +72,10 @@ export type {
 	VerifyPasswordResetCodeRequestType,
 	GetJobsRequestType,
 	GetUserFavoriteJobsRequestType,
-	ToggleJobFavoriteRequestType
+	ToggleJobFavoriteRequestType,
+	SendChatMessageType,
+	ReadChatConversationMessagesType,
+	GetChatConversationType,
+	SendUserMessageType,
+	GetUserChatConversationType
 }
