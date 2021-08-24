@@ -232,7 +232,7 @@ class Map extends React.Component<Props, State> {
 						return (
 							<MapView.Marker 
 								style={styles.markerContainer} 
-								title={marker.title}
+								title={`${(marker.price)?marker.price:''} - ${marker.title} `}
 								key={index} 
 								coordinate={
 									{
@@ -241,7 +241,7 @@ class Map extends React.Component<Props, State> {
 									}
 								}>
 								 <Animated.View style={[styles.markerWrap, false && opacityStyle]}>
-									{ false &&
+									{ true &&
 									<Animated.View style={[styles.ring, scaleStyle]} />
 									}
 									<View style={styles.marker} />
@@ -279,6 +279,7 @@ class Map extends React.Component<Props, State> {
 				  {this.state.jobs.map((item, index) => (
 					 <JobsMapItem
 					 	key={index.toString()}
+						navigate={this.navigateTo}
 					 	index={index}
 						getJobs={this._getJobs}
 						item={item}
@@ -376,8 +377,9 @@ const styles = StyleSheet.create({
   marker: {
     width: 10,
     height: 10,
+	margin:30,
     borderRadius: 4,
-    backgroundColor: 'black',//"rgba(130,4,150, 0.9)",
+    backgroundColor: 'white',//"rgba(130,4,150, 0.9)",
   },
   ring: {
     width: 24,
@@ -388,12 +390,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(130,4,150, 0.5)",
   },
-  productImage:{
-	height:width/8,
-	width:width/8,
-	borderRadius:20,
-	padding:30,
-  },
   markerContainer:{
 	//backgroundColor:'yellow',
 	justifyContent:'center',
