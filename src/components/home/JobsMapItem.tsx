@@ -10,10 +10,12 @@ import { ToggleJobFavoriteRequestType } from '../../backend/requests/types'
 
 type Props = {
 	navigation?:any,
+	navigate?:any,
 	authUser: any,
 	item: any,
 	index: any,
 	authUserToken:string,
+	toggleJobFavorite:boolean,
 	getJobs?:Function,
 	dispatch:any
 }
@@ -80,7 +82,7 @@ class JobsMapItem  extends React.Component<Props, State>{
 	}
 
 
-
+ 
 	getDate = () => {
 		const created_at_timestamp = Math.floor(new Date(this.props.item.created_at).valueOf()/1000);
 		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
@@ -97,7 +99,14 @@ class JobsMapItem  extends React.Component<Props, State>{
 			<View key={index.toString()} style={styles.card} >
 				<View style={styles.cardRow1}>
 				<View style={styles.cardRow1Row1}>
-					<Text numberOfLines={1} style={styles.cardTitle}>{item.title}</Text>
+					<TouchableOpacity
+						style={styles.cardTitleContainer}
+						onPress={()=>{
+							this.props.navigate('JobDetail', {'job':item})
+						}}	
+					>
+						<Text numberOfLines={1} style={styles.cardTitle}>{item.title}</Text>
+					</TouchableOpacity>
 					{ item.price &&
 					<Text numberOfLines={1} style={styles.cardPrice}>XOF{item.price}</Text>
 					}
@@ -161,12 +170,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
 
 	},
+	cardTitleContainer: {
+		flex:1,
+		marginRight:10,
+	},
 	cardTitle: {
 		//fontSize: ,
 		fontSize:20,
-		flex:1,
 		fontWeight: "bold",
-		marginRight:10,
 	},
 	cardPrice: {
 		fontSize: 17,
