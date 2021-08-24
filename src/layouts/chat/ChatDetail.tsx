@@ -312,7 +312,6 @@ class ChatDetail extends React.Component<Props, State> {
 						ref={this.chatScrollRef}
 						data={this.getChatMessages()}
 						keyExtractor={(item)=>item.id.toString()}
-						/*
 						getItemLayout={(data, index) => (
 								{
 									length:ITEM_HEIGHT, 
@@ -320,7 +319,6 @@ class ChatDetail extends React.Component<Props, State> {
 									index
 								}
 							)}
-						*/
 						renderItem={({item, index})=>(
 							<ChatMessageItem
 								item={item}
