@@ -5,6 +5,8 @@ import {AuthNavigator} from './auth.navigator';
 import MainNavigator from './main.navigator'
 import Loader from '../layouts/splash/Loader'
 import ChatDetail from '../layouts/chat/ChatDetail'
+import JobDetail from '../layouts/job/JobDetail';
+
 const Stack = createStackNavigator();
 
 export const Nav = (): React.ReactElement => (
@@ -32,6 +34,11 @@ export const Nav = (): React.ReactElement => (
 			}}
 			name='ChatDetail' 
 			component={ChatDetail}/>
+		<Stack.Screen 
+			options={{
+			}}
+			name='JobDetail' 
+			component={JobDetail}/>
   </Stack.Navigator>
 );
 
