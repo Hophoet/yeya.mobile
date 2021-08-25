@@ -98,6 +98,7 @@ class JobsViewItem  extends React.Component<Props, State>{
 
 		let item = this.props.item
 		//console.log(authUser, authUserToken)
+		// console.log(item.favorite_users_ids)
 		return(
 			<View style={[styles.container]}>
 				<View style={styles.row1}>
@@ -113,7 +114,7 @@ class JobsViewItem  extends React.Component<Props, State>{
 						}
 					}}	
 				style={styles.row2}>
-						<Text numberOfLines={2} style={styles.title}>{item.title} title rest</Text>
+						<Text numberOfLines={2} style={styles.title}>{item.title}</Text>
 						<Text>
 							{ item.price &&
 							<Text style={styles.price}>XOF {item.price} </Text>
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
 		flexDirection:'row',
 		marginHorizontal:20,
 		marginVertical:10,
-		borderRadius:10,
+		borderRadius: 5,
 		padding:10,
 		minHeight:width/4,
 	},
