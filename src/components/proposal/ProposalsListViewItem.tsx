@@ -50,8 +50,9 @@ class ProposalsListViewItem  extends React.Component<Props, State>{
 	}
 
 	getDate = () => {
-		const created_at_timestamp = Math.floor(new Date(this.props.item.created_at).valueOf()/1000);
-		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
+		let created_at = this.props.item && this.props.item.job && this.props.item.job.created_at
+		const created_at_timestamp = Math.floor(new Date(created_at).valueOf()/1000);
+		const date:string = moment.unix(created_at_timestamp).fromNow()//.format('ll')
 		return date;
 	}
 
@@ -112,14 +113,21 @@ class ProposalsListViewItem  extends React.Component<Props, State>{
 							<Text style={styles.emoji}>📅</Text>
 						</View>
 					</View>
-					<View style={styles.row2}>
-							<Text numberOfLines={2} style={styles.title}>{job.title} title rest</Text>
+					<TouchableOpacity 
+					
+						onPress={()=>{
+							if(this.props.navigateTo){
+								this.props.navigateTo('JobDetail', {'job':job})
+							}
+						}}	
+							style={styles.row2}>
+							<Text numberOfLines={2} style={styles.title}>{job.title}</Text>
 							<Text>
 								{ job.price &&
 								<Text style={styles.price}>XOF {job.price} </Text>
 								}
 								{ (job.city )&&`- ${job.city.name}, ${job.city.country}`}</Text>
-					</View>
+					</TouchableOpacity>
 					<View style={styles.row3}>
 						<View style={styles.row3Column1}>
 						</View>
