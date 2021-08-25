@@ -22,12 +22,16 @@ import {  getCities } from '../../backend/requests/city'
 import {  GetCategoriesType, GetCitiesType } from '../../backend/requests/types'
 import { TextInput } from "react-native-gesture-handler";
 import CategoryPickerModal from '../../components/modals/CategoryPickerModa'
+import  {SET_CATEGORIES, SET_CITIES} from '../../redux/store/actions'
 import CityPickerModal from '../../components/modals/CityPickerModal'
 
 type Props ={
   authUser:any,
   authUserToken:string,
+  categories:any[],
+  cities:any[],
   navigation:any,
+  dispatch:Function,
 }
 
 type State = {
@@ -48,10 +52,8 @@ class AddJobStep1 extends React.Component<Props, State>{
   constructor(props:Props){
     super(props);
     this.state = {
-        cities:[],
-        categories:[]
-      
-
+        cities:this.props.cities?this.props.cities:[],
+        categories: this.props.categories?this.props.categories:[],
     }
     this.title = ''
     this.price = 0
@@ -73,8 +75,10 @@ class AddJobStep1 extends React.Component<Props, State>{
         }
         getCities(data)
         .then((response:any) => {
-          console.log('cities') 
+          // console.log('cities') 
           this.setState({cities:response.data})
+          let setCitiesAction = {type:SET_CITIES, value:response.data}
+          this.props.dispatch(setCitiesAction)
           // console.log(response.data) 
         }
         )
@@ -93,8 +97,10 @@ class AddJobStep1 extends React.Component<Props, State>{
         }
         getCategories(data)
         .then((response:any) => {
-          console.log('categories') 
+          // console.log('categories') 
           this.setState({categories:response.data})
+          let setCategoriesAction = {type:SET_CATEGORIES, value:response.data}
+          this.props.dispatch(setCategoriesAction)
           // console.log(response.data) 
         }
         )
@@ -244,7 +250,9 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
 return {
 	authUserToken: state.authUserToken,
-	authUser:state.authUser
+	authUser:state.authUser,
+  categories: state.categories,
+  cities: state.cities,
 };
 };
 
