@@ -33,11 +33,13 @@ const ChatUserItem = ({item, authUser, navigateTo}:any) => {
 	const _getNewMessagesCount = () => {
 		let newMessagesCount = 0;
 		let messages = item.messages;
-		for(let message of messages){
-			if(!message.read && 
-				(message.sender && authUser && message.receiver.id == authUser.id)
-			){
-				newMessagesCount++;
+		if(messages){
+			for(let message of messages){
+				if(!message.read && 
+					(message.sender && authUser && message.receiver.id == authUser.id)
+				){
+					newMessagesCount++;
+				}
 			}
 		}
 		return newMessagesCount;
