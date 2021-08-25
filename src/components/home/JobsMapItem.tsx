@@ -157,7 +157,7 @@ const CARD_WIDTH = width/2;
 const styles = StyleSheet.create({
   card: {
     padding: 10,
-	borderRadius:10,
+	borderRadius: 5,
     elevation: 2,
     backgroundColor: "#FFF",
     margin: 10,
