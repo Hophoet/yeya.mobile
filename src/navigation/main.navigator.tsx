@@ -12,7 +12,31 @@ import Chat from '../layouts/chat/Chat'
 import Proposal from '../layouts/proposal/ProposalsListView'
 import ProposalsListView from '../layouts/proposal/ProposalsListView';
 
+import AddJobStep1 from '../layouts/add_job/AddJobStep1';
+import AddJobStep2 from '../layouts/add_job/AddJobStep2';
+import AddJobStep3 from '../layouts/add_job/AddJobStep3';
+
 const Stack = createStackNavigator();
+
+// add job stack navigator
+const AddJobStackNav = (): React.ReactElement =>(
+  <Stack.Navigator 
+    // headerMode='none'
+    >
+    <Stack.Screen 
+        options={{
+            // headerShown:false,
+        }}
+        name='AddJobStep1' 
+        component={AddJobStep1}/>
+    <Stack.Screen 
+        name='AddJobStep2' 
+        component={AddJobStep2}/>
+    <Stack.Screen 
+        name='AddJobStep3' 
+        component={AddJobStep3}/>
+  </Stack.Navigator>
+)
 export const HomeStack = (): React.ReactElement => (
   <Stack.Navigator>
     <Stack.Screen 
@@ -29,6 +53,7 @@ export const HomeStack = (): React.ReactElement => (
       component={ListView}/>
   </Stack.Navigator>
 );
+
 
 
 const Tab = createBottomTabNavigator();
@@ -71,13 +96,13 @@ const Tab = createBottomTabNavigator();
         }}
       />
 		<Tab.Screen 
-			name="Add" 
-			component={Home}
+			name="AddJob" 
+			component={AddJobStackNav}
 			options = {{
 				tabBarIcon: ({color, size, focused}) => {
 					let iconName = (focused)?'add-circle':'add-circle-outline';
 					let iconSize = (focused)?35:30; 
-					let iconColor = (focused)?'black':'gray';
+					let iconColor = (focused)?colors.main:'gray';
 					return (<Icon name={iconName} color={iconColor} size={iconSize} />);
 				},
         tabBarBadge:'4',
