@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 
 type Props = {
 	navigation:any,
+	navigate:any,
 	authUser: any,
 	item: any,
 	authUserToken:string,
@@ -104,14 +105,21 @@ class JobsViewItem  extends React.Component<Props, State>{
 						<Text style={styles.emoji}>📅</Text>
 					</View>
 				</View>
-				<View style={styles.row2}>
+				<TouchableOpacity 
+				
+					onPress={()=>{
+						if(this.props.navigate){
+							this.props.navigate('JobDetail', {'job':item})
+						}
+					}}	
+				style={styles.row2}>
 						<Text numberOfLines={2} style={styles.title}>{item.title} title rest</Text>
 						<Text>
 							{ item.price &&
 							<Text style={styles.price}>XOF {item.price} </Text>
 							}
 							{ (item.city )&&`- ${item.city.name}, ${item.city.country}`}</Text>
-				</View>
+				</TouchableOpacity>
 				<View style={styles.row3}>
 					<View style={styles.row3Column1}>
 						<TouchableOpacity 
