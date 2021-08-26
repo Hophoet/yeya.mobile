@@ -91,6 +91,14 @@ class Favorite extends React.Component<Props, State> {
 		  });
 	}
 
+	navigateTo = (screen:any, data:any) => {
+		this.props.navigation.navigate(
+			screen,
+			data
+		);
+
+	}
+
 
 
 	componentDidMount() { 
@@ -151,6 +159,7 @@ class Favorite extends React.Component<Props, State> {
 						showsVerticalScrollIndicator={false}
 						renderItem={({item, index}:any) => <JobsViewItem
 							item={item}	
+							navigate={this.navigateTo}
 							fromFavorite={true}
 							getUserFavoriteJobs={this._getUserFavoriteJobs}
 						/>}
