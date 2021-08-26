@@ -32,16 +32,14 @@ const StepHeader = (
 					let index = i + 1;
 					if(index < size){
 						return (
-						// <View key={i} style={styles.columnContainer}>
-						<>
+						<View key={i} style={styles.columnContainer}>
 							<View style={[styles.column, (step>=(i+1)) && styles.activeColumn]}>
 								<View style={[styles.circle, (step>=(i+1)) && styles.activeCircle]} >
 									<Text style={styles.number}>{i+1}</Text>
 								</View>
 							</View>
 							<View style={[styles.line,(step>=(index+1)) && styles.activeLine]}/>
-						</>
-						// </View>
+						</View>
 						)
 					}
 					else if(index == size){
@@ -85,7 +83,11 @@ const styles = StyleSheet.create({
 	},
 	columnContainer:{
 		//flexDirection:'row',
-		backgroundColor:'red',
+		//backgroundColor:'red',
+		flex:1,
+		justifyContent:'center',
+		alignItems:'center',
+		flexDirection:'row',
 		// width:'100%',
 	},
 	column:{
