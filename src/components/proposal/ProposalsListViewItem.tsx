@@ -140,8 +140,7 @@ class ProposalsListViewItem  extends React.Component<Props, State>{
 						/>}
 						ItemSeparatorComponent={()=><View style={styles.itemsSeparator}/>}
 						keyExtractor={(item)=>{
-							console.log(item)
-							return (item  && item.job && item.job.id) }}
+							return (item  && item.conversation && item.conversation.id) }}
 					/>
 				</View>
 			</View>
