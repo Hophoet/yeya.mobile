@@ -18,6 +18,9 @@ const SEND_CHAT_MESSAGE_URL = `${HOST}/api/v1/chat/send-message`;
 const GET_USER_CHAT_CONVERSATIONS_URL = `${HOST}/api/v1/chat/user/conversations`;
 const GET_CHAT_CONVERSATION_URL = `${HOST}/api/v1/chat/conversation`;
 
+//
+const GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL = `${HOST}/api/v1/jobs-with-proposals-conversation`;
+
 export {
 	HOST,
 	axios,
@@ -31,4 +34,5 @@ export {
 	SEND_CHAT_MESSAGE_URL,
 	GET_USER_CHAT_CONVERSATIONS_URL,
 	GET_CHAT_CONVERSATION_URL,
+	GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL,
 };
