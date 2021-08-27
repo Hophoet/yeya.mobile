@@ -173,7 +173,7 @@ class ResetPassword extends React.Component<Props, State> {
 						<TouchableOpacity 
 							onPress={this.navigateToSignIn}
 							style={styles.forgotPasswordButton}>
-							<Text style={styles.forgotPasswordButtonLabel}>Vous-vous rappeler de votre mot de passe</Text>
+							<Text style={styles.forgotPasswordButtonLabel}>Vous-vous rappeler de votre mot de passe ?</Text>
 						</TouchableOpacity>
 					</View>
 					<View style={styles.row2}>
