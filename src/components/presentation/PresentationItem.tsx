@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {TextInput, Image, ScrollView, FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
+import {colors} from '../../assets/colors/main'
 
 const PresentationItem = ({item, it,  index, scrollX, currentIndex}:any) => {
 	return(
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
 	},
 	title:{
 		textAlign:'center',
-		color:'blue',
+		color:colors.main,
 		fontWeight:'bold',
 		fontSize:28,
 		marginBottom:10,
