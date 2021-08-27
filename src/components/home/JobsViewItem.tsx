@@ -117,7 +117,7 @@ class JobsViewItem  extends React.Component<Props, State>{
 						<TouchableOpacity 
 							onPress={this._toggleJobFavorite}
 							style={styles.favoriteButton}>
-							<Icon size={30} name={this._isUserFavorite()?'heart':'heart-outline'} color='gray'/>
+							<Icon size={30} name={this._isUserFavorite()?'heart':'heart-outline'} color='red'/>
 						</TouchableOpacity>
 					</View>
 					<View style={styles.row3Column2}>
