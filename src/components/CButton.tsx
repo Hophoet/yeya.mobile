@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import {colors} from '../assets/colors/main'
 import Icon from "react-native-vector-icons/Ionicons";
 
 
@@ -24,7 +25,7 @@ export default CButton;
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container:{
-        backgroundColor:'blue',
+        backgroundColor:colors.main,
 		flexDirection:'row',
 		justifyContent:'center',
 		alignItems:'center',
