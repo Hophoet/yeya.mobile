@@ -38,7 +38,6 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                         style={styles.iconButton}
                         onPress={ ()=>{
                             if(this.props.toggleJobFavorite){
-                                console.log(' toggle favorite')
                                 this.props.toggleJobFavorite()
                             }
                         } }
