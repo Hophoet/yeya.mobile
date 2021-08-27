@@ -3,12 +3,14 @@ import {
 	GET_JOBS_URL,
 	TOGGLE_JOB_FAVORITE_URL,
 	GET_FAVORITE_JOBS_URL,
+	GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL,
 } from './setup';
 
 import { 
 	GetJobsRequestType,
 	GetUserFavoriteJobsRequestType,
 	ToggleJobFavoriteRequestType,
+	GetUserJobsProposalsAndConversations
 
 } from './types';
 
@@ -18,6 +20,25 @@ function getJobs(data:GetJobsRequestType){
 	return new Promise( (resolve, reject) => {
 		axios({
 			url: GET_JOBS_URL,
+			method: 'GET',
+			data:{},
+			headers:{
+				Authorization:`Bearer ${data.authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+	})
+}
+
+function getUserJobsProposalsAndConversations(data:GetUserJobsProposalsAndConversations){
+	return new Promise( (resolve, reject) => {
+		axios({
+			url: GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL,
 			method: 'GET',
 			data:{},
 			headers:{
@@ -78,5 +99,6 @@ function toggleJobFavorite(data:ToggleJobFavoriteRequestType){
 export {
 	getJobs,
 	getUserFavorite,
-	toggleJobFavorite
+	toggleJobFavorite,
+	getUserJobsProposalsAndConversations,
 }
