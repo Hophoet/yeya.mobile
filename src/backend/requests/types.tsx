@@ -64,6 +64,10 @@ type SendUserMessageType =  {
 	text:string
 }
 
+type GetUserJobsProposalsAndConversationsType =  {
+	authToken:string
+}
+
 
 export type {
 	SignInRequestType,
@@ -77,5 +81,6 @@ export type {
 	ReadChatConversationMessagesType,
 	GetChatConversationType,
 	SendUserMessageType,
-	GetUserChatConversationType
+	GetUserChatConversationType,
+	GetUserJobsProposalsAndConversationsType
 }
