@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
+import {colors} from '../assets/colors/main'
 
 const MainHeader = (
 		{
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
 	row2Title:{
 		fontSize:30,
 		fontWeight:'bold',
-		color:'blue',
+		color:colors.main,
 	},
 	row2Description:{
 		fontSize:15,
