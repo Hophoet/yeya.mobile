@@ -118,7 +118,9 @@ const Presentation = ({navigation}:Props) => {
 				?(<>
 					<View style={styles.row3Row}>
 						<TouchableOpacity 
-							onPress={scrollToEnd}
+							onPress={()=> {
+								navigation.navigate('SignIn')
+							}}
 							style={styles.skipButton}>
 							<Text style={styles.skip}>Skip</Text>
 
