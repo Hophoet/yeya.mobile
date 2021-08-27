@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {TextInput, Image, ScrollView, FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import {colors} from '../../assets/colors/main'
 
 
 const PresentationIndicator = ({item, index, scrollX, currentIndex}:any) => {
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
         width:10,
         height:10,
         borderRadius:60,
-		backgroundColor:'blue',
+		backgroundColor:colors.main,
         marginHorizontal:5,
     },
     indicator2:{
