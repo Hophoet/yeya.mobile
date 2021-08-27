@@ -3,10 +3,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from "react-native-vector-icons/Ionicons";
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../layouts/main/Home'
+import {colors} from '../assets/colors/main'
+
 import ListView from '../layouts/main/ListView'
 import MapView from '../layouts/main/MapView'
 import Favorite from '../layouts/main/Favorite'
 import Chat from '../layouts/chat/Chat'
+import Proposal from '../layouts/proposal/ProposalsListView'
+import ProposalsListView from '../layouts/proposal/ProposalsListView';
 
 const Stack = createStackNavigator();
 export const HomeStack = (): React.ReactElement => (
@@ -44,7 +48,7 @@ const Tab = createBottomTabNavigator();
           tabBarIcon: ({color, size, focused}) => {
             let iconName = (focused)?'search':'search-outline';
             let iconSize = (focused)?35:30; 
-            let iconColor = (focused)?'black':'gray';
+            let iconColor = (focused)?colors.main:'gray';
             return (<Icon name={iconName} color={iconColor} size={iconSize} />);
           },
           tabBarShowLabel:false
@@ -60,7 +64,7 @@ const Tab = createBottomTabNavigator();
           tabBarIcon: ({color, size, focused}) => {
             let iconName = (focused)?'heart':'heart-outline';
             let iconSize = (focused)?35:30; 
-            let iconColor = (focused)?'black':'gray';
+            let iconColor = (focused)?colors.main:'gray';
             return (<Icon name={iconName} color={iconColor} size={iconSize} />);
           },
           tabBarShowLabel:false
@@ -88,7 +92,23 @@ const Tab = createBottomTabNavigator();
           tabBarIcon: ({color, size, focused}) => {
             let iconName = (focused)?'chatbox':'chatbox-outline';
             let iconSize = (focused)?35:30; 
-            let iconColor = (focused)?'black':'gray';
+            let iconColor = (focused)?colors.main:'gray';
+            return (<Icon name={iconName} color={iconColor} size={iconSize} />);
+          },
+          tabBarShowLabel:false
+          
+        }}
+      
+      />
+      <Tab.Screen
+        name="Proposal" 
+        component={ProposalsListView}
+        options = {{
+          tabBarLabel:'Proposal',
+          tabBarIcon: ({color, size, focused}) => {
+            let iconName = (focused)?'people':'people-outline';
+            let iconSize = (focused)?35:30; 
+            let iconColor = (focused)?colors.main:'gray';
             return (<Icon name={iconName} color={iconColor} size={iconSize} />);
           },
           tabBarShowLabel:false
