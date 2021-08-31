@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { bgLinearGradient, sideBarLinearGradient} from '../../assets/colors/main';
+import { bgLinearGradient, colors, sideBarLinearGradient} from '../../assets/colors/main';
 import Icon from "react-native-vector-icons/Ionicons";
 import StepHeader from '../../components/StepHeader';
 import Toast from '../../components/toasts';
@@ -55,12 +55,11 @@ class AddJobStep3 extends React.Component<Props, State>{
   }
 
   render(){
-    console.log('JOB DATA')
-    console.log(this.state.job)
     return (
         <View style={styles.container}>
           <View style={styles.row1}>
-            <Text>Votre tache a été ajoutée avec succes et disponible</Text>
+            <Icon name='checkbox-outline' size={40} color={colors.main}/>
+            <Text style={styles.message}>Votre tache a été ajoutée avec succes et totalement disponible</Text>
           </View>
 
         </View>
@@ -75,5 +74,16 @@ const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
 	container:{
 		flex:1,
+    backgroundColor:'white',
 	},
+  row1:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  message:{
+    fontSize:20,
+    paddingHorizontal:30,
+    textAlign:'center',
+  }
 })
