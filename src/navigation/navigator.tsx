@@ -6,8 +6,12 @@ import MainNavigator from './main.navigator'
 import Loader from '../layouts/splash/Loader'
 import ChatDetail from '../layouts/chat/ChatDetail'
 import JobDetail from '../layouts/job/JobDetail';
+import UpdateJobStep1 from '../layouts/update_job/UpdateJobStep1'
+import UpdateJobStep2 from '../layouts/update_job/UpdateJobStep2'
+import UpdateJobStep3 from '../layouts/update_job/UpdateJobStep3'
 
 const Stack = createStackNavigator();
+
 
 export const Nav = (): React.ReactElement => (
   <Stack.Navigator>
@@ -39,6 +43,21 @@ export const Nav = (): React.ReactElement => (
 			}}
 			name='JobDetail' 
 			component={JobDetail}/>
+		<Stack.Screen 
+			options={{
+			}}
+			name='UpdateJobStep1' 
+			component={UpdateJobStep1}/>
+		<Stack.Screen 
+			options={{
+			}}
+			name='UpdateJobStep2' 
+			component={UpdateJobStep2}/>
+		<Stack.Screen 
+			options={{
+			}}
+			name='UpdateJobStep3' 
+			component={UpdateJobStep3}/>
   </Stack.Navigator>
 );
 
