@@ -13,28 +13,40 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 import { bgLinearGradient, sideBarLinearGradient} from '../../assets/colors/main';
 import Icon from "react-native-vector-icons/Ionicons";
+import {connect} from 'react-redux';
 import StepHeader from '../../components/StepHeader';
 import CButton from '../../components/CButton';
 import Toast from '../../components/toasts';
 import {getGeolocation} from '../../utils/geolocation'
+import { createJob } from '../../backend/requests/job'
+import { CreateJobType, Geolocation } from '../../backend/requests/types'
 
 type Props ={
   navigation:any,
   job:any,
+  authUser:any,
+  authUserToken:string,
   route:any
 }
 
 type State = {
   region:any,
+  requestIsLoading:boolean,
 }
 
 class AddJobStep2 extends React.Component<Props, State>{
   phoneInput:any;
 	map:any;
+	_isMounted:boolean;
 	job:any;
+  geolocation:any;
   constructor(props:Props){
     super(props);
+		// Set the component mount state to false
+		this._isMounted = false;
+    
     this.state = {
+        requestIsLoading:false,
 			  region: {
 				latitude: 33.7866,
 				longitude: -118.2987,
@@ -44,6 +56,11 @@ class AddJobStep2 extends React.Component<Props, State>{
 
     }
     this.job = this.props.route.params.job
+    this.geolocation = {
+				latitude: 33.7866,
+				longitude: -118.2987,
+    }
+
   }
 
 
@@ -54,6 +71,8 @@ class AddJobStep2 extends React.Component<Props, State>{
         // Toast._show_bottom_toast('Entrer un numéro valide')
   }
   componentDidMount(){
+		// Enable the component mount state
+		this._isMounted = true;
     this.props.navigation.setOptions({
       header: () => (
         <StepHeader 
@@ -82,15 +101,19 @@ class AddJobStep2 extends React.Component<Props, State>{
 					  },
 					  350
 					);
-          this._continue({
-            job:{
-              ...this.job,
-              geolocation:{
-                latitude: region.latitude,
-                longitude: region.longitude
-              }
-            }
-          })
+          this.geolocation = {
+						latitude:region.latitude,
+						longitude:region.longitude,
+          }
+          // this._continue({
+          //   job:{
+          //     ...this.job,
+          //     geolocation:{
+          //       latitude: region.latitude,
+          //       longitude: region.longitude
+          //     }
+          //   }
+          // })
 			}
 			)
 			.catch((error:any)=> {
@@ -98,6 +121,70 @@ class AddJobStep2 extends React.Component<Props, State>{
 				console.log(error);
 
 			})
+    }
+
+
+    _createJob = () => {
+      let job = this.job
+      let geolocation = this.geolocation
+      let authUserToken = this.props.authUserToken
+      if (job && geolocation && job){
+        console.log(job, geolocation, authUserToken)
+        this.setState({requestIsLoading:true})
+
+				let data:CreateJobType = {
+          authToken:authUserToken,
+					title:job.title,
+					description:job.description,
+          categoryId:job.categoryId,
+          cityId:job.cityId,
+					price:job.price,
+					geolocation:geolocation,
+				}
+				createJob(data)
+				.then((response:any) => {
+					if(this._isMounted){
+            this.setState({requestIsLoading:false})
+						Toast._show_bottom_toast("votre tache a éta creé avec success");	
+						//console.log(response.data)
+						let token = response.data.token && response.data.token.value
+						let user = response.data.user
+            this.props.navigation.navigate(
+                'AddJobStep3',
+                data)
+					}
+				})
+				.catch(error => {
+					if(this._isMounted){
+            			this.setState({requestIsLoading:false})
+						//console.log(error.response.status);
+						//console.log(error.response.headers);
+						if (error.response) {
+						  // The request was made and the server responded with a status code
+						  // that falls out of the range of 2xx
+						  console.log(error.response.data);
+						  let errorData = error.response.data;
+						  if(errorData.code == 'auth/username-and-password-required'){
+								Toast._show_bottom_toast("Entrer votre nom d'utlisateur et mot de passe pour continuer");	
+						  }
+						  else if(errorData.code == 'auth/email-and-password-required'){
+							 Toast._show_bottom_toast("Entrer votre email et mot de passe pour continuer");	
+
+						  }
+						} else if (error.request) {
+						  // The request was made but no response was received
+						  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+						  // http.ClientRequest in node.js
+						  console.log(error.request);
+						} else {
+						  // Something happened in setting up the request that triggered an Error
+						  console.log('Error', error.message);
+						}
+						console.log(error.config);
+						}
+				  });
+
+      }
     }
 
 
@@ -137,6 +224,13 @@ class AddJobStep2 extends React.Component<Props, State>{
           onPress={this._getGeolocation}
           label='Localiser le lieu actuel'
         />
+        { this.geolocation &&
+        <CButton
+          onPress={this._createJob}
+          loading={this.state.requestIsLoading}
+          label='Enregistrer'
+        />
+        }
       </View>
 
       </View>
@@ -144,7 +238,25 @@ class AddJobStep2 extends React.Component<Props, State>{
           }
 
 }
-export default AddJobStep2;
+// Map dispath function from redux to the component props
+const mapDispatchToProps = (dispatch:any) => {
+	return {
+	  dispatch: (action:any) => {
+		dispatch(action);
+	  },
+	};
+  };
+  
+// Map the redux global state to the component props
+const mapStateToProps = (state:any) => {
+return {
+	authUserToken: state.authUserToken,
+	authUser:state.authUser
+};
+};
+
+// Export the component by connecting the maps to the component
+export default connect(mapStateToProps, mapDispatchToProps)(AddJobStep2);
 
 
 const {width, height} = Dimensions.get('window');
@@ -186,11 +298,14 @@ const styles = StyleSheet.create({
   },
 	row3:{
     position: "absolute",
+    flexDirection:'row',
     bottom: 5,
     left: 0,
     right: 0,
     paddingVertical: 10,
-    alignItems:'center'
+    alignItems:'flex-end',
+    justifyContent:'space-around'
+    // alignItems:'center'
 	//backgroundColor:'yellow',
 	},
 })
