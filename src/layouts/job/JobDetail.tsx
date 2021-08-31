@@ -7,10 +7,13 @@ import { toggleJobFavorite, deleteJob } from '../../backend/requests/job'
 import { ToggleJobFavoriteRequestType, DeleteJobType } from '../../backend/requests/types'
 import Icon from 'react-native-vector-icons/Ionicons';
 import ChatMessageItem from '../../components/chats/ChatMessagesItem'
+import ProposalModal from '../../components/modals/Proposal'
 import Toast from '../../components/toasts'
 import {senderChatMessage, getChatConversation, readChatConversationMessages} from '../../backend/requests/chat';
 import {SendChatMessageType, GetChatConversationType, ReadChatConversationMessagesType} from '../../backend/requests/types';
 import { colors } from '../../assets/colors/main'
+import { createProposal } from '../../backend/requests/job'
+import { CreateProposalType } from '../../backend/requests/types'
 
 
 type Props = {
@@ -22,6 +25,8 @@ type Props = {
 type State = {
 	job:any,
 	isUserFavorite:boolean,
+	requestIsLoading:boolean,
+	proposalModalIsVisible:boolean,
 }
 
 class JobDetail extends React.Component<Props, State> {
@@ -38,10 +43,69 @@ class JobDetail extends React.Component<Props, State> {
 
 		// Set the state
 		this.state = {
+			requestIsLoading:false,
+			proposalModalIsVisible:false,
 			job: this.props.route.params && this.props.route.params.job,
 			isUserFavorite:true,
 		};
  	}
+
+    _createProposal = (text:string) => {
+      let job = this.state.job
+      let authUserToken = this.props.authUserToken
+      if (job 
+		&& authUserToken 
+		&& text
+		&& !this.state.requestIsLoading
+		){
+        this.setState({requestIsLoading:true})
+		let data:CreateProposalType = {
+          	authToken:authUserToken,
+			jobId:job.id,
+			text:text,
+		}
+		createProposal(data)
+		.then((response:any) => {
+			if(this._isMounted){
+				this.setState({requestIsLoading:false})
+				Toast._show_bottom_toast("Vous avez postuler à cette tache avec succes");	
+				this.toggleProposalModal()
+			}
+		})
+		.catch((error:any) => {
+			if(this._isMounted){
+				this.setState({requestIsLoading:false})
+				//console.log(error.response.status);
+				//console.log(error.response.headers);
+				if (error.response) {
+					// The request was made and the server responded with a status code
+					// that falls out of the range of 2xx
+					console.log(error.response.data);
+					let errorData = error.response.data;
+					console.log(errorData)
+					if(errorData.code == 'proposal/already-apply'){
+						Toast._show_bottom_toast("Vous avez déja postuler à cette tache");	
+					}
+					else if(errorData.code == 'auth/email-and-password-required'){
+						Toast._show_bottom_toast("Entrer votre email et mot de passe pour continuer");	
+
+					}
+				} else if (error.request) {
+					// The request was made but no response was received
+					// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+					// http.ClientRequest in node.js
+					console.log(error.request);
+				} else {
+					// Something happened in setting up the request that triggered an Error
+					console.log('Error', error.message);
+				}
+				console.log(error.config);
+			}
+		});
+
+      }
+    }
+
 
 
    _customNav = () => {
@@ -197,6 +261,11 @@ class JobDetail extends React.Component<Props, State> {
 		// console.log('message listener clear')
 	}
 
+
+	toggleProposalModal = () => {
+		this.setState({proposalModalIsVisible:!this.state.proposalModalIsVisible})
+	}
+
 	render() {
 		// console.log(this.getChatMessages().length)
 		// console.log(this.chatScrollRef)
@@ -204,6 +273,17 @@ class JobDetail extends React.Component<Props, State> {
 		
 		return (
 			<View style={styles.container}>
+				<ProposalModal
+					modalIsVisible={this.state.proposalModalIsVisible}
+					requestIsLoading={this.state.requestIsLoading}
+					toggleModal={this.toggleProposalModal}
+					navigateBack={this.props.navigation.goBack}
+					submitInput={(value:any)=> { 
+						if(value.text){
+							this._createProposal(value.text)
+						}
+					}}
+				/>
 				<View style={styles.row1}>
 					<View style={styles.row1Row1}>
 						<Text style={styles.title}>{this.state.job && this.state.job.title}</Text>
@@ -213,25 +293,22 @@ class JobDetail extends React.Component<Props, State> {
 						<Text style={styles.location}> / {this.state.job && this.state.job.city && this.state.job.city.name} - {this.state.job && this.state.job.city && this.state.job.city.country} </Text>
 					</View>
 				</View>
-				{/* <View style={styles.row2}>
-					<TouchableOpacity 
-						onPress={()=>{}}
-						style={styles.favoriteButton}>
-						<Icon size={40} name={this._isUserFavorite()?'heart':'heart-outline'} color='red'/>
-					</TouchableOpacity>
-				</View> */}
 				<View style={styles.row3}>
 					<View style={styles.descriptionContainer}>
 						<ScrollView
 							showsVerticalScrollIndicator={false}	
 						>
-							<Text style={styles.description}>{this.state.job && this.state.job.description} Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque tenetur voluptatibus modi adipisci praesentium laborum, distinctio deleniti esse minus expedita quae doloribus quaerat. Quo commodi cumque nisi nulla deleniti placeat. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore quod voluptatibus earum asperiores, repellendus voluptate porro, nam magnam animi labore, cum deserunt quidem eligendi. Praesentium nisi minus consequatur consequuntur at. Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis perferendis dignissimos ab eaque consectetur aspernatur, quis sint modi minima temporibus ut ipsam accusantium fuga vitae architecto libero illo et voluptas. Lorem ipsum dolor sit amet consectetur adipisicing elit. A, pariatur deserunt. Alias voluptatum quae, consectetur cumque hic natus, omnis similique reprehenderit velit assumenda ullam sint modi debitis asperiores architecto adipisci. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum, recusandae laudantium expedita culpa molestias pariatur praesentium cum eaque incidunt provident veniam voluptates sequi, commodi ut facilis officiis quae, ab dicta. Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa mollitia deleniti nulla nihil, perferendis architecto omnis numquam aspernatur neque nemo harum earum porro quisquam minima fuga quo dignissimos? Animi, doloremque. Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque numquam, molestiae saepe sunt praesentium ipsum laboriosam libero nisi perferendis fugit illo error provident ex atque. Quos voluptate pariatur ducimus quae? </Text>
+							<Text style={styles.description}>{this.state.job && this.state.job.description} 
+							</Text>
 						</ScrollView>
 					</View>
 				</View>
 				<JobDetailBottomButton
 					isJobOwner={this._isJobOwner()}	
+					toggleProposalModal={this.toggleProposalModal}
+					job={this.state.job}
 					deleteJob={this.onDeleteJob}
+					navigateTo={this.navigateTo}
 					isUserFavorite={this.state.isUserFavorite}	
 					toggleJobFavorite={this._toggleJobFavorite}
 				/>
@@ -306,6 +383,9 @@ const styles = StyleSheet.create({
 		borderTopEndRadius:20,
 		borderTopLeftRadius:20,
 		padding:20,
+	},
+	description:{
+		fontSize:20,
 	}
 
 });
