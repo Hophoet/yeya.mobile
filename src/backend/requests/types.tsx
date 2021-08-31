@@ -99,6 +99,12 @@ type DeleteJobType =  {
 	id:string
 }
 
+type CreateProposalType =  {
+	authToken:string,
+	jobId:string,
+	text:string
+}
+
 export type {
 	SignInRequestType,
 	SignUpRequestType,
@@ -116,5 +122,6 @@ export type {
 	CreateJobType,
 	UpdateJobType,
 	Geolocation,
-	DeleteJobType
+	DeleteJobType,
+	CreateProposalType,
 }
