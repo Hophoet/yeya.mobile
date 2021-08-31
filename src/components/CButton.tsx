@@ -1,14 +1,19 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import {Text, StyleSheet, TouchableOpacity, View, ActivityIndicator, Dimensions} from 'react-native'
 import {colors} from '../assets/colors/main'
 import Icon from "react-native-vector-icons/Ionicons";
 
 
-const CButton = ({label, onPress, iconPosition, buttonStyle, icon, textStyle, iconColor}:any) => {
+const CButton = ({label, onPress, iconPosition, buttonStyle, loading, icon, textStyle, iconColor}:any) => {
 	return(
 		<TouchableOpacity 
             onPress={onPress}
             style={[styles.container, buttonStyle]}>
+            { loading && 
+				<View>
+					<ActivityIndicator color='white'/>
+				</View>
+			}
             { icon && iconPosition == 'left' &&
                 <Icon name={icon} size={25} color={(iconColor)?iconColor:'white'} />
             }
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
 		paddingVertical:10,
 		borderRadius:10,
 		paddingHorizontal:20,
-		elevation:20,
+		elevation:10,
 	},
 	buttonLabel:{
 		fontWeight:'bold',
