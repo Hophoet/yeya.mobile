@@ -4,13 +4,20 @@ import {
 	TOGGLE_JOB_FAVORITE_URL,
 	GET_FAVORITE_JOBS_URL,
 	GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL,
+	CREATE_JOB_URL,
+	UPDATE_JOB_URL,
+	HOST,
+
 } from './setup';
 
 import { 
 	GetJobsRequestType,
 	GetUserFavoriteJobsRequestType,
 	ToggleJobFavoriteRequestType,
-	GetUserJobsProposalsAndConversations
+	GetUserJobsProposalsAndConversationsType,
+	CreateJobType,
+	UpdateJobType,
+	DeleteJobType,
 
 } from './types';
 
@@ -96,9 +103,86 @@ function toggleJobFavorite(data:ToggleJobFavoriteRequestType){
 	})
 }
 
+function createJob(data:CreateJobType){
+	return new Promise( (resolve, reject) => {
+		axios({
+			url: CREATE_JOB_URL,
+			method: 'POST',
+			data:{
+				'title':data.title,
+				'description':data.description,
+				'price':data.price,
+				'city_id':'611feda597d8b3a708f0848b',
+				'category_id':'6117137b85cdebd22151feff',
+				'geolocation':data.geolocation,
+			},
+			headers:{
+				Authorization:`Bearer ${data.authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+	})
+}
+function updateJob(data:UpdateJobType){
+	return new Promise( (resolve, reject) => {
+		axios({
+			url: UPDATE_JOB_URL,
+			method: 'PUT',
+			data:{
+				'id':data.id,
+				'title':data.title,
+				'description':data.description,
+				'price':data.price,
+				'city_id':'611feda597d8b3a708f0848b',
+				'category_id':'6117137b85cdebd22151feff',
+				'geolocation':data.geolocation,
+			},
+			headers:{
+				Authorization:`Bearer ${data.authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+	})
+}
+
+function deleteJob(data:DeleteJobType){
+	return new Promise( (resolve, reject) => {
+		axios({
+			url: `${HOST}/api/v1/job/${data.id}/delete`,
+			method: 'DELETE',
+			data:{
+				'id':data.id,
+			},
+			headers:{
+				Authorization:`Bearer ${data.authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+	})
+}
+
+
 export {
 	getJobs,
 	getUserFavorite,
 	toggleJobFavorite,
+	createJob,
+	updateJob,
+	deleteJob,
 	getUserJobsProposalsAndConversations,
 }
