@@ -7,8 +7,10 @@ import {colors} from '../../assets/colors/main'
 
 type Props = {
     navigateTo?:Function,
+    isJobOwner:boolean,
     isUserFavorite:boolean,
     toggleJobFavorite:Function,
+    deleteJob:Function,
 
 }
 
@@ -52,7 +54,21 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                         }
                         }
                     >
-                        <Text style={styles.buttonLabel}>Apply for job</Text>
+                        <Text style={styles.buttonLabel}>
+                        { this.props.isJobOwner?'Mettre à jour':' Postuler à la tache'}    
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row3} >
+                    <TouchableOpacity 
+                        style={styles.iconButton}
+                        onPress={ ()=>{
+                            if(this.props.deleteJob){
+                                this.props.deleteJob()
+                            }
+                        } }
+                    >
+                        <Icon size={40} name={'trash'} color='red'/>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -68,7 +84,7 @@ const styles = StyleSheet.create({
         bottom:0,
         paddingVertical:10,
         width:width,
-        height:90,
+        height:80,
         elevation:20,
         backgroundColor:'white',
         flexDirection:'row',
@@ -78,7 +94,11 @@ const styles = StyleSheet.create({
         paddingHorizontal:20,
     },
     row2:{
-        flex:3,
+        flex:4,
+        paddingHorizontal:20,
+    },
+    row3:{
+        flex:1,
         paddingHorizontal:20,
     },
     iconButton:{
@@ -87,12 +107,12 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderWidth:2,
         borderColor:colors.main,
-        borderRadius:20,
+        borderRadius:10,
         flex:1,
     },
     textButton:{
         backgroundColor:colors.main,
-        borderRadius:20,
+        borderRadius:10,
         justifyContent:'center',
         alignItems:'center',
         flex:1,
