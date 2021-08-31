@@ -46,7 +46,7 @@ const StepHeader = (
 						return (
 						<View key={i} style={[styles.column, (step>=(i+1)) && styles.activeColumn]}>
 							<View style={[styles.circle, (step>=(i+1)) && styles.activeCircle]} >
-								<Icon size={25} name='checkmark' color='white' />
+								<Icon size={25} name='checkmark' color={colors.main} />
 							</View>
 						</View>
 						)
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 	circle:{
 		borderWidth:4,
 		borderColor:colors.main,
-		borderRadius:90,
+		borderRadius:10,
 		height:width/8,
 		width:width/8,
 		opacity:.2,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 	number:{
 		fontSize:25,
 		fontWeight:'bold',
-		color:'black',
+		color:colors.main,
 	},
 	title:{
 		fontSize:20,
