@@ -68,6 +68,36 @@ type GetUserJobsProposalsAndConversationsType =  {
 	authToken:string
 }
 
+type Geolocation =  {
+	latitude:number,
+	longitude:number
+}
+
+type CreateJobType =  {
+	authToken:string,
+	title:string,
+	description:string,
+	price:number,
+	cityId:string,
+	categoryId:string,
+	geolocation?:Geolocation
+}
+
+type UpdateJobType =  {
+	authToken:string,
+	id:string,
+	title:string,
+	description:string,
+	price:number,
+	cityId:string,
+	categoryId:string,
+	geolocation?:Geolocation
+}
+
+type DeleteJobType =  {
+	authToken:string,
+	id:string
+}
 
 export type {
 	SignInRequestType,
@@ -82,5 +112,9 @@ export type {
 	GetChatConversationType,
 	SendUserMessageType,
 	GetUserChatConversationType,
-	GetUserJobsProposalsAndConversationsType
+	GetUserJobsProposalsAndConversationsType,
+	CreateJobType,
+	UpdateJobType,
+	Geolocation,
+	DeleteJobType
 }
