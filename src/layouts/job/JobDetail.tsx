@@ -1,12 +1,13 @@
 import React, {createRef} from 'react';
-import { Text, ScrollView, TextInput, FlatList, Dimensions, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { Text, ScrollView, Alert, TextInput, FlatList, Dimensions, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import MainHeader from '../../components/MainHeader';
 import JobDetailBottomButton from '../../components/buttons/JobDetailBottomButton';
-import { toggleJobFavorite } from '../../backend/requests/job'
-import { ToggleJobFavoriteRequestType } from '../../backend/requests/types'
+import { toggleJobFavorite, deleteJob } from '../../backend/requests/job'
+import { ToggleJobFavoriteRequestType, DeleteJobType } from '../../backend/requests/types'
 import Icon from 'react-native-vector-icons/Ionicons';
 import ChatMessageItem from '../../components/chats/ChatMessagesItem'
+import Toast from '../../components/toasts'
 import {senderChatMessage, getChatConversation, readChatConversationMessages} from '../../backend/requests/chat';
 import {SendChatMessageType, GetChatConversationType, ReadChatConversationMessagesType} from '../../backend/requests/types';
 import { colors } from '../../assets/colors/main'
@@ -57,6 +58,61 @@ class JobDetail extends React.Component<Props, State> {
         });
 
     }
+
+	onDeleteJob = () =>{
+		Alert.alert(
+			'Suppression',
+			'Voulez-vous vraiment supprimer cette tache ?',
+			[
+				{	
+					text: 'Non',
+					onPress: () => {},
+					style: 'cancel'
+				},
+				{
+					text:'Oui',
+					onPress: () => this._deleteJob()
+				}
+			],
+			{ cancelable:false}
+		);
+	}
+	// Method to delete job
+	_deleteJob = () => {
+		let job = this.state.job
+		let authUserToken = this.props.authUserToken
+		if (job && authUserToken){
+
+		let data:DeleteJobType = {
+			authToken:this.props.authUserToken,
+			id:job.id
+		}
+		deleteJob(data)
+		.then((response:any) => {
+			Toast._show_bottom_toast('Tache supprimée avec succes');
+			this.props.navigation.goBack()
+		})
+		.catch( (error:any)=>  {
+			if(error.response) {
+			  // The request was made and the server responded with a status code
+			  // that falls out of the range of 2xx
+			  console.log(error.response.data);
+			  console.log(error.response.status);
+			  console.log(error.response.headers);
+			} else if (error.request) {
+			  // The request was made but no response was received
+			  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+			  // http.ClientRequest in node.js
+			  console.log(error.request);
+			} else {
+			  // Something happened in setting up the request that triggered an Error
+			  console.log('Error', error.message);
+			}
+			console.log(error.config);
+		  });
+		}
+	}
+
 
 	// Method to get the products categories
 	_toggleJobFavorite = () => {
@@ -119,6 +175,21 @@ class JobDetail extends React.Component<Props, State> {
 		}
 		return false
 	}
+	_isJobOwner = () => {
+		let job = this.state.job
+		if(job){
+			let job_user = job.user
+			let authUser = this.props.authUser
+			if(job_user && authUser){
+				// console.log(job_user.id, authUser.id)
+				if(job_user.id == authUser.id){
+					return true
+				}
+			}
+		}
+		return false
+
+	}
 
 	componentWillUnmount(){
 		// Set tje component mount state to true
@@ -159,6 +230,8 @@ class JobDetail extends React.Component<Props, State> {
 					</View>
 				</View>
 				<JobDetailBottomButton
+					isJobOwner={this._isJobOwner()}	
+					deleteJob={this.onDeleteJob}
 					isUserFavorite={this.state.isUserFavorite}	
 					toggleJobFavorite={this._toggleJobFavorite}
 				/>
