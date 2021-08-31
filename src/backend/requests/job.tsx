@@ -6,6 +6,7 @@ import {
 	GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL,
 	CREATE_JOB_URL,
 	UPDATE_JOB_URL,
+	CREATE_PROPOSAL_URL,
 	HOST,
 
 } from './setup';
@@ -18,6 +19,7 @@ import {
 	CreateJobType,
 	UpdateJobType,
 	DeleteJobType,
+	CreateProposalType,
 
 } from './types';
 
@@ -130,6 +132,7 @@ function createJob(data:CreateJobType){
 }
 function updateJob(data:UpdateJobType){
 	return new Promise( (resolve, reject) => {
+		console.log(data)
 		axios({
 			url: UPDATE_JOB_URL,
 			method: 'PUT',
@@ -176,6 +179,29 @@ function deleteJob(data:DeleteJobType){
 	})
 }
 
+function createProposal(data:CreateProposalType){
+	return new Promise( (resolve, reject) => {
+		console.log(data)
+		axios({
+			url: CREATE_PROPOSAL_URL,
+			method: 'POST',
+			data:{
+				'job_id':data.jobId,
+				'text':data.text,
+			},
+			headers:{
+				Authorization:`Bearer ${data.authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+	})
+}
+
 
 export {
 	getJobs,
@@ -185,4 +211,5 @@ export {
 	updateJob,
 	deleteJob,
 	getUserJobsProposalsAndConversations,
+	createProposal
 }
