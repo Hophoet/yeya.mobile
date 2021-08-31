@@ -105,7 +105,7 @@ class AddJobStep1 extends React.Component<Props, State>{
   return (
       <View style={styles.container}>
       <View style={styles.row1}>
-        <Text style={styles.title}>Ajouter les informations sur votre tache</Text>
+        <Text style={styles.title}>Renseigner les informations sur votre tache</Text>
       </View>
       <View style={styles.row2}>
           <ScrollView
