@@ -31,6 +31,8 @@ class AddJobStep1 extends React.Component<Props, State>{
   title:string;
   price:number;
   description:string;
+  categoryId:string;
+  cityId:string;
   constructor(props:Props){
     super(props);
     this.state = {
@@ -40,6 +42,8 @@ class AddJobStep1 extends React.Component<Props, State>{
     this.title = ''
     this.price = 0
     this.description = ''
+    this.cityId = ''
+    this.categoryId = ''
   }
 
 
@@ -49,13 +53,21 @@ class AddJobStep1 extends React.Component<Props, State>{
 
 
   _continue = () => {
-      if(this.title && this.description && this.price){
+      if(
+        this.title 
+        && this.description 
+        && this.price
+        && this.cityId
+        && this.categoryId
+        ){
         this.props.navigation.navigate(
             'AddJobStep2',
             {
               'job':{
                 title:this.title,
                 price:this.price,
+                cityId:this.cityId,
+                categoryId:this.categoryId,
                 description:this.description
               }
             })
@@ -68,6 +80,12 @@ class AddJobStep1 extends React.Component<Props, State>{
       }
       else if(!this.description){
           Toast._show_bottom_toast('Ajouter la description de votre tache')
+      }
+      else if(!this.categoryId){
+          Toast._show_bottom_toast('Ajouter la category de votre tache')
+      }
+      else if(!this.cityId){
+          Toast._show_bottom_toast('Ajouter votre ville residence')
       }
   }
   componentDidMount(){
@@ -122,6 +140,22 @@ class AddJobStep1 extends React.Component<Props, State>{
                   
                 />
               </View>
+              <View style={styles.textInputContainer}>
+                <CTextInput
+                  textInputProps={{
+                    }}
+                  onChangeText={(text:string)=>this.categoryId= text}
+                  placeholder='Category de votre tache' 
+                />
+              </View>
+              <View style={styles.textInputContainer}>
+                <CTextInput
+                  textInputProps={{
+                    }}
+                  onChangeText={(text:string)=>this.cityId= text}
+                  placeholder='Ville de residence' 
+                />
+              </View>
             <View style={styles.buttonContainer}>
                 <CButton
                   onPress={this._continue}
@@ -152,14 +186,16 @@ const styles = StyleSheet.create({
     paddingBottom:20,
   },
   row2:{
-    paddingHorizontal:20, 
     flex:1,
   },
   textInputContainer:{
     marginBottom:20,
+    paddingHorizontal:20, 
   },
   buttonContainer:{
     alignItems:'flex-end',
+    paddingHorizontal:20, 
+    paddingBottom:30,
     paddingTop:20,
   },
   title:{
