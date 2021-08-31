@@ -14,6 +14,7 @@ const GET_FAVORITE_JOBS_URL = `${HOST}/api/v1/user/favorite-jobs`;
 const TOGGLE_JOB_FAVORITE_URL = `${HOST}/api/v1/job/toggle-favorite`;
 const CREATE_JOB_URL = `${HOST}/api/v1/job/create`;
 const UPDATE_JOB_URL = `${HOST}/api/v1/job/update`;
+const CREATE_PROPOSAL_URL = `${HOST}/api/v1/proposal/create`;
 
 // Chat
 const SEND_CHAT_MESSAGE_URL = `${HOST}/api/v1/chat/send-message`;
@@ -39,4 +40,5 @@ export {
 	GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL,
 	CREATE_JOB_URL,
 	UPDATE_JOB_URL,
+	CREATE_PROPOSAL_URL,
 };
