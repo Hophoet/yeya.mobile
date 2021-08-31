@@ -128,7 +128,7 @@ class AddJobStep2 extends React.Component<Props, State>{
       let job = this.job
       let geolocation = this.geolocation
       let authUserToken = this.props.authUserToken
-      if (job && geolocation && job){
+      if (job && geolocation && authUserToken){
         console.log(job, geolocation, authUserToken)
         this.setState({requestIsLoading:true})
 
