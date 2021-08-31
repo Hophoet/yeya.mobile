@@ -7,6 +7,8 @@ import {colors} from '../../assets/colors/main'
 
 type Props = {
     navigateTo?:Function,
+    job:any,
+    toggleProposalModal:Function,
     isJobOwner:boolean,
     isUserFavorite:boolean,
     toggleJobFavorite:Function,
@@ -51,6 +53,21 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                     <TouchableOpacity 
                         style={styles.textButton}
                         onPress={ () => {
+                            if(this.props.isJobOwner){
+                                if(this.props.navigateTo){
+                                    this.props.navigateTo('UpdateJobStep1',
+                                    {
+                                        'job':{
+                                            ...this.props.job
+                                        }
+                                    })
+                                }
+                            }
+                            else{
+                                if(this.props.toggleProposalModal){
+                                    this.props.toggleProposalModal()
+                                }
+                            }
                         }
                         }
                     >
@@ -59,6 +76,7 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                         </Text>
                     </TouchableOpacity>
                 </View>
+                { this.props.isJobOwner && 
                 <View style={styles.row3} >
                     <TouchableOpacity 
                         style={styles.iconButton}
@@ -71,6 +89,7 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                         <Icon size={40} name={'trash'} color='red'/>
                     </TouchableOpacity>
                 </View>
+                }
             </View>
           
         )
