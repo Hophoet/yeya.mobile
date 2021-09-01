@@ -105,6 +105,15 @@ type CreateProposalType =  {
 	text:string
 }
 
+// category
+type GetCategoriesType =  {
+	authToken:string
+}
+// city
+type GetCitiesType =  {
+	authToken:string
+}
+
 export type {
 	SignInRequestType,
 	SignUpRequestType,
@@ -124,4 +133,6 @@ export type {
 	Geolocation,
 	DeleteJobType,
 	CreateProposalType,
+	GetCategoriesType,
+	GetCitiesType,
 }
