@@ -105,15 +105,6 @@ class AddJobStep2 extends React.Component<Props, State>{
 						latitude:region.latitude,
 						longitude:region.longitude,
           }
-          // this._continue({
-          //   job:{
-          //     ...this.job,
-          //     geolocation:{
-          //       latitude: region.latitude,
-          //       longitude: region.longitude
-          //     }
-          //   }
-          // })
 			}
 			)
 			.catch((error:any)=> {

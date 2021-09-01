@@ -17,18 +17,30 @@ import CTextInput from '../../components/CTextInput';
 import CButton from '../../components/CButton';
 import Toast from '../../components/toasts';
 import { TextInput } from "react-native-gesture-handler";
+import {  getCategories } from '../../backend/requests/category'
+import {  getCities } from '../../backend/requests/city'
+import {  GetCategoriesType, GetCitiesType } from '../../backend/requests/types'
+import CategoryPickerModal from '../../components/modals/CategoryPickerModa'
+import CityPickerModal from '../../components/modals/CityPickerModal'
+import {connect} from 'react-redux';
 
 type Props ={
   navigation:any,
+  authUser:any,
+  authUserToken:string,
   route:any,
 }
 
 type State = {
   title:string,
   price:number,
+  cities:any[],
+  categories:any[],
   description:string,
   categoryId:string,
   cityId:string,
+  city:any,
+  category:any,
   geolocation:any,
   
 }
@@ -36,21 +48,68 @@ type State = {
 class UpdateJobStep1 extends React.Component<Props, State>{
 
   job:any;
+  category:any;
+  city:any;
   constructor(props:Props){
     super(props);
     this.state = {
         title: this.props.route.params.job && this.props.route.params.job.title,
         price: this.props.route.params.job && this.props.route.params.job.price,
         description: this.props.route.params.job && this.props.route.params.job.description,
+        city: this.props.route.params.job && this.props.route.params.job.city,
+        category: this.props.route.params.job && this.props.route.params.job.category,
         cityId: this.props.route.params.job && this.props.route.params.job.city && this.props.route.params.job.city.id,
         categoryId: this.props.route.params.job && this.props.route.params.job.category && this.props.route.params.job.category.id,
         geolocation: this.props.route.params.job && this.props.route.params.job.geolocation ,
+        cities:[],
+        categories:[]
 
     }
     this.job = this.props.route.params.job
   }
 
 
+
+
+	 _getCities = () => {
+     let authUserToken = this.props.authUserToken
+     if(authUserToken){
+        let data: GetCitiesType = {
+            authToken:authUserToken
+        }
+        getCities(data)
+        .then((response:any) => {
+          console.log('cities') 
+          this.setState({cities:response.data})
+          // console.log(response.data) 
+        }
+        )
+        .catch((error:any)=> {
+          console.log(error);
+
+        })
+     }
+    }
+
+	 _getCategories = () => {
+     let authUserToken = this.props.authUserToken
+     if(authUserToken){
+        let data: GetCategoriesType = {
+            authToken:authUserToken
+        }
+        getCategories(data)
+        .then((response:any) => {
+          console.log('categories') 
+          this.setState({categories:response.data})
+          // console.log(response.data) 
+        }
+        )
+        .catch((error:any)=> {
+          console.log(error);
+
+        })
+     }
+    }
 
 
 
@@ -103,7 +162,15 @@ class UpdateJobStep1 extends React.Component<Props, State>{
         />
       ),
     });
+    this._getCategories()
+    this._getCities()
   }
+    _setCategory = (category:any) => {
+        this.setState({categoryId:category.id})
+    }
+    _setCity = (city:any) => {
+        this.setState({cityId:city.id})
+    }
 
   render(){
     console.log(this.job)
@@ -153,22 +220,18 @@ class UpdateJobStep1 extends React.Component<Props, State>{
                 />
               </View>
               <View style={styles.textInputContainer}>
-                <CTextInput
-                  textInputProps={{
-                    value:this.state.categoryId
-                    }}
-                  onChangeText={(categoryId:string)=>this.setState({categoryId})}
-                  placeholder='Category de votre tache' 
-                />
+                  <CategoryPickerModal
+                      categories={this.state.categories}
+                      setProductCategory={this._setCategory}
+                      category={this.state.category}
+                  />
               </View>
               <View style={styles.textInputContainer}>
-                <CTextInput
-                  textInputProps={{
-                    value:this.state.cityId
-                    }}
-                  onChangeText={(cityId:string)=>this.setState({cityId})}
-                  placeholder='Ville de residence' 
-                />
+                  <CityPickerModal
+                      cities={this.state.cities}
+                      setCity={this._setCity}
+                      city={this.state.city}
+                  />
               </View>
             <View style={styles.buttonContainer}>
                 <CButton
@@ -184,7 +247,25 @@ class UpdateJobStep1 extends React.Component<Props, State>{
           }
 
 }
-export default UpdateJobStep1;
+// Map dispath function from redux to the component props
+const mapDispatchToProps = (dispatch:any) => {
+	return {
+	  dispatch: (action:any) => {
+		dispatch(action);
+	  },
+	};
+  };
+  
+// Map the redux global state to the component props
+const mapStateToProps = (state:any) => {
+return {
+	authUserToken: state.authUserToken,
+	authUser:state.authUser
+};
+};
+
+// Export the component by connecting the maps to the component
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateJobStep1);
 
 
 const {width, height} = Dimensions.get('window');
