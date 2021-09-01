@@ -21,6 +21,12 @@ const SEND_CHAT_MESSAGE_URL = `${HOST}/api/v1/chat/send-message`;
 const GET_USER_CHAT_CONVERSATIONS_URL = `${HOST}/api/v1/chat/user/conversations`;
 const GET_CHAT_CONVERSATION_URL = `${HOST}/api/v1/chat/conversation`;
 
+// categories
+const GET_CATEGORIES_URL = `${HOST}/api/v1/categories`;
+
+// cities
+const GET_CITIES_URL = `${HOST}/api/v1/cities`;
+
 //
 const GET_JOBS_PROPOSALS_AND_CONVERSATIONS_URL = `${HOST}/api/v1/jobs-with-proposals-conversation`;
 
@@ -41,4 +47,6 @@ export {
 	CREATE_JOB_URL,
 	UPDATE_JOB_URL,
 	CREATE_PROPOSAL_URL,
+	GET_CITIES_URL,
+	GET_CATEGORIES_URL,
 };
