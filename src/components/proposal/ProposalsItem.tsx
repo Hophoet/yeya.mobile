@@ -71,7 +71,7 @@ class ProposalsItem  extends React.Component<Props, State>{
 						{ (conversationUser &&  conversationUser.image)
 						?<Image 
 							style={styles.image}
-							source={conversationUser.image.url}/>
+							source={{uri:conversationUser.image.url}}/>
 						:<View style={styles.userIcon}>
 							<Icon color='white' name='person' size={13} />
 						</View>
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
 		width:width/15,
 		height:width/15,
 		borderRadius:100,
+		backgroundColor:'#1113'
 	},
 	userIcon:{
 		width:width/15,
