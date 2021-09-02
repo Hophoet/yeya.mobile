@@ -12,9 +12,15 @@ import Chat from '../layouts/chat/Chat'
 import Proposal from '../layouts/proposal/ProposalsListView'
 import ProposalsListView from '../layouts/proposal/ProposalsListView';
 
+import User from '../layouts/user/User';
+
 import AddJobStep1 from '../layouts/add_job/AddJobStep1';
 import AddJobStep2 from '../layouts/add_job/AddJobStep2';
 import AddJobStep3 from '../layouts/add_job/AddJobStep3';
+
+import ImproveApp from '../layouts/app/ImproveApp';
+import ImproveAppDone from '../layouts/app/ImproveAppDone';
+import EditPersonalInfo from '../layouts/user/EditPersonalInfo';
 
 const Stack = createStackNavigator();
 
@@ -55,6 +61,25 @@ export const HomeStack = (): React.ReactElement => (
 );
 
 
+const ProfileNav = () => (
+	<Stack.Navigator >
+		<Stack.Screen 
+			options={{
+				headerShown:false,
+			}}
+			name='Profile' 
+			component={User}/>
+		<Stack.Screen 
+			name='EditPersonalInfo' 
+			component={EditPersonalInfo}/>
+		<Stack.Screen 
+			name='ImproveApp' 
+			component={ImproveApp}/>
+		<Stack.Screen 
+			name='ImproveAppDone' 
+			component={ImproveAppDone}/>
+	</Stack.Navigator>
+)
 
 const Tab = createBottomTabNavigator();
 
@@ -143,15 +168,15 @@ const Tab = createBottomTabNavigator();
       />
 		<Tab.Screen
 			name="Profile" 
-			component={Home}
+			component={ProfileNav}
 			
 			options = {{
 				tabBarLabel:'Profile',
 				tabBarIcon: ({color, size, focused}) => {
 					let iconName = (focused)?'person':'person-outline';
 					let iconSize = (focused)?35:30; 
-					let iconColor = (focused)?'black':'gray';
-					return (<Icon name={iconName} color={iconColor} size={iconSize} />);
+            let iconColor = (focused)?colors.main:'gray';
+          return (<Icon name={iconName} color={iconColor} size={iconSize} />);
 				},
         tabBarShowLabel:false
 
