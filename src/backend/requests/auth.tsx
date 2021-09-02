@@ -1,6 +1,8 @@
 import {
 	axios,
 	SIGN_IN_URL,
+	SET_USER_PROFILE_URL,
+	UPDATE_USER_PERSONAL_INFOS_URL,
 	SIGN_UP_URL,
 	SEND_PASSWORD_RESET_CODE_URL,
 	VERIFIY_PASSWORD_RESET_CODE_URL
@@ -112,9 +114,67 @@ function verifyPasswordResetCode(data:VerifyPasswordResetCodeRequestType){
 	})
 }
 
+function updateUserPersonalInfos(authToken:string, infos:UpdateUserPersonalInfosType){
+	let formData = new FormData();
+	formData.append('username', infos.username);
+	formData.append('first_name', infos.firstName);
+	formData.append('last_name', infos.lastName);
+	formData.append('email', infos.email);
+	formData.append('phone_number', infos.phoneNumber);
+	return new Promise( (resolve, reject) => {
+		axios({
+			url: UPDATE_USER_PERSONAL_INFOS_URL,
+			method: 'PUT',
+			data: formData,
+			headers:{
+				'Authorization':`Token ${authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+	})
+}
+
+function setUserProfile(authToken:string, imagePath: string){
+	let formData = new FormData();
+	formData.append(
+		'image',
+		{
+			uri:imagePath,
+			type:'image/jpeg',
+			name:'defaultname.jpg'
+		}
+	)
+	return new Promise( (resolve, reject) => {
+		axios({
+			url: SET_USER_PROFILE_URL,
+			method: 'POST',
+			data: formData,
+			headers:{
+				Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+				'Authorization':`Token ${authToken}`
+			}
+		})
+		.then((response:any) => {
+			resolve(response);
+		})
+		.catch((error:any) => {
+			reject(error);
+		})
+
+	})
+}
+
 export {
 	signIn,
 	signUp,
 	sendPasswordResetCode,
+	setUserProfile,
 	verifyPasswordResetCode,
+	updateUserPersonalInfos,
 }
