@@ -122,7 +122,7 @@ const Presentation = ({navigation}:Props) => {
 								navigation.navigate('SignIn')
 							}}
 							style={styles.skipButton}>
-							<Text style={styles.skip}>Skip</Text>
+							<Text style={styles.skip}>Passer</Text>
 
 						</TouchableOpacity>
 
@@ -145,7 +145,7 @@ const Presentation = ({navigation}:Props) => {
 							}}
 							iconPosition='right'
 							icon='arrow-forward' 
-							label='Get Started'
+							label='Commencer Maintement'
 						/>
 					</View>
 
