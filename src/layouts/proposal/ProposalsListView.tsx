@@ -6,47 +6,36 @@ import Toast from '../../components/toasts'
 import { mailFormatIsValid } from '../../utils/mail'
 import { getJobs, getUserJobsProposalsAndConversations } from '../../backend/requests/job'
 import { GetJobsRequestType, GetUserJobsProposalsAndConversationsType } from '../../backend/requests/types'
-import CButton from '../../components/CButton';
 import ProposalsListViewItem from '../../components/proposal/ProposalsListViewItem';
-import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
-import Icon from "react-native-vector-icons/Ionicons";
+import  {SET_PROPOSALS} from '../../redux/store/actions'
+import ScreenHeader from '../../components/ScreenHeader'
 import { connect } from 'react-redux'
 
 type Props = {
 	navigation:any,
 	authUser: any,
 	authUserToken:string,
-	dispatch:any
+	dispatch:Function,
+	proposals:any[],
 }
 
 type State = {
 	requestIsLoading:boolean,
-	selectedFilter:any,
 	jobs:any[],
 }
 
 class ProposalsListView extends React.Component<Props, State> {
 
 	_isMounted:boolean;
-	email:string = '';
-	password:string = '';
-	filters:any[] = []
 	constructor(props:Props) {
 		super(props);
 		// Set the component mount state to false
 		this._isMounted = false;
-		this.filters = [
-			{id:2, name:'Most Revelant'},
-			{id:3, name:'Most Recent'},
-		]
 		// Set the state
 		this.state = {
 			requestIsLoading:false,
-			selectedFilter:this.filters[0],
-			jobs:[
-			]
-
+			jobs: this.props.proposals
 		};
  	}
 
@@ -64,6 +53,8 @@ class ProposalsListView extends React.Component<Props, State> {
 				this.setState({jobs:response.data});
 				this.setState({requestIsLoading:false})
 				//console.log(response.data);
+				let setProposalsAction = {type:SET_PROPOSALS, value:response.data}
+				this.props.dispatch(setProposalsAction)
 			}
 		})
 		.catch( (error:any)=>  {
@@ -129,13 +120,11 @@ class ProposalsListView extends React.Component<Props, State> {
 	render(){
 		return(
 			<View style={styles.container}>
-				<StatusBar 
-					hidden={false}
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
+				<ScreenHeader
+					title='Vos taches et leur postulations'	
+					// description='Ici vous avez vos taches et leurs propositions'	
 				/>
-				<View style={styles.row2}>
-				</View>
 				<View style={styles.row3}>
 					<FlatList
 						data={this.state.jobs}
@@ -167,7 +156,8 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
     return {
         authUserToken:state.authUserToken,
-        authUser:state.authUser
+        authUser:state.authUser,
+        proposals:state.proposals,
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProposalsListView)
