@@ -7,6 +7,7 @@ import CTextInput from '../../components/CTextInput';
 import CButton from '../../components/CButton';
 import {  SendUserMessageType} from '../../backend/requests/types'
 import { sendUserMessage} from '../../backend/requests/message'
+import { colors } from '../../assets/colors/main'
 
 type Props = {
 	navigation:any,
@@ -147,13 +148,12 @@ class ImproveApp extends React.Component<Props, State> {
 	render() {
 		return (
 			<View style={styles.container}>
-				<StatusBar backgroundColor='black' />
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScrollView>
-
 				<View style={styles.row1}>
 					{ this.state.requestIsLoading &&
 					<View style={styles.activityIndicatorContainer}>
-						<ActivityIndicator color='gray' size='large'/>
+						<ActivityIndicator color={colors.main} size='large'/>
 					</View>
 					}
 					<CTextInput
@@ -173,10 +173,7 @@ class ImproveApp extends React.Component<Props, State> {
 				<View style={styles.row3}>
 						<CButton
 							disabled={this.state.requestIsLoading}
-							onPress={() => {
-								console.log('nav')
-								this.props.navigation.navigate('ImproveAppDone')
-							}}
+							onPress={this._sendUserMessage}
 							label={"Envoyer"}		
 							// labelStyle={styles.labelStyle}
 						/>
