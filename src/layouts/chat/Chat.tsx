@@ -4,16 +4,21 @@ import {connect} from 'react-redux';
 import ChatUserItem from '../../components/chats/ChatUserItem';
 import {getUserChatConversations} from '../../backend/requests/chat'
 import {GetUserChatConversationType} from '../../backend/requests/types';
+import  {SET_CHATS} from '../../redux/store/actions'
 import BorderButton from '../../components/CButton';
+import ScreenHeader from '../../components/ScreenHeader'
 
 type Props = {
 	navigation:any,
 	authUserToken:string,
 	authUser:any,
+	chats:any[],
+	dispatch:Function,
 }
 
 type State = {
-	chatConversations:any[]
+	chatConversations:any[],
+	requestIsLoading:boolean,
 }
 
 class Chat extends React.Component<Props, State> {
@@ -22,9 +27,10 @@ class Chat extends React.Component<Props, State> {
 		super(props);
 		// Set the component mount state to false
 		this._isMounted = false;
-		// Set the state
+		// Set the stat
 		this.state = {
-			chatConversations:[]
+			chatConversations: this.props.chats?this.props.chats:[],
+			requestIsLoading:false,
 		};
  	}
 
@@ -38,6 +44,8 @@ class Chat extends React.Component<Props, State> {
 			if(this._isMounted){
 				// request to get the products on the screen focus
 				this._getUserChatConversations();
+				// console.log('redux globals state ')
+				// console.log(this.props.chats)
 			}
 		});
 
@@ -47,6 +55,7 @@ class Chat extends React.Component<Props, State> {
 		let newMessagesCount = 0;
 		const authUser = this.props.authUser;
 		let conversations:any[] = this.state.chatConversations;
+		// console.log(conversations)
 		for(let conversation of conversations){
 			let messages = conversation.messages;
 			for(let message of messages){
@@ -95,12 +104,15 @@ class Chat extends React.Component<Props, State> {
 			const data:GetUserChatConversationType = {
 				authToken:authUserToken
 			}
+			this.setState({requestIsLoading:true})
 			getUserChatConversations(data)
 			.then((response:any) => {
 				if(this._isMounted){
+					this.setState({requestIsLoading:false})
 					let conversations:any[] = this.sortConversations(response.data)
 					this.setState({chatConversations:conversations});
-
+					let setChatsAction = {type:SET_CHATS, value:conversations}
+					this.props.dispatch(setChatsAction)
 
 					// update tab bar badge
 					let newMessagesCount = this._getNewMessagesCount()
@@ -118,6 +130,7 @@ class Chat extends React.Component<Props, State> {
 			})
 			.catch( (error:any) => {
 				if (error.response) {
+				this.setState({requestIsLoading:false})
 				// The request was made and the server responded with a status code
 				// that falls out of the range of 2xx
 				console.log(error.response.data);
@@ -161,39 +174,20 @@ class Chat extends React.Component<Props, State> {
 	}
 
 	render() {
+		console.log(this.state.chatConversations[0].last_updated_at)
 		return (
 			<View style={styles.container}>
 				<StatusBar backgroundColor='black' />
-				<View style={styles.row1}>
-						<View style={styles.headerContainer}>
-							<Text style={styles.headerTitle}>Boite de réception</Text>
-						</View>
-						{ !this._userAuthenticated() &&
-						<View style={styles.naContainer}>
-							<Text style={styles.naTitle}>Connectez-vous pour consulter les messages</Text>
-							<Text style={styles.naDescription}>Une fois votre connexion effectuée, les messages de vos clients apparaitrons ici.</Text>
-							<BorderButton
-								buttonStyle={{alignSelf:'flex-start'}}
-								label='Connexion'
-								onPress={()=>{
-									this.props.navigation.navigate('SignIn')
-								}}
-							/>
-						</View>
-						}
-						{ (this._userAuthenticated() 
-							&& this.state.chatConversations 
-							&& this.state.chatConversations.length == 0) &&
-						<View style={styles.naContainer}>
-							<Text style={styles.naDescription}>
-							Une fois vos produits commandé, les messages de vos clients apparaitrons ici.</Text>
-						</View>
-						}
-				</View>
+				<ScreenHeader
+					title='Boite de réception'	
+					// description='Ici vous avez vos taches et leurs propositions'	
+				/>
 
 				<View style={styles.row2}>
 					{ this._userAuthenticated() &&
 					<FlatList
+						onRefresh={this._getUserChatConversations}
+						refreshing={this.state.requestIsLoading}
 						showsVerticalScrollIndicator={false}
 						data={this.state.chatConversations}
 						keyExtractor={(item)=>item.id.toString()}
@@ -228,7 +222,8 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
 return {
 	authUserToken: state.authUserToken,
-	authUser:state.authUser
+	authUser:state.authUser,
+	chats:state.chats,
 };
 };
 
@@ -242,13 +237,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 	backgroundColor:'white',
-	paddingHorizontal:20,
-  },
-  row1:{
-	paddingVertical:10,
   },
   row2:{
-	  flex:1,
+	flex:1,
+	paddingHorizontal:20,
 
   },
 	headerContainer:{
@@ -259,21 +251,4 @@ const styles = StyleSheet.create({
 		borderBottomColor:'black',
 		marginBottom:10,
   },
-   headerTitle:{
-		fontSize:30,
-		fontWeight:'bold',
-		paddingVertical:10,
-	},
-	headerDescription:{
-		 
-	},
-	naTitle:{
-		fontSize:20,
-		fontWeight:'bold',
-		// paddingVertical:10,
-
-	},
-	naDescription:{
-		opacity:.5
-	},
 });
