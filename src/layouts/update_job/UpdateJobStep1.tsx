@@ -22,13 +22,17 @@ import {  getCities } from '../../backend/requests/city'
 import {  GetCategoriesType, GetCitiesType } from '../../backend/requests/types'
 import CategoryPickerModal from '../../components/modals/CategoryPickerModa'
 import CityPickerModal from '../../components/modals/CityPickerModal'
+import  {SET_CATEGORIES, SET_CITIES} from '../../redux/store/actions'
 import {connect} from 'react-redux';
 
 type Props ={
   navigation:any,
   authUser:any,
   authUserToken:string,
+  categories:any[],
+  cities:any[],
   route:any,
+  dispatch:Function,
 }
 
 type State = {
@@ -61,8 +65,8 @@ class UpdateJobStep1 extends React.Component<Props, State>{
         cityId: this.props.route.params.job && this.props.route.params.job.city && this.props.route.params.job.city.id,
         categoryId: this.props.route.params.job && this.props.route.params.job.category && this.props.route.params.job.category.id,
         geolocation: this.props.route.params.job && this.props.route.params.job.geolocation ,
-        cities:[],
-        categories:[]
+        cities:this.props.cities?this.props.cities:[],
+        categories: this.props.categories?this.props.categories:[],
 
     }
     this.job = this.props.route.params.job
@@ -79,8 +83,10 @@ class UpdateJobStep1 extends React.Component<Props, State>{
         }
         getCities(data)
         .then((response:any) => {
-          console.log('cities') 
+          // console.log('cities') 
           this.setState({cities:response.data})
+          let setCitiesAction = {type:SET_CITIES, value:response.data}
+          this.props.dispatch(setCitiesAction)
           // console.log(response.data) 
         }
         )
@@ -99,8 +105,10 @@ class UpdateJobStep1 extends React.Component<Props, State>{
         }
         getCategories(data)
         .then((response:any) => {
-          console.log('categories') 
+          // console.log('categories') 
           this.setState({categories:response.data})
+          let setCategoriesAction = {type:SET_CATEGORIES, value:response.data}
+          this.props.dispatch(setCategoriesAction)
           // console.log(response.data) 
         }
         )
@@ -216,7 +224,6 @@ class UpdateJobStep1 extends React.Component<Props, State>{
                     maxLength:1000,
                   }
                   }
-                  
                 />
               </View>
               <View style={styles.textInputContainer}>
@@ -260,7 +267,9 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
 return {
 	authUserToken: state.authUserToken,
-	authUser:state.authUser
+	authUser:state.authUser,
+  categories: state.categories,
+  cities: state.cities,
 };
 };
 
