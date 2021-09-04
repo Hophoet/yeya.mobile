@@ -12,13 +12,16 @@ import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
 import Icon from "react-native-vector-icons/Ionicons";
 import { getUserFavorite } from '../../backend/requests/job'
+import  {SET_FAVORITES} from '../../redux/store/actions'
 import { GetUserFavoriteJobsRequestType } from '../../backend/requests/types'
+import ScreenHeader from '../../components/ScreenHeader'
 import { connect } from 'react-redux'
 
 type Props = {
 	navigation:any,
 	authUser: any,
 	authUserToken:string,
+	favorites:any[],
 	dispatch:any
 }
 
@@ -46,9 +49,7 @@ class Favorite extends React.Component<Props, State> {
 		this.state = {
 			requestIsLoading:false,
 			selectedFilter:this.filters[0],
-			jobs:[
-			]
-
+			jobs: this.props.favorites?this.props.favorites:[],
 		};
  	}
 
@@ -62,9 +63,11 @@ class Favorite extends React.Component<Props, State> {
 		getUserFavorite(data)
 		.then((response:any) => {
 			if(this._isMounted){
-				console.log(response.data)
+				// console.log(response.data)
 				this.setState({jobs:response.data});
 				this.setState({requestIsLoading:false})
+				let setFavoritesAction = {type:SET_FAVORITES, value:response.data}
+				this.props.dispatch(setFavoritesAction)
 				//console.log(response.data);
 			}
 		})
@@ -145,12 +148,10 @@ class Favorite extends React.Component<Props, State> {
 					barStyle={'dark-content'}
 					backgroundColor={'white'}
 				/>
-				<View style={styles.row1}>
-					<View style={styles.row1Row1}>
-						<Text style={styles.headerTitle}>Favoris</Text>
-						<Text style={styles.headerDescription}>Collecter les traveaux que vous souhaitez revoir plus tard en cliquant sur le coeur</Text>
-					</View>
-				</View>
+				<ScreenHeader
+					title='Vos favoris'	
+					description='Collecter les taches que vous souhaiterez revoir consulter plus tard en cliquant sur le coeur'	
+				/>
 				<View style={styles.row2}>
 					<FlatList
 						onRefresh={this._getUserFavoriteJobs}
@@ -182,7 +183,8 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
     return {
         authUserToken:state.authUserToken,
-        authUser:state.authUser
+        authUser:state.authUser,
+        favorites:state.favorites,
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Favorite)
@@ -193,30 +195,6 @@ const styles = StyleSheet.create({
 		flex:1,
 		backgroundColor:'white',
 		//backgroundColor:'#6C63FF'
-	},
-	headerTitle:{
-		fontSize:35,
-		fontWeight:'bold',
-	},
-	headerDescription:{
-		color:'gray',
-		fontSize:14,
-	},
-	row1:{
-		flexDirection:'row',
-		//backgroundColor:'red',
-		paddingHorizontal:20,
-		alignItems:'center',
-		flex:1,
-	},
-	row1Row1:{
-		flex:3,
-		//backgroundColor:'red',
-	},
-	row1Row2:{
-		flex:1,
-		//backgroundColor:'blue',
-		alignItems:'center',
 	},
 	row2:{
 		flex:6,
