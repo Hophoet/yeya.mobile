@@ -6,14 +6,18 @@ import { getJobs } from '../../backend/requests/job'
 import { GetJobsRequestType } from '../../backend/requests/types'
 import toasts from '../../components/toasts'
 import JobsMapItem from '../../components/home/JobsMapItem'
+import IconButton from '../../components/buttons/IconButton'
+import  {SET_JOBS} from '../../redux/store/actions'
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons'
+import { colors } from '../../assets/colors/main';
 
 type Props = {
 	navigation:any,
 	authUserToken:string,
-	dispatch:any,
+	dispatch:Function,
 	authUser:any,
+	jobs:any[],
 }
 type State = {
 	region:any,
@@ -43,7 +47,7 @@ class Map extends React.Component<Props, State> {
 				latitudeDelta: 0.04864195044303443,
 				longitudeDelta: 0.040142817690068,
 			  },
-			  jobs:[],
+			  jobs:this.props.jobs?this.props.jobs:[],
 			};
 		}
 
@@ -119,6 +123,9 @@ class Map extends React.Component<Props, State> {
 		);
 
 	}
+	navigateToListView = () => {
+		this.props.navigation.navigate('ListView')
+	}
 
 	_isUserFavorite = (item:any) => {
 		let user_ids = item.favorite_users_ids
@@ -149,6 +156,8 @@ class Map extends React.Component<Props, State> {
 				//console.log(response.data[3])
 				this.setState({jobs:response.data});
 				this.setState({requestIsLoading:false})
+				let setJobsAction = {type:SET_JOBS, value:response.data}
+				this.props.dispatch(setJobsAction)
 				//console.log(response.data);
 			}
 		})
@@ -256,6 +265,12 @@ class Map extends React.Component<Props, State> {
 				</MapView>
 
 				<View style={styles.footerContainer}>
+					<View style={styles.footerButtonContainer}>
+						<IconButton
+							onPress={this.navigateToListView}
+							icon='list'
+						/>
+					</View>
 				<Animated.ScrollView
 					  horizontal
 					  scrollEventThrottle={1}
@@ -308,7 +323,8 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
 return {
 	authUserToken: state.authUserToken,
-	authUser:state.authUser
+	authUser: state.authUser,
+	jobs: state.jobs
 };
 };
 
@@ -414,4 +430,10 @@ const styles = StyleSheet.create({
 	color:'white',
 	fontSize:16,
 },
+  footerButtonContainer:{
+	  alignItems:'flex-end',
+	  paddingHorizontal:10,
+	//   backgroundColor:'red',
+	  
+  },
 });
