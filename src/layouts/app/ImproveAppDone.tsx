@@ -35,7 +35,7 @@ class ImproveAppDone extends React.Component<Props, State> {
  		}
 
 	back = () => {
-		this.props.navigation.navigate('Profile');
+		this.props.navigation.navigate('User');
 	}
 
 	navigateTo = (screen:any) => {
@@ -75,7 +75,7 @@ class ImproveAppDone extends React.Component<Props, State> {
 		let authUser = this.props.authUser
 		return (
 			<View style={styles.container}>
-				<StatusBar backgroundColor='black' />
+				<StatusBar barStyle='light-content' />
 
 				<View style={styles.row1}>
 					<Ionicons 
@@ -83,7 +83,7 @@ class ImproveAppDone extends React.Component<Props, State> {
 						name='mail-unread-outline' 
 						color={colors.main} />
 					<Text style={styles.message}>
-						<Text style={styles.username}>{(authUser)?authUser.username:''}</Text>	
+						<Text style={styles.username}>{(authUser)?authUser.first_name:''}</Text>	
 						, Merci pour votre participation à m'amélioration de l'application</Text>
 				</View>
 			</View>
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
 	},
 	username:{
 		fontWeight:'bold',
+		color:colors.main,
 	},
 	textInputContainer:{
 		flexDirection:'row',
