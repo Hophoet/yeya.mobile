@@ -6,7 +6,7 @@ import ProfileHeader from '../../components/user/ProfileHeader';
 import ActionButtonsItem from '../../components/user/ActionButtonsItem';
 import Icon from 'react-native-vector-icons/Ionicons'
 import UserProfileImagePicker from '../../components/UserProfileImagePicker';
-import {SET_AUTH_USER, SET_AUTH_USER_TOKEN} from '../../redux/store/actions';
+import {SET_AUTH_USER, SET_AUTH_USER_TOKEN, CLEAN} from '../../redux/store/actions';
 import {setUserProfile } from '../../backend/requests/auth';
 import {SetUserProfileImageType } from '../../backend/requests/types';
 import Toast from '../../components/toasts';
@@ -99,8 +99,13 @@ class  User extends React.Component<Prop,State> {
 			type:SET_AUTH_USER_TOKEN, 
 			value:''
 		}
+		let clean_action = { 
+			type:CLEAN,
+			value:null
+		}
 		this.props.dispatch(auth_user_action)
 		this.props.dispatch(auth_user_token_action)
+		this.props.dispatch(clean_action)
 		this.props.navigation.navigate('Loader');
 		Toast._show_bottom_toast('Déconnexion avec succès');
 		console.log('user logout')
