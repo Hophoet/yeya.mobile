@@ -67,7 +67,7 @@ const ProfileNav = () => (
 			options={{
 				headerShown:false,
 			}}
-			name='Profile' 
+			name='User' 
 			component={User}/>
 		<Stack.Screen 
 			name='EditPersonalInfo' 
@@ -130,7 +130,6 @@ const Tab = createBottomTabNavigator();
 					let iconColor = (focused)?colors.main:'gray';
 					return (<Icon name={iconName} color={iconColor} size={iconSize} />);
 				},
-        tabBarBadge:'4',
         tabBarShowLabel:false
 			}}
 		 />
