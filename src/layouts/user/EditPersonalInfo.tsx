@@ -3,6 +3,8 @@ import {ActivityIndicator, ScrollView, TextInput, StatusBar, Text, View, StyleSh
 import {connect} from 'react-redux';
 import MainHeader from '../../components/MainHeader';
 import { updateUserPersonalInfos} from '../../backend/requests/auth';
+import { UpdateUserInfos } from '../../backend/requests/types';
+import { colors } from '../../assets/colors/main'
 import toasts from '../../components/toasts'
 import  {SET_AUTH_USER} from '../../redux/store/actions'
 
@@ -19,7 +21,6 @@ type State = {
 	firstName:string,
 	about:string,
 	lastName:string,
-	email:string,
 	phoneNumber:string,
 	isLoading:boolean,
 	usernameError:string,
@@ -39,7 +40,6 @@ class EditPersonalInfo extends React.Component<Props, State>{
 			about : this.props.authUser && this.props.authUser.about,
 			firstName : this.props.authUser && this.props.authUser.first_name,
 			lastName : this.props.authUser && this.props.authUser.last_name,
-			email : this.props.authUser && this.props.authUser.email,
 			phoneNumber : this.props.authUser && this.props.authUser.phone_number,
 			isLoading: false,
 			usernameError:'',
@@ -79,7 +79,6 @@ class EditPersonalInfo extends React.Component<Props, State>{
 	_validateFields = () => {
 		if(this.state.firstName 
 			&& this.state.lastName 
-			&& this.state.email 
 			&& this.state.about 
 			&& this.state.phoneNumber){
 			return true;
@@ -93,9 +92,6 @@ class EditPersonalInfo extends React.Component<Props, State>{
 		else if(!this.state.about){
             toasts._show_bottom_toast("A propos de vous");
 		}
-		else if(!this.state.email){
-            toasts._show_bottom_toast("Entrer votre email");
-		}
 		else if(!this.state.phoneNumber){
             toasts._show_bottom_toast("Entrer votre phone number");
 		}
@@ -105,11 +101,11 @@ class EditPersonalInfo extends React.Component<Props, State>{
 	_updateUserPersonalInfos = () => {
 		if(this.props.authUserToken){
 			if(this._validateFields()){
-				let infos = {
+				let infos: UpdateUserInfos = {
+					'authToken':this.props.authUserToken,
 					'about':this.state.about,
 					'firstName':this.state.firstName,
 					'lastName':this.state.lastName,
-					'email':this.state.email,
 					'phoneNumber':this.state.phoneNumber
 				}
 				if(this._isMounted){
@@ -141,10 +137,6 @@ class EditPersonalInfo extends React.Component<Props, State>{
 							if(errorData.code == 'user/username-already-used'){
 								this.setState({usernameError:"nom d'utilisateur déja utilisé"})
             					toasts._show_bottom_toast("votre nouveau nom d'utilisateur est déja utilisé");
-							}
-							else if(errorData.code == 'user/email-already-used'){
-								this.setState({emailError:"email déja utilisé"})
-            					toasts._show_bottom_toast("votre nouveau email est déja utilisé");
 							}
 						}
 						console.log(error.response.status);
@@ -181,7 +173,7 @@ class EditPersonalInfo extends React.Component<Props, State>{
 		if(this.state.isLoading){
 			return(
 				<View style={styles.loadingIndicatorContainer}>
-					<ActivityIndicator size='small' color='gray'/>
+					<ActivityIndicator size='large' color={colors.main}/>
 				</View>
 			)
 		}
@@ -191,8 +183,9 @@ class EditPersonalInfo extends React.Component<Props, State>{
 	render() {
 		return (
 			<View style={styles.container}>
-				<StatusBar backgroundColor='black' />
+				<StatusBar barStyle='light-content' />
 				<ScrollView>
+					{this._renderLoadingIndicator()}
 					<View style={styles.row1}>
 						<View style={styles.textInputContainer}>
 							<Text style={styles.textInputLabel}>Prénom</Text>
@@ -221,32 +214,10 @@ class EditPersonalInfo extends React.Component<Props, State>{
 							/>
 						</View>
 						<View style={styles.textInputContainer}>
-							<Text style={styles.textInputLabel}>Adresse e-mail</Text>
-							{ (this.state.emailError)
-								?<Text style={styles.errorLabel}>{this.state.emailError}</Text>
-								:null
-							}
-							<TextInput 
-								value={this.state.email} 
-								style={[styles.textInput,
-									(this.state.emailError)
-									?{borderBottomColor:'red', borderBottomWidth:1}
-									:{}
-								
-								]}
-								onChangeText={email=>{
-									if(this.state.emailError){
-										this.setState({emailError:''})
-									}
-									this.setState({email})
-								
-								}}
-							/>
-						</View>
-						<View style={styles.textInputContainer}>
 							<Text style={styles.textInputLabel}>Numéro de telephone operationel</Text>
 							<TextInput 
 								value={this.state.phoneNumber} 
+								keyboardType='numeric'
 								onChangeText={phoneNumber=>this.setState({phoneNumber})}
 								style={[styles.textInput,
 								
