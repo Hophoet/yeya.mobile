@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import UserProfileImagePicker from '../../components/UserProfileImagePicker';
 import {SET_AUTH_USER, SET_AUTH_USER_TOKEN} from '../../redux/store/actions';
 import {setUserProfile } from '../../backend/requests/auth';
+import {SetUserProfileImageType } from '../../backend/requests/types';
 import Toast from '../../components/toasts';
 
 type Prop = {
@@ -20,6 +21,7 @@ type Prop = {
 }
 
 type State = {
+	imageUpdateIsLoading:boolean,
 
 }
 
@@ -32,10 +34,11 @@ class  User extends React.Component<Prop,State> {
 		this._isMounted = false;
 		//state
         this.state = {
+			imageUpdateIsLoading: false
         }
 		this.profileActions = [
 			{id:5, icon:'trending-up', title:"Ameliorer l'application", action:this._navigateToImproveApp},
-			{id:4, icon:'log-out-outline', title:'Log Out', action:this.onLogout},
+			{id:4, icon:'log-out-outline', title:'Se Deconnecter', action:this.onLogout},
 		]
     }
 
@@ -129,12 +132,16 @@ class  User extends React.Component<Prop,State> {
 		}
 	}
 	_setUserProfile = (image:any) => {
-		this.setState({refreshIsLoading:true});
+		this.setState({imageUpdateIsLoading:true});
 		const authUserToken = this.props.authUserToken	
-		setUserProfile(authUserToken, image)
+		let data:SetUserProfileImageType = {
+			authToken:authUserToken,
+			image:image
+		}
+		setUserProfile(data)
 		.then((response:any) => {
 			if(this._isMounted){
-				this.setState({refreshIsLoading:false});
+				this.setState({imageUpdateIsLoading:false});
 				let action = { 
 					type:SET_AUTH_USER, 
 					value:response.data.user
@@ -145,7 +152,7 @@ class  User extends React.Component<Prop,State> {
 		})
 		.catch((error:any) => {
 			if(this._isMounted){
-				this.setState({refreshIsLoading:false});
+				this.setState({imageUpdateIsLoading:false});
 			}
 			if (error.response) {
 			  // The request was made and the server responded with a status code
@@ -170,6 +177,7 @@ class  User extends React.Component<Prop,State> {
 	
 
 	onImagePicked = (image:any) => {
+		// console.log('image', image)
 		if(image){
 			if(this._isMounted){
 				this._setUserProfile(image);
@@ -186,17 +194,22 @@ class  User extends React.Component<Prop,State> {
 		let image = authUser && authUser.image && authUser.image.url
         return(
             <View style={styles.container}>
-                <StatusBar backgroundColor={colors.main}/>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<View style={styles.row1}>
 					<View style={styles.row1Column1}>
 						<TouchableOpacity style={styles.userCircle}>
 								{/* <Image style={styles.image} source={{uri:authUser.image.url}}/> */}
-								<UserProfileImagePicker image={image} onImagePicked={this.onImagePicked}/>
+								<UserProfileImagePicker 
+									imageUpdateIsLoading={this.state.imageUpdateIsLoading}
+									image={image} 
+									onImagePicked={this.onImagePicked}/>
 						</TouchableOpacity>
 					</View>
 					<View style={styles.row1Column2}>
 						<Text style={styles.username}>{authUser && authUser.email}</Text>
-						{/* <Text style={styles.email}>Jimmy Daytona</Text> */}
+						{ ( authUser && (authUser.last_name || authUser.first_name)) &&
+						<Text style={styles.email}>{authUser.first_name} {authUser.last_name}</Text>
+						}
 					</View>
 				</View>
 				<View style={styles.row2}>
@@ -207,10 +220,10 @@ class  User extends React.Component<Prop,State> {
 					</TouchableOpacity>
 					<View style={styles.aboutContainer}>
 						<Text style={styles.aboutLabel}>A propos de moi</Text>
-						<Text style={styles.aboutDescription}>i love react native a lot!</Text>
+						<Text style={styles.aboutDescription}>{( authUser && authUser.about)? authUser.about: '_'}</Text>
 					</View>
 					<View style={styles.actionsContainer}>
-						<Text style={styles.actionsTitle}>SETTINGS</Text>
+						{/* <Text style={styles.actionsTitle}>SETTINGS</Text> */}
 						<FlatList
 							data={this.profileActions}
 							keyExtractor={(item) =>item.id.toString()}
@@ -320,6 +333,7 @@ const styles = StyleSheet.create({
 	aboutContainer:{
 		// backgroundColor:'red',
 		paddingHorizontal:20,
+		paddingBottom:20,
 	},
 	actionButtonSeparator:{
 		padding:20,
