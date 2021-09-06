@@ -7,7 +7,8 @@ const bgLinearGradient = {
 }
 
 const colors = {
-    main:'#1FA9FF'
+    main:'#1FA9FF',
+    second:'#1FA9AF'
 }
 const sideBarLinearGradient = {
     top:'#33DDFF', 
