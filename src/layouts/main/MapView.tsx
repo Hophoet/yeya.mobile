@@ -401,10 +401,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 100,
-    backgroundColor: "rgba(130,4,150, 0.3)",
+    backgroundColor: colors.main, 
     position: "absolute",
     borderWidth: 1,
-    borderColor: "rgba(130,4,150, 0.5)",
+    borderColor: colors.second,
   },
   markerContainer:{
 	//backgroundColor:'yellow',
