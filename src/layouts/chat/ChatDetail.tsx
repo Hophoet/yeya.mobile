@@ -301,9 +301,7 @@ class ChatDetail extends React.Component<Props, State> {
 	}
 
 	render() {
-		// console.log(this.getChatMessages().length)
-		// console.log(this.chatScrollRef)
-		const ITEM_HEIGHT = (width/1.5) + 10;
+		const ITEM_HEIGHT = width/1.2
 		
 		return (
 			<View style={styles.container}>
@@ -336,7 +334,7 @@ class ChatDetail extends React.Component<Props, State> {
 
 							<TextInput
 								value={this.state.message}
-								maxLength={250}
+								maxLength={100}
 								style={styles.textInput}
 								onChangeText={(message)=>this.setState({message})}
 								onSubmitEditing={this._sendMessage}
