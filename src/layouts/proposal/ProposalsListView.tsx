@@ -122,8 +122,8 @@ class ProposalsListView extends React.Component<Props, State> {
 			<View style={styles.container}>
                 <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScreenHeader
-					title='Vos taches et leur postulations'	
-					// description='Ici vous avez vos taches et leurs propositions'	
+					title='Vos taches'	
+					description='Ici vous avez vos taches et leurs et leur demandes'	
 				/>
 				<View style={styles.row3}>
 					<FlatList
