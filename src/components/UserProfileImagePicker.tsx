@@ -54,7 +54,7 @@ const UserProfileImagePicker = ({image, onImagePicked, imageUpdateIsLoading}:Pro
             else{
             
                 return (
-                    <Icon size={30} name='person' color='white'/>
+                    <Icon size={30} name='person' color={colors.main}/>
                 )
             }
         }
