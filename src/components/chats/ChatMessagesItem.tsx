@@ -54,10 +54,10 @@ const ChatMessagesItem = ({item, authUser, width, height, navigate}:any) => {
 									source={item.image}
 								/>
 							</View>
-
 						}
-
-					<Text style={[
+					<Text 
+						numberOfLines={2}
+						style={[
 						( (authUser && authUser.id) == (sender && sender.id) )
 						?styles.notSenderText
 						:styles.senderText]}>{(item && item.text)?item.text:'message'}</Text>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     },
 	contentContainer:{
 		padding:20,
-		maxWidth:width/2,
+		maxWidth:width/1.2,
 		maxHeight:width/1.5,
 	},
 	ownerMessageRadius:{
