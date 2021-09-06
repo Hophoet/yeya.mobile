@@ -54,8 +54,6 @@ const ChatUserItem = ({item, authUser, navigateTo}:any) => {
 	//console.log(getLastMessage());
 	//console.log(getUserProfileUrl());
 	//console.log(_getNewMessagesCount())
-
-	//console.log(item)
     return(
         <TouchableOpacity 
 			activeOpacity={.5}
@@ -89,7 +87,7 @@ const ChatUserItem = ({item, authUser, navigateTo}:any) => {
 				]}>{
 				(lastMessage && lastMessage.text)
 					? lastMessage.text
-					:'last message of the user receiver'}</Text>
+					:' '}</Text>
 			</View>
 			<View style={styles.row3}>
 				{ (lastMessagesCount > 0) &&
