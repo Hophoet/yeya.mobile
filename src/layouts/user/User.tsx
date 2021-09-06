@@ -149,7 +149,7 @@ class  User extends React.Component<Prop,State> {
 				this.setState({imageUpdateIsLoading:false});
 				let action = { 
 					type:SET_AUTH_USER, 
-					value:response.data.user
+					value:response.data
 				}
 				this.props.dispatch(action)
 				console.log('update user profile')
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
 	userCircle:{
 		width:width/4.5,
 		height:width/4.5,
-		backgroundColor:'#111b',
+		backgroundColor:'white',
 		borderRadius:90,
 		justifyContent:'center',
 		alignItems:'center',
