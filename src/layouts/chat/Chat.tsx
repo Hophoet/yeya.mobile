@@ -78,22 +78,35 @@ class Chat extends React.Component<Props, State> {
 	sortConversations =(conversations:any[])=> {
 		if(conversations){
 			let sorted_conversations = conversations.sort((conversation1, conversation2)=> {
-				// console.log(conversation1)
-				let c1Ts = this._getDateTimeStamp(conversation1.last_updated_at);
-				let c2Ts = this._getDateTimeStamp(conversation2.last_updated_at);
-				if(c2Ts > c1Ts){
-					return 4;
+				// console.log(conversation1.updated_at, conversation2.updated_at)
+				if(conversation1.updated_at && conversation2.updated_at){
+					let c1Ts = this._getDateTimeStamp(conversation1.last_updated_at);
+					let c2Ts = this._getDateTimeStamp(conversation2.last_updated_at);
+					if(c2Ts > c1Ts){
+						return 4;
+					}
+					else if(c2Ts < c1Ts){
+						return -4;
+					}
+					else {
+						return 0;
+					}
 				}
-				else if(c2Ts < c1Ts){
-					return -4;
-				}
-				else {
-					return 0;
-				}
+				return 0;
 			})
 			return sorted_conversations;
 		}
 		return conversations;
+	}
+
+	validateConversations = (conversations:any[]) => {
+		let validatedConversations:any[] = []
+		for(let conversation of conversations){
+			if(conversation.messages && conversation.messages.length > 0){
+				validatedConversations.push(conversation)
+			}
+		}
+		return validatedConversations
 	}
 
 	// Method to get the products categories
@@ -109,7 +122,9 @@ class Chat extends React.Component<Props, State> {
 			.then((response:any) => {
 				if(this._isMounted){
 					this.setState({requestIsLoading:false})
-					let conversations:any[] = this.sortConversations(response.data)
+					let conversations:any[] = this.sortConversations(
+						this.validateConversations(response.data)
+					)
 					this.setState({chatConversations:conversations});
 					let setChatsAction = {type:SET_CHATS, value:conversations}
 					this.props.dispatch(setChatsAction)
@@ -170,17 +185,15 @@ class Chat extends React.Component<Props, State> {
 		){
 			return true;
 		}
-
 	}
 
 	render() {
-		console.log(this.state.chatConversations[0].last_updated_at)
 		return (
 			<View style={styles.container}>
 				<StatusBar backgroundColor='black' />
 				<ScreenHeader
 					title='Boite de réception'	
-					// description='Ici vous avez vos taches et leurs propositions'	
+					description='Consulter vos messages'	
 				/>
 
 				<View style={styles.row2}>
