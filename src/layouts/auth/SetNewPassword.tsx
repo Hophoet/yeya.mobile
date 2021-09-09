@@ -50,6 +50,7 @@ class SignIn extends React.Component<Props, State> {
             <MainHeader 
 				title="Nouveau mot de passe"
 				description="Choisisser votre nouveau mot de passe"
+				firstAction={this.props.navigation.goBack}	
 				// firstAction={()=>{}}	
 				navigateTo={()=> {}}
 			/>
