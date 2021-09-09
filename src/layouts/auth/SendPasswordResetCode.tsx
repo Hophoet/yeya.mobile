@@ -46,7 +46,7 @@ class ResetPassword extends React.Component<Props, State> {
             <MainHeader 
 				title="Mot de passe oublié"
 				description="Entrer votre email pour que vous puisions vous envoyer le code de verification pour restorer votre compte"
-				// firstAction={()=>{}}	
+				firstAction={this.props.navigation.goBack}	
 				navigateTo={()=> {}}
 			/>
 		  ),
