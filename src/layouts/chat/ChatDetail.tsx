@@ -2,6 +2,7 @@ import React, {createRef} from 'react';
 import { TextInput, FlatList, Dimensions, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import MainHeader from '../../components/MainHeader';
+import ChatDetailHeader from '../../components/chats/ChatDetailHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ChatMessageItem from '../../components/chats/ChatMessagesItem'
 import {senderChatMessage, getChatConversation, readChatConversationMessages} from '../../backend/requests/chat';
@@ -102,9 +103,10 @@ class ChatDetail extends React.Component<Props, State> {
 	   const chatUser:any = this.getChatUser();
         this.props.navigation.setOptions({
           header: () => (
-            <MainHeader 
+            <ChatDetailHeader 
 				firstAction={this.back}	
-				iconLabel={(chatUser && chatUser.email)?chatUser.email:'icon label'}
+				user={this.getChatUser()}
+				title={(chatUser && chatUser.email)?chatUser.email:'icon label'}
 				secondAction={this.save}
 			/>
           ),
