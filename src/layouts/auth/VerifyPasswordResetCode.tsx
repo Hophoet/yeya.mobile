@@ -47,6 +47,7 @@ class VerifyPasswordResetCode extends React.Component<Props, State> {
             <MainHeader 
 				title="Verification de votre identité"
 				description="Entrer le code envoyer a votre email pour confirmer votre identité"
+				firstAction={this.props.navigation.goBack}	
 				// firstAction={()=>{}}	
 				navigateTo={()=> {}}
 			/>
