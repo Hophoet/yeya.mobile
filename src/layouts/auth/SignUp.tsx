@@ -42,8 +42,9 @@ class SignUp extends React.Component<Props, State> {
         this.props.navigation.setOptions({
           header: () => (
             <MainHeader 
-				title="Creer un nouveau compte"
+				title="Creer un compte"
 				description="je suis si heureux de voir que vous pouvez continuer à vous connecter pour poster vos taches ou retrouver des taches a faire"
+				firstAction={this.props.navigation.goBack}	
 				// firstAction={()=>{}}	
 				navigateTo={()=> {}}
 			/>
