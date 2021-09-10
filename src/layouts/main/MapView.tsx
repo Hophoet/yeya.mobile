@@ -11,6 +11,7 @@ import  {SET_JOBS} from '../../redux/store/actions'
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main';
+import  {sortByMostRecent} from '../../utils/filters'
 
 type Props = {
 	navigation:any,
@@ -142,6 +143,19 @@ class Map extends React.Component<Props, State> {
 		return false
 	}
 
+	_sort = () => {
+		this._sortByMostRecent()
+	}
+	
+
+	_sortByMostRecent = () => {
+		let jobs = [...this.state.jobs];	
+		if(jobs){
+			let sortedJobs:any[] = sortByMostRecent(jobs)
+			this.setState({jobs:sortedJobs});
+		}
+	}
+
 
 	// Method to get the products categories
 	_getJobs = () => {
@@ -155,6 +169,7 @@ class Map extends React.Component<Props, State> {
 			if(this._isMounted){
 				//console.log(response.data[3])
 				this.setState({jobs:response.data});
+				this._sort()
 				this.setState({requestIsLoading:false})
 				let setJobsAction = {type:SET_JOBS, value:response.data}
 				this.props.dispatch(setJobsAction)
