@@ -5,7 +5,8 @@ import MainHeader from '../../components/MainHeader';
 import Toast from '../../components/toasts'
 import { mailFormatIsValid } from '../../utils/mail'
 import { getJobs } from '../../backend/requests/job'
-import { GetJobsRequestType } from '../../backend/requests/types'
+import { getCategories } from '../../backend/requests/category'
+import { GetJobsRequestType, GetCategoriesType } from '../../backend/requests/types'
 import CButton from '../../components/CButton';
 import JobsViewItem from '../../components/home/JobsViewItem';
 import CTextInput from '../../components/CTextInput';
@@ -13,8 +14,9 @@ import { colors } from '../../assets/colors/main'
 import Icon from "react-native-vector-icons/Ionicons";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import IconButton from '../../components/buttons/IconButton'
-import  {SET_JOBS} from '../../redux/store/actions'
-import  {searchQuery, sortByMostPopular, sortByMostRecent} from '../../utils/filters'
+import  {SET_JOBS, SET_CATEGORIES} from '../../redux/store/actions'
+import  {searchQuery, sortByMostPopular, sortByMostRecent, sortJobsByCategories} from '../../utils/filters'
+import Categories from '../../components/category/Categories'
 import { connect } from 'react-redux'
 
 type Props = {
@@ -22,6 +24,8 @@ type Props = {
 	authUser: any,
 	authUserToken:string,
 	jobs:any[],
+	categories:any[],
+	selectCategory:any,
 	dispatch:Function
 }
 
@@ -29,8 +33,10 @@ type State = {
 	requestIsLoading:boolean,
 	selectedFilter:any,
 	searchQuery:any,
+	selectedCategories: any[],
 	jobs:any[],
 	baseJobs:any[],
+  	categories:any[],
 }
 
 class ListView extends React.Component<Props, State> {
@@ -52,10 +58,36 @@ class ListView extends React.Component<Props, State> {
 			searchQuery:'',
 			requestIsLoading:false,
 			selectedFilter:null,
+		  	selectedCategories:[],
 			jobs:this.props.jobs?this.props.jobs:[],
-			baseJobs:this.props.jobs?this.props.jobs:[]
+			baseJobs:this.props.jobs?this.props.jobs:[],
+        	categories: this.props.categories?this.props.categories:[],
 		};
  	}
+
+	 _getCategories = () => {
+     let authUserToken = this.props.authUserToken
+     if(authUserToken){
+        let data: GetCategoriesType = {
+            authToken:authUserToken
+        }
+        getCategories(data)
+        .then((response:any) => {
+          if(this._isMounted){
+            // console.log('categories') 
+            this.setState({categories:response.data})
+            let setCategoriesAction = {type:SET_CATEGORIES, value:response.data}
+            this.props.dispatch(setCategoriesAction)
+            // console.log(response.data) 
+          }
+        }
+        )
+        .catch((error:any)=> {
+          console.log(error);
+        })
+     }
+    }
+
 
 	// Method to get the products categories
 	_getJobs = () => {
@@ -143,14 +175,21 @@ class ListView extends React.Component<Props, State> {
 		// Enable the component mount state
 		this._isMounted = true;
 		this._getJobs()
+		this._getCategories()
 		// Add event listener , before the component dismiss
 		this.props.navigation.addListener('focus', (e:any) => {
 			// make products request to get data, like avaible products for the user
 			if(this._isMounted){
 				// request to get the products on the screen focus
 				this._getJobs()
+				this._getCategories()
 			}
 		});
+
+	}
+
+	componentWillUnmount(){
+		this._isMounted = false;
 
 	}
 
@@ -201,6 +240,47 @@ class ListView extends React.Component<Props, State> {
 		}
 	}
 
+	selectCategory = (category:any) => {
+		let selectedCategories = [...this.state.selectedCategories];
+		let categoryExists = selectedCategories.find(item=>item.id==category.id)
+		if(categoryExists){
+			//console.log('category removed')
+			selectedCategories = selectedCategories.filter(item=>item.id!=category.id)
+		}	
+		else{
+			//console.log('category added')
+			selectedCategories.push(category)
+		}
+		
+		this.setState(state => {
+			return {selectedCategories};
+		});
+		// console.log('-------------------')
+		// selectedCategories.map(c => {
+		// 	console.log(c.id)
+		// })
+		// console.log('-------------------')
+		//console.log(selectedCategories.length)
+		//console.log(this.state.selectedCategories.length)
+		this._sortJobsByCategories(selectedCategories);
+	}
+
+	// sort jobs by categories
+	_sortJobsByCategories  = (selectedCategories: any[]) => {
+		let jobs = [...this.state.jobs];	
+		let baseJobs = [...this.state.baseJobs];
+		// Get the search jobs with the search algo function
+		let sortedJobs = sortJobsByCategories(jobs, baseJobs, selectedCategories)
+		if(sortedJobs.length == 0 && selectedCategories.length == 0){
+			this.setState({jobs:baseJobs});
+		}
+		else{
+			// Set the sorted jobs by categories found
+			this.setState({jobs:sortedJobs});
+			
+		}
+	}
+
 
 	render(){
 		return(
@@ -233,8 +313,13 @@ class ListView extends React.Component<Props, State> {
 					</View>
 				</View>
 				<View style={styles.row2}>
+					<View style={styles.row2Row1}>
+						<Categories 
+							categories={this.state.categories}
+							selectCategory={this.selectCategory}
+						/>
+					</View>
 					<View style={styles.row2Content}>
-
 					{
 						this.filters.map((item, index)=> (
 							<TouchableOpacity 
@@ -309,6 +394,7 @@ const mapStateToProps = (state:any) => {
         authUserToken:state.authUserToken,
         authUser:state.authUser,
         jobs:state.jobs,
+		categories: state.categories
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ListView)
@@ -344,20 +430,29 @@ const styles = StyleSheet.create({
 		flex:3,
 		flexDirection:'row',
 		// backgroundColor:'blue',
+		// backgroundColor:'yellow',
 		alignItems:'center',
 	},
 	textInput:{
 		flex:1,
 	},
 	row2:{
-		flex:1,
+		flex:1.5,
 		paddingHorizontal:20,
-		// backgroundColor:'red',
+		// backgroundColor:'blue',
 		justifyContent:'center',
 
 	},
+	row2Row1:{
+		// flex:1,
+		// backgroundColor:'gray',
+		// alignItems:'center',
+		// justifyContent:'center',
+	},
 	row2Content:{
 		flexDirection:'row',
+		// flex:1,
+		// backgroundColor:'yellow',
 	},
 	row3:{
 		flex:9,
