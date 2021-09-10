@@ -42,6 +42,7 @@ type State = {
 
 class AddJobStep1 extends React.Component<Props, State>{
 
+	_isMounted:boolean;
   title:string;
   price:number;
   description:string;
@@ -51,6 +52,7 @@ class AddJobStep1 extends React.Component<Props, State>{
   cities:any[];
   constructor(props:Props){
     super(props);
+		this._isMounted = false;
     this.state = {
         cities:this.props.cities?this.props.cities:[],
         categories: this.props.categories?this.props.categories:[],
@@ -76,10 +78,12 @@ class AddJobStep1 extends React.Component<Props, State>{
         getCities(data)
         .then((response:any) => {
           // console.log('cities') 
-          this.setState({cities:response.data})
-          let setCitiesAction = {type:SET_CITIES, value:response.data}
-          this.props.dispatch(setCitiesAction)
-          // console.log(response.data) 
+          if(this._isMounted){
+            this.setState({cities:response.data})
+            let setCitiesAction = {type:SET_CITIES, value:response.data}
+            this.props.dispatch(setCitiesAction)
+            // console.log(response.data) 
+          }
         }
         )
         .catch((error:any)=> {
@@ -97,11 +101,13 @@ class AddJobStep1 extends React.Component<Props, State>{
         }
         getCategories(data)
         .then((response:any) => {
-          // console.log('categories') 
-          this.setState({categories:response.data})
-          let setCategoriesAction = {type:SET_CATEGORIES, value:response.data}
-          this.props.dispatch(setCategoriesAction)
-          // console.log(response.data) 
+          if(this._isMounted){
+            // console.log('categories') 
+            this.setState({categories:response.data})
+            let setCategoriesAction = {type:SET_CATEGORIES, value:response.data}
+            this.props.dispatch(setCategoriesAction)
+            // console.log(response.data) 
+          }
         }
         )
         .catch((error:any)=> {
@@ -150,6 +156,7 @@ class AddJobStep1 extends React.Component<Props, State>{
       }
   }
   componentDidMount(){
+		this._isMounted = true;
     this.props.navigation.setOptions({
       header: () => (
         <StepHeader 
@@ -160,6 +167,19 @@ class AddJobStep1 extends React.Component<Props, State>{
     });
     this._getCategories()
     this._getCities()
+		this.props.navigation.addListener('focus', (e:any) => {
+			// make products request to get data, like avaible products for the user
+			if(this._isMounted){
+				// request to get the products on the screen focus
+        this._getCategories()
+        this._getCities()
+			}
+		});
+  }
+
+  componentWillUnmount(){
+		this._isMounted = false;
+
   }
     _setCategory = (category:any) => {
         this.categoryId = category.id;
