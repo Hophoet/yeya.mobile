@@ -269,6 +269,8 @@ class JobDetail extends React.Component<Props, State> {
 	render() {
 		// console.log(this.getChatMessages().length)
 		// console.log(this.chatScrollRef)
+		// console.log(this.state.job.favorite_users_ids.length)
+
 		const ITEM_HEIGHT = (width/1.5) + 10;
 		
 		return (
@@ -291,6 +293,12 @@ class JobDetail extends React.Component<Props, State> {
 					<View style={styles.row1Row2}>
 						<Text style={styles.price}>XOF {this.state.job && this.state.job.price}</Text>
 						<Text style={styles.location}> / {this.state.job && this.state.job.city && this.state.job.city.name} - {this.state.job && this.state.job.city && this.state.job.city.country} </Text>
+					</View>
+					<View style={styles.row1Row3}>
+						<View style={styles.categoryContainer}>
+							<Text style={styles.categoryLabel}>{this.state.job && this.state.job.category && this.state.job.category.name}</Text>
+
+						</View>
 					</View>
 				</View>
 				<View style={styles.row3}>
@@ -367,7 +375,24 @@ const styles = StyleSheet.create({
 		// backgroundColor:'blue'
 	},
 	row1Row2:{
+		// flex:1,
 		flexDirection:'row',
+	},
+	row1Row1:{
+		// flex:1,
+		flexDirection:'row',
+	},
+	row1Row3:{
+		// flex:1,
+	},
+	categoryContainer: {
+		borderWidth:StyleSheet.hairlineWidth,
+		padding:10,
+		borderRadius:5,
+		borderColor:'#1113',
+		minWidth:width/4,
+		justifyContent:'center',
+		alignItems:'center',
 	},
 	title:{
 		fontSize:20,
