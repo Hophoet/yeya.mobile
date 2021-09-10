@@ -47,6 +47,7 @@ class SignIn extends React.Component<Props, State> {
 				title="Bienvenue"
 				description="je suis si heureux de voir que vous pouvez continuer à vous connecter pour poster vos taches ou retrouver des taches a faire"
 				// firstAction={()=>{}}	
+				firstAction={this.props.navigation.goBack}	
 				navigateTo={()=> {}}
 			/>
 		  ),
@@ -54,6 +55,7 @@ class SignIn extends React.Component<Props, State> {
     }
 
 	onSubmit = () => {
+		console.log('submit')
 		if(this.email && this.password){
 			if(mailFormatIsValid(this.email)){
 				// can sign in
@@ -93,7 +95,7 @@ class SignIn extends React.Component<Props, State> {
 						//console.log(response.data)
 						let token = response.data.token && response.data.token.value
 						let user = response.data.user
-						console.log(token, user)
+						// console.log(token, user)
 						let authUserTokenAction = {type:SET_AUTH_USER_TOKEN, value:token}
 						let authUserAction = {type:SET_AUTH_USER, value:user}
 						this.props.dispatch(authUserTokenAction)
@@ -180,7 +182,7 @@ class SignIn extends React.Component<Props, State> {
 									autoFocus={true}
 									icon='mail'	
 									onChangeText={(text:string)=>this.email=text}
-									onSubmitEditing={()=>this.onSubmit}
+									onSubmitEditing={this.onSubmit}
 									placeholder='Address-email'
 								/>
 							</View>
@@ -189,7 +191,7 @@ class SignIn extends React.Component<Props, State> {
 									icon='lock-closed'	
 									password
 									focus={true}
-									onSubmitEditing={()=>this.onSubmit}
+									onSubmitEditing={this.onSubmit}
 									onChangeText={(text:string)=>this.password=text}
 									placeholder='Mot de passe'
 								/>
@@ -260,6 +262,7 @@ const styles = StyleSheet.create({
 	row1:{
 		flex:4,
 		paddingTop:20,
+		backgroundColor:'white',
 		//backgroundColor:'red',
 		// justifyContent:'center',
 		// justifyContent:'center',
