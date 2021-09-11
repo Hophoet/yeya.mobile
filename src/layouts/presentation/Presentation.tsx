@@ -77,7 +77,8 @@ const Presentation = ({navigation}:Props) => {
 	return(
 		<View style={styles.container}>
 			<StatusBar 
-				hidden={true}
+				barStyle={'dark-content'}
+				backgroundColor={'white'}
 			/>
 			<View style={styles.row1}>
 				<FlatList
@@ -145,7 +146,7 @@ const Presentation = ({navigation}:Props) => {
 							}}
 							iconPosition='right'
 							icon='arrow-forward' 
-							label='Commencer Maintement'
+							label='Commencer Votre Experience Maintement'
 						/>
 					</View>
 
@@ -189,10 +190,11 @@ const styles = StyleSheet.create({
 	},
 	row1:{
 		// backgroundColor:'red',
-		flex:3,
+		flex:4,
 	},
 	row2:{
 		// backgroundColor:'aqua',
+		flex:1,
 	},
 	row3:{
 		flex:1,
