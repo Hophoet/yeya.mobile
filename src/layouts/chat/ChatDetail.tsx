@@ -8,6 +8,7 @@ import ChatMessageItem from '../../components/chats/ChatMessagesItem'
 import {senderChatMessage, getChatConversation, readChatConversationMessages} from '../../backend/requests/chat';
 import {SendChatMessageType, GetChatConversationType, ReadChatConversationMessagesType} from '../../backend/requests/types';
 import { colors } from '../../assets/colors/main'
+import  {SET_CHATS} from '../../redux/store/actions'
 
 
 type Props = {
@@ -15,6 +16,8 @@ type Props = {
 	navigation:any,
 	authUser:any,
 	authUserToken:string,
+	chats:any[],
+	dispatch:Function,
 }
 type State = {
 	chat:any,
@@ -61,9 +64,10 @@ class ChatDetail extends React.Component<Props, State> {
 
 
 	_messagesListener = () => {
-		// console.log('message listener start')
+		console.log('message listener start')
 		this.messagesListener = setInterval(() => {
-			// console.log('message listener call')
+			console.log('message listener call')
+			this._getChatConversation()
 		}, 18000)
 
 	}
@@ -135,6 +139,8 @@ class ChatDetail extends React.Component<Props, State> {
 				if(this._isMounted){
 					console.log('chat getted')
 					this.setState({chat:response.data})
+					let setChatsAction = {type:SET_CHATS, value:response.data}
+					this.props.dispatch(setChatsAction)
 					this._handleMessageList();
 					// console.log(response.data)
 					// console.log('chat conversations')
@@ -312,6 +318,7 @@ class ChatDetail extends React.Component<Props, State> {
 						ref={this.chatScrollRef}
 						data={this.getChatMessages()}
 						keyExtractor={(item)=>item.id.toString()}
+						// initialNumToRender={5}
 						getItemLayout={(data, index) => (
 								{
 									length:ITEM_HEIGHT, 
@@ -374,7 +381,8 @@ const mapDispatchToProps = (dispatch:any) => {
 const mapStateToProps = (state:any) => {
 return {
 	authUserToken: state.authUserToken,
-	authUser:state.authUser
+	authUser:state.authUser,
+	chats:state.chats,
 };
 };
 
