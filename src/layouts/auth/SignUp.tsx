@@ -43,7 +43,7 @@ class SignUp extends React.Component<Props, State> {
           header: () => (
             <MainHeader 
 				title="Creer un compte"
-				description="je suis si heureux de voir que vous pouvez continuer à vous connecter pour poster vos taches ou retrouver des taches a faire"
+				description="On est heureux de vous voir, vous pouvez continuer votre inscription pour poster vos taches ou retrouver des taches a faire"
 				firstAction={this.props.navigation.goBack}	
 				// firstAction={()=>{}}	
 				navigateTo={()=> {}}
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
 
 	},
 	link:{
-		color:'blue'
+		color: colors.main,
 	}
 
 })
