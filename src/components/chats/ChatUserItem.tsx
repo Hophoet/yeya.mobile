@@ -159,13 +159,13 @@ const styles = StyleSheet.create({
 		borderRadius:width,
 		width:width/20,
 		height:width/20,
-		padding:5,
+		padding:3,
 		justifyContent:'center',
 		alignItems:'center',
 	},
 	counterLabel:{
 		color:'white',
-		fontSize:10,
+		fontSize:7,
 		fontWeight:'bold'
 	}
 })
