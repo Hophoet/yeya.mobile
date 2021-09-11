@@ -141,8 +141,8 @@ function updateJob(data:UpdateJobType){
 				'title':data.title,
 				'description':data.description,
 				'price':data.price,
-				'city_id':'611feda597d8b3a708f0848b',
-				'category_id':'6117137b85cdebd22151feff',
+				'city_id': data.cityId,
+				'category_id': data.categoryId,
 				'geolocation':data.geolocation,
 			},
 			headers:{
