@@ -110,7 +110,7 @@ class ProposalsListViewItem  extends React.Component<Props, State>{
 
 					<View style={styles.row1}>
 						<View style={styles.row1Row1}>
-							<Text style={styles.emoji}>📅</Text>
+							{/* <Text style={styles.emoji}>📅</Text> */}
 						</View>
 					</View>
 					<TouchableOpacity 
@@ -127,6 +127,7 @@ class ProposalsListViewItem  extends React.Component<Props, State>{
 								<Text style={styles.price}>XOF {job.price} </Text>
 								}
 								{ (job.city )&&`- ${job.city.name}, ${job.city.country}`}</Text>
+							<Text style={styles.categoryLabel}>{job && job.category && job.category.name}</Text>
 					</TouchableOpacity>
 					<View style={styles.row3}>
 						<View style={styles.row3Column1}>
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
 
 	},
 	row1:{
-		flex:1,
+		// flex:1,
 		flexDirection:'row',
 		//backgroundColor:'aqua',
 		justifyContent:'center',
