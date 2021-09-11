@@ -105,7 +105,7 @@ class JobsMapItem  extends React.Component<Props, State>{
 							this.props.navigate('JobDetail', {'job':item})
 						}}	
 					>
-						<Text numberOfLines={1} style={styles.cardTitle}>{item.title}</Text>
+						<Text numberOfLines={2} style={styles.cardTitle}>{item.title}</Text>
 					</TouchableOpacity>
 					{ item.price &&
 					<Text numberOfLines={1} style={styles.cardPrice}>XOF{item.price}</Text>
@@ -152,7 +152,7 @@ const mapStateToProps = (state:any) => {
 export default connect(mapStateToProps, mapDispatchToProps)(JobsMapItem)
 
 const {width, height} = Dimensions.get('window');
-const CARD_HEIGHT = width / 5;
+const CARD_HEIGHT = width / 3.3;
 const CARD_WIDTH = width/2;
 const styles = StyleSheet.create({
   card: {
