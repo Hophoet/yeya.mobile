@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FlatList, TextInput, ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import { FlatList, BackHandler, TextInput, ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
 import MainHeader from '../../components/MainHeader';
 import Toast from '../../components/toasts'
 import { mailFormatIsValid } from '../../utils/mail'
@@ -185,6 +185,7 @@ class ListView extends React.Component<Props, State> {
 				this._getCategories()
 			}
 		});
+		this._exitListener()
 
 	}
 
@@ -279,6 +280,18 @@ class ListView extends React.Component<Props, State> {
 			this.setState({jobs:sortedJobs});
 			
 		}
+	}
+
+	_exitListener = () => {
+		this.props.navigation.addListener('beforeRemove', (e:any) => {
+			// Check if the event type is the device back press
+			if(e.data.action.type == 'GO_BACK'){
+				// Diseable the default action for the event
+				e.preventDefault();
+				// Exit the app if the user is authenticated
+				BackHandler.exitApp();
+			}
+		});
 	}
 
 
