@@ -45,7 +45,7 @@ class SignIn extends React.Component<Props, State> {
           header: () => (
             <MainHeader 
 				title="Bienvenue"
-				description="je suis si heureux de voir que vous pouvez continuer à vous connecter pour poster vos taches ou retrouver des taches a faire"
+				description="On est heureux de vous voir, vous pouvez continuer à votre connexion pour poster vos taches ou retrouver des taches à réaliser"
 				// firstAction={()=>{}}	
 				firstAction={this.props.navigation.goBack}	
 				navigateTo={()=> {}}
@@ -162,7 +162,6 @@ class SignIn extends React.Component<Props, State> {
 		return(
 			<View style={styles.container}>
 				<StatusBar 
-					hidden={false}
 					barStyle={'dark-content'}
 					backgroundColor={'white'}
 				/>
