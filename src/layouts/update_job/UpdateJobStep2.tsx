@@ -33,6 +33,7 @@ type Props ={
 type State = {
   region:any,
   requestIsLoading:boolean,
+  locationIsLoading:boolean,
 }
 
 class UpdateJobStep2 extends React.Component<Props, State>{
@@ -48,9 +49,10 @@ class UpdateJobStep2 extends React.Component<Props, State>{
     
     this.state = {
         requestIsLoading:false,
+        locationIsLoading:false,
 			  region: {
-				latitude: 33.7866,
-				longitude: -118.2987,
+				latitude: 6.131944,
+				longitude: 1.222778,
 				latitudeDelta: 0.04864195044303443,
 				longitudeDelta: 0.040142817690068,
 			  }
@@ -70,8 +72,27 @@ class UpdateJobStep2 extends React.Component<Props, State>{
           data)
         // Toast._show_bottom_toast('Entrer un numéro valide')
   }
+
+  initilizeMap = () => {
+    if(this.geolocation 
+      && this.geolocation.latitude 
+      && this.geolocation.longitude){
+					this.map.animateToRegion(
+					  {
+						latitude:this.geolocation.latitude,
+						longitude:this.geolocation.longitude,
+						latitudeDelta: this.state.region.latitudeDelta,
+						longitudeDelta: this.state.region.longitudeDelta,
+					  },
+					  350
+					);
+
+    }
+
+  }
   componentDidMount(){
 		// Enable the component mount state
+    setTimeout(this.initilizeMap, 3000)
 		this._isMounted = true;
     this.props.navigation.setOptions({
       header: () => (
@@ -83,6 +104,7 @@ class UpdateJobStep2 extends React.Component<Props, State>{
     });
   }
 	 _getGeolocation = () => {
+      this.setState({locationIsLoading:true})
 			getGeolocation()
 			.then((position:any) => {
 					let region = {
@@ -101,6 +123,7 @@ class UpdateJobStep2 extends React.Component<Props, State>{
 					  },
 					  350
 					);
+          this.setState({locationIsLoading:false})
           this.geolocation = {
 						latitude:region.latitude,
 						longitude:region.longitude,
@@ -117,6 +140,7 @@ class UpdateJobStep2 extends React.Component<Props, State>{
 			}
 			)
 			.catch((error:any)=> {
+        this.setState({locationIsLoading:false})
 				console.log('geolocation request error');
 				console.log(error);
 
@@ -129,7 +153,12 @@ class UpdateJobStep2 extends React.Component<Props, State>{
       let geolocation = this.geolocation
       let authUserToken = this.props.authUserToken
       // console.log(job, geolocation, authUserToken)
-      if (job && geolocation && job){
+      if (job 
+          && geolocation 
+          && job
+          && ! this.state.requestIsLoading
+          && ! this.state.locationIsLoading
+          ){
         this.setState({requestIsLoading:true})
 
 				let data:UpdateJobType = {
@@ -222,6 +251,7 @@ class UpdateJobStep2 extends React.Component<Props, State>{
         <CButton
           onPress={this._getGeolocation}
           label='Localiser le lieu actuel'
+          loading={this.state.locationIsLoading}
         />
         { this.geolocation &&
         <CButton
