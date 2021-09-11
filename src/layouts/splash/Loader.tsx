@@ -1,7 +1,8 @@
 import React from 'react'
-import {StyleSheet, StatusBar, View} from 'react-native'
+import {Text, Image, Dimensions, StyleSheet, StatusBar, View} from 'react-native'
 import {NavigationActions} from '@react-navigation/compat'
 import { connect } from 'react-redux'
+import { colors } from '../../assets/colors/main'
 
 
 type Prop = {
@@ -54,6 +55,8 @@ class Loader extends React.Component<Prop, State>{
         return (
             <View style={styles.container}>
 				<StatusBar backgroundColor='white' />
+				<Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
+				<Text style={styles.title}>yeya</Text>
             </View>
         )
     }
@@ -77,6 +80,8 @@ const mapStateToProps = (state:any) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Loader)
 
 
+const {width, height} = Dimensions.get('window')
+
 const styles = StyleSheet.create({
     container:{
         flex:1,
@@ -85,4 +90,14 @@ const styles = StyleSheet.create({
 		backgroundColor:'white',
 
 	},
+	title:{
+		textAlign:'center',
+		fontSize:20,
+		fontWeight:'bold',
+		color:colors.main,
+	},
+	logo:{
+		width:width/4,
+		height:width/4,
+	}
 })
