@@ -60,6 +60,7 @@ class ImproveApp extends React.Component<Props, State> {
 		if(
 			authUser 
 			&& authUserToken
+			&& this._fieldIsValie()
 			&& (!this.state.requestIsLoading)
 		){
 			let data: SendUserMessageType = {
@@ -165,7 +166,7 @@ class ImproveApp extends React.Component<Props, State> {
 						}
 						}
 						autoFocus={true}
-						setValue={(message:string) => this.message = message}
+						onChangeText={(message:string) => this.message = message}
 						label={"dit-nous comment nous pourons vous améliorez l'application"}	
 						placeholder="laissez-nous votre message"
 					/>
