@@ -103,7 +103,7 @@ class JobsViewItem  extends React.Component<Props, State>{
 			<View style={[styles.container]}>
 				<View style={styles.row1}>
 					<View style={styles.row1Row1}>
-						<Text style={styles.emoji}>📅</Text>
+						<Image resizeMode='center' style={styles.image} source={require('../../assets/images/job4.png')} />
 					</View>
 				</View>
 				<TouchableOpacity 
@@ -167,18 +167,15 @@ const styles = StyleSheet.create({
 	},
 	row1:{
 		flex:1,
-		flexDirection:'row',
-		//backgroundColor:'aqua',
+		// backgroundColor:'aqua',
 		justifyContent:'center',
 		alignItems:'center',
 	},
 	row1Row1:{
-		flexDirection:'row',
-		justifyContent:'center',
-		alignItems:'center',
+		flex:1,
 	},
 	row2:{
-		flex:2,
+		flex:1,
 		justifyContent:'center'
 
 	},
@@ -207,5 +204,12 @@ const styles = StyleSheet.create({
 	},
 	favoriteButton:{
 		//backgroundColor:'red',
+	},
+	image:{
+		flex:1,
+		width: 160,
+		height: 120,
+		// backgroundColor:'red',
+
 	}
 	})
