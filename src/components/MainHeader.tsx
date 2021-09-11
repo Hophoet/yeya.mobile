@@ -2,6 +2,7 @@ import React,{useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import {colors} from '../assets/colors/main'
+import { theme } from '../assets/theme/theme'
 
 const MainHeader = (
 		{
@@ -42,7 +43,7 @@ const MainHeader = (
 			</View>
 			{ title &&
 			<View style={styles.row2}>
-				<Text style={styles.row2Title}>{title}</Text>
+				<Text style={[styles.row2Title, theme.body]}>{title}</Text>
 				{ description &&
 					<Text style={styles.row2Description}>{description}</Text>
 				}
