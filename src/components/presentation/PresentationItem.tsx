@@ -23,24 +23,23 @@ export default PresentationItem;
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
 	container:{
-		flex:1,
 		justifyContent:'center',
 		backgroundColor:'white',
 		width:width
 	},
 	labelContainer:{
 		flex:.3,
-		//backgroundColor:'blue',
+		// backgroundColor:'blue',
 		//padding:10,
 	},
 	footerContainer:{
-		backgroundColor:'red',
+		// backgroundColor:'red',
 		paddingVertical:50,
 	},
 	imageContainer:{
 		flex:.7,
 		justifyContent:'center',
-		//backgroundColor:'red',
+		// backgroundColor:'blue',
 		alignItems:'center',
 	},
 	image:{
@@ -60,8 +59,9 @@ const styles = StyleSheet.create({
 	},
 	description:{
 		color:'gray',
+		flex:1,
 		textAlign:'center',
-		paddingHorizontal:64,
+		paddingHorizontal:40,
 
 	}
 })
