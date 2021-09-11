@@ -32,6 +32,7 @@ type Props ={
 type State = {
   region:any,
   requestIsLoading:boolean,
+  locationIsLoading:boolean,
 }
 
 class AddJobStep2 extends React.Component<Props, State>{
@@ -47,9 +48,10 @@ class AddJobStep2 extends React.Component<Props, State>{
     
     this.state = {
         requestIsLoading:false,
+        locationIsLoading:false,
 			  region: {
-				latitude: 33.7866,
-				longitude: -118.2987,
+				latitude: 6.131944,
+				longitude: 1.222778,
 				latitudeDelta: 0.04864195044303443,
 				longitudeDelta: 0.040142817690068,
 			  }
@@ -83,6 +85,7 @@ class AddJobStep2 extends React.Component<Props, State>{
     });
   }
 	 _getGeolocation = () => {
+        	this.setState({locationIsLoading:true})
 			getGeolocation()
 			.then((position:any) => {
 					let region = {
@@ -101,6 +104,7 @@ class AddJobStep2 extends React.Component<Props, State>{
 					  },
 					  350
 					);
+        			this.setState({locationIsLoading:false})
           this.geolocation = {
 						latitude:region.latitude,
 						longitude:region.longitude,
@@ -108,6 +112,7 @@ class AddJobStep2 extends React.Component<Props, State>{
 			}
 			)
 			.catch((error:any)=> {
+        		this.setState({locationIsLoading:false})
 				console.log('geolocation request error');
 				console.log(error);
 
@@ -119,8 +124,12 @@ class AddJobStep2 extends React.Component<Props, State>{
       let job = this.job
       let geolocation = this.geolocation
       let authUserToken = this.props.authUserToken
-      if (job && geolocation && authUserToken){
-        console.log(job, geolocation, authUserToken)
+      if (job 
+			&& geolocation 
+			&& authUserToken
+			&& ! this.state.requestIsLoading
+			&& ! this.state.locationIsLoading
+			){
         this.setState({requestIsLoading:true})
 
 				let data:CreateJobType = {
@@ -213,6 +222,7 @@ class AddJobStep2 extends React.Component<Props, State>{
       <View style={styles.row3}>
         <CButton
           onPress={this._getGeolocation}
+          loading={this.state.locationIsLoading}
           label='Localiser le lieu actuel'
         />
         { this.geolocation &&
