@@ -45,7 +45,7 @@ class SignIn extends React.Component<Props, State> {
           header: () => (
             <MainHeader 
 				title="Bienvenue"
-				description="On est heureux de vous voir, vous pouvez continuer à votre connexion pour poster vos taches ou retrouver des taches à réaliser"
+				description="On est heureux de vous voir, vous pouvez continuer votre connexion pour poster vos taches ou retrouver des taches à réaliser"
 				// firstAction={()=>{}}	
 				firstAction={this.props.navigation.goBack}	
 				navigateTo={()=> {}}
