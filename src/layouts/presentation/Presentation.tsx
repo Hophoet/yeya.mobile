@@ -17,7 +17,7 @@ const Presentation = ({navigation}:Props) => {
 	const slidesRead:any[] = [];
 	const scrollX = useRef(new Animated.Value(0)).current;
 	let flatListRef:any;
-	const viewableItemsChanged = useRef(({ viewableItems }) => {
+	const viewableItemsChanged = useRef(({ viewableItems }: any) => {
 		setCurrentIndex(viewableItems[0].index);
 		console.log(viewableItems[0].index);
 		// _setReadSlide(viewableItems[0]);
