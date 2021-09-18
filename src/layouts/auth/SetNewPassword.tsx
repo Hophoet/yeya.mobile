@@ -1,7 +1,5 @@
-
 import React from 'react';
-import { ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-
+import { ActivityIndicator,  StatusBar, ScrollView, View, StyleSheet, Dimensions} from 'react-native'
 import MainHeader from '../../components/MainHeader';
 import Toast from '../../components/toasts'
 import CButton from '../../components/CButton';
@@ -137,7 +135,6 @@ class SignIn extends React.Component<Props, State> {
 		// Enable the component mount state
 		this._isMounted = true;
 		this._customNavHeader();
-		console.log(this.email, this.code)
 	}
 
 	navigateToSignIn = ()=>{
@@ -148,11 +145,7 @@ class SignIn extends React.Component<Props, State> {
 	render(){
 		return(
 			<View style={styles.container}>
-				<StatusBar 
-					hidden={false}
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
-				/>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScrollView
 					style={styles.contentContainer}
 				>
