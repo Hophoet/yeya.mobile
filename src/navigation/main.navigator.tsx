@@ -48,14 +48,14 @@ export const HomeStack = (): React.ReactElement => (
 			options={{
 				headerShown:false,
 			}}
-      name='MapView' 
-      component={MapView}/>
+      name='ListView' 
+      component={ListView}/>
     <Stack.Screen 
 			options={{
 				headerShown:false,
 			}}
-      name='ListView' 
-      component={ListView}/>
+      name='MapView' 
+      component={MapView}/>
   </Stack.Navigator>
 );
 
@@ -154,7 +154,7 @@ const Tab = createBottomTabNavigator();
         options = {{
           tabBarLabel:'Proposal',
           tabBarIcon: ({color, size, focused}) => {
-            let iconName = (focused)?'people':'people-outline';
+            let iconName = (focused)?'list-sharp':'list-sharp';
             let iconSize = (focused)?35:30; 
             let iconColor = (focused)?colors.main:'gray';
             return (<Icon name={iconName} color={iconColor} size={iconSize} />);
