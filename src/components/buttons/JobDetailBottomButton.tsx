@@ -46,7 +46,7 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                             }
                         } }
                     >
-                        <Icon size={40} name={this.props.isUserFavorite?'heart':'heart-outline'} color='red'/>
+                        <Icon size={30} name={this.props.isUserFavorite?'heart':'heart-outline'} color='red'/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.row2} >
@@ -86,7 +86,7 @@ export default class JobDetailBottomButton extends React.Component<Props, State>
                             }
                         } }
                     >
-                        <Icon size={40} name={'trash'} color='red'/>
+                        <Icon size={30} name={'trash'} color='red'/>
                     </TouchableOpacity>
                 </View>
                 }
@@ -110,10 +110,13 @@ const styles = StyleSheet.create({
     },
     row1:{
         flex:1,
-        paddingHorizontal:20,
+        paddingHorizontal:10,
+        // backgroundColor:'red',
+        justifyContent:'center',
+        // alignItems:'center',
     },
     row2:{
-        flex:4,
+        flex:3.4,
         paddingHorizontal:20,
     },
     row3:{
@@ -126,8 +129,10 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderWidth:2,
         borderColor:colors.main,
-        borderRadius:10,
+        // padding:5,
         flex:1,
+
+        borderRadius:10,
     },
     textButton:{
         backgroundColor:colors.main,
