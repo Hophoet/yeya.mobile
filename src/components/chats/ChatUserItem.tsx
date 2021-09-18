@@ -50,10 +50,6 @@ const ChatUserItem = ({item, authUser, navigateTo}:any) => {
 	const lastMessage:any = getLastMessage();
 	const lastMessagesCount:number = _getNewMessagesCount();
 	
-	//console.log(getChatUser())
-	//console.log(getLastMessage());
-	//console.log(getUserProfileUrl());
-	//console.log(_getNewMessagesCount())
     return(
         <TouchableOpacity 
 			activeOpacity={.5}
