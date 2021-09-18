@@ -1,12 +1,9 @@
 
 import React, {useState} from 'react'
 import {Image, StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main'
 
 const ChatsItem = ({item, width, height, navigate}:any) => {
-  const [isFavorite, toggleFavorite] = useState(true);
-
 
 	return(
 		<View style={[styles.container]}>
