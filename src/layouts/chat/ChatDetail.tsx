@@ -1,7 +1,6 @@
 import React, {createRef} from 'react';
-import { TextInput, FlatList, Dimensions, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { TextInput, StatusBar, FlatList, Dimensions, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import MainHeader from '../../components/MainHeader';
 import ChatDetailHeader from '../../components/chats/ChatDetailHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ChatMessageItem from '../../components/chats/ChatMessagesItem'
@@ -64,16 +63,13 @@ class ChatDetail extends React.Component<Props, State> {
 
 
 	_messagesListener = () => {
-		console.log('message listener start')
 		this.messagesListener = setInterval(() => {
-			console.log('message listener call')
 			this._getChatConversation()
 		}, 18000)
 
 	}
 
 	back = () => {
-		console.log('back press');
 		this.props.navigation.goBack();	
 	}
 	save = () => {
@@ -137,7 +133,6 @@ class ChatDetail extends React.Component<Props, State> {
 			getChatConversation(data)
 			.then((response:any) => {
 				if(this._isMounted){
-					console.log('chat getted')
 					this.setState({chat:response.data})
 					let setChatsAction = {type:SET_CHATS, value:response.data}
 					this.props.dispatch(setChatsAction)
@@ -313,6 +308,7 @@ class ChatDetail extends React.Component<Props, State> {
 		
 		return (
 			<View style={styles.container}>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<View style={styles.row1}>
 					<FlatList
 						ref={this.chatScrollRef}
