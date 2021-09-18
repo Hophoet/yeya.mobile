@@ -1,9 +1,5 @@
-
 import React from 'react'
-import { Text, StyleSheet, View, Dimensions, Image, TouchableOpacity} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
-
-
+import { Text, StyleSheet, View, Dimensions} from 'react-native'
 
 
 type Props = {
