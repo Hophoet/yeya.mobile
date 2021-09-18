@@ -18,8 +18,15 @@ type State = {
 
 // Loading screen component
 class Loader extends React.Component<Prop, State>{
+  	texts:any[string];
     constructor(props:Prop){
         super(props);
+		this.texts = [
+			'Trouver des taches à réaliser',
+			'Votre nouvelle application Togolaise',
+			"Yeya signifie c'est ca ",
+			'Poster vos taches, pour trouver la personne idéale pour sa réalisation',
+		]
     }
 	// method to dynamic navigation to the authentification or the app home screen
 	_actionManager = async () => {
@@ -52,11 +59,13 @@ class Loader extends React.Component<Prop, State>{
 		});
 	}
     render(){
+		let randomText = this.texts[Math.floor(Math.random() * this.texts.length)];
         return (
             <View style={styles.container}>
                 <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
-				<Text style={styles.title}>yeya</Text>
+				<Text style={styles.title}>Yeya</Text>
+				<Text style={styles.description}>{randomText}</Text>
             </View>
         )
     }
@@ -95,6 +104,9 @@ const styles = StyleSheet.create({
 		fontSize:20,
 		fontWeight:'bold',
 		color:colors.main,
+	},
+	description:{
+		textAlign:'center',
 	},
 	logo:{
 		width:width/4,
