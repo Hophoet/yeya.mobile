@@ -53,7 +53,7 @@ export default class CityPickerModal extends React.Component<Props, State>{
 	}
 
 	
-	onClosed = () =>{ console.log('close key pressed')}
+	onClosed = () =>{ }
 
 	onSelected =  (item:any) => { 
 		this.setState({selectedItem:item}) 
@@ -61,7 +61,7 @@ export default class CityPickerModal extends React.Component<Props, State>{
 	}
 	
 
-	onBackButtonPressed = () => { console.log('back key pressed') }
+	onBackButtonPressed = () => { }
 
 
 	render(){
@@ -101,7 +101,7 @@ export default class CityPickerModal extends React.Component<Props, State>{
 					showAlphabeticalIndex={true}
 					autoGenerateAlphabeticalIndex={true}
 					selectPlaceholderText={'Choose one...'}
-					onEndReached={() => console.log('list ended...')}
+					onEndReached={() => null }
 					searchPlaceholderText={'Search...'}
 					requireSelection={false}
 					autoSort={false}
