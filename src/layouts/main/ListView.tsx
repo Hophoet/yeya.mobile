@@ -1,15 +1,10 @@
 
 import React from 'react';
 import { FlatList, BackHandler, TextInput, ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-import MainHeader from '../../components/MainHeader';
-import Toast from '../../components/toasts'
-import { mailFormatIsValid } from '../../utils/mail'
 import { getJobs } from '../../backend/requests/job'
 import { getCategories } from '../../backend/requests/category'
 import { GetJobsRequestType, GetCategoriesType } from '../../backend/requests/types'
-import CButton from '../../components/CButton';
 import JobsViewItem from '../../components/home/JobsViewItem';
-import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
 import Icon from "react-native-vector-icons/Ionicons";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -298,11 +293,7 @@ class ListView extends React.Component<Props, State> {
 	render(){
 		return(
 			<View style={styles.container}>
-				<StatusBar 
-					hidden={false}
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
-				/>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<View style={styles.row1}>
 					<View style={styles.row1Row1}>
 						{/* <Text style={styles.headerTitle}>Creer/Trouver du jobs</Text> */}
