@@ -1,6 +1,5 @@
 import React,{useEffect} from 'react'
 import {View, FlatList, StyleSheet} from 'react-native'
-
 import CategoryItem from './CategoryItem';
 
 type Prop = {
