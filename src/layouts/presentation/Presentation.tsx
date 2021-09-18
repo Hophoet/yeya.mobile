@@ -6,6 +6,7 @@ import slides from '../../data/presentation/slides';
 import PresentationItem from '../../components/presentation/PresentationItem';
 import PresentationIndicator from '../../components/presentation/PresentationIndicator';
 import CButton from '../../components/CButton';
+import {colors} from '../../assets/colors/main'
 
 
 type Props = {
@@ -19,7 +20,6 @@ const Presentation = ({navigation}:Props) => {
 	let flatListRef:any;
 	const viewableItemsChanged = useRef(({ viewableItems }: any) => {
 		setCurrentIndex(viewableItems[0].index);
-		console.log(viewableItems[0].index);
 		// _setReadSlide(viewableItems[0]);
 		
 	}).current;
@@ -40,7 +40,6 @@ const Presentation = ({navigation}:Props) => {
 	}
 
 	const _handleNavigation = () =>{
-		console.log('slide reads', slidesRead);
 		if( slidesRead.length >=3){
 			// console.log('presentation read can be done')
 		}
@@ -51,7 +50,6 @@ const Presentation = ({navigation}:Props) => {
 	}
 
 	useEffect(()=>{
-		console.log('currentIndex', currentIndex)
 		_setReadSlide(slidesRead, currentIndex);
 	},[currentIndex, viewableItemsChanged])
 
@@ -65,7 +63,6 @@ const Presentation = ({navigation}:Props) => {
 		flatListRef.scrollToEnd()
 	}
 	const scrollToIndexFailed = (error:any) => {
-		console.log('ON FAILED')
 		const offset = error.averageItemLength * error.index;
 		flatListRef.scrollToOffset({offset});
 		//setTimeout(() => this.flatListRef.scrollToIndex({ index: error.index }), 100); // You may choose to skip this line if the above typically works well because your average item height is accurate.
@@ -76,10 +73,7 @@ const Presentation = ({navigation}:Props) => {
 	const ITEM_HEIGHT = width;
 	return(
 		<View style={styles.container}>
-			<StatusBar 
-				barStyle={'dark-content'}
-				backgroundColor={'white'}
-			/>
+             <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 			<View style={styles.row1}>
 				<FlatList
 					ref={(ref) =>  flatListRef = ref}
