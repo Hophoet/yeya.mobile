@@ -1,17 +1,13 @@
 import React from "react";
 import {
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   View,
   ScrollView,
   StatusBar,
   Text,
-  TouchableOpacity,
 } from "react-native";
 
-import { bgLinearGradient, sideBarLinearGradient} from '../../assets/colors/main';
-import Icon from "react-native-vector-icons/Ionicons";
 import StepHeader from '../../components/StepHeader';
 import {connect} from 'react-redux';
 import CTextInput from '../../components/CTextInput';
@@ -20,10 +16,10 @@ import Toast from '../../components/toasts';
 import {  getCategories } from '../../backend/requests/category'
 import {  getCities } from '../../backend/requests/city'
 import {  GetCategoriesType, GetCitiesType } from '../../backend/requests/types'
-import { TextInput } from "react-native-gesture-handler";
 import CategoryPickerModal from '../../components/modals/CategoryPickerModa'
 import  {SET_CATEGORIES, SET_CITIES} from '../../redux/store/actions'
 import CityPickerModal from '../../components/modals/CityPickerModal'
+import { colors } from '../../assets/colors/main'
 
 type Props ={
   authUser:any,
@@ -193,6 +189,7 @@ class AddJobStep1 extends React.Component<Props, State>{
 
   return (
       <View style={styles.container}>
+        <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
       <View style={styles.row1}>
         <Text style={styles.title}>Renseigner les informations sur votre tache</Text>
       </View>
