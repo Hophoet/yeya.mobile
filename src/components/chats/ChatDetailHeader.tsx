@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import {View, Image, Dimensions, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Image, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import { colors } from '../../assets/colors/main'
 
