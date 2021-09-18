@@ -1,16 +1,12 @@
-import React, {createRef} from 'react';
-import { Text, ScrollView, Alert, TextInput, FlatList, Dimensions, View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {} from 'react';
+import { Text, StatusBar, ScrollView, Alert,  Dimensions, View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import MainHeader from '../../components/MainHeader';
 import JobDetailBottomButton from '../../components/buttons/JobDetailBottomButton';
 import { toggleJobFavorite, deleteJob } from '../../backend/requests/job'
 import { ToggleJobFavoriteRequestType, DeleteJobType } from '../../backend/requests/types'
-import Icon from 'react-native-vector-icons/Ionicons';
-import ChatMessageItem from '../../components/chats/ChatMessagesItem'
 import ProposalModal from '../../components/modals/Proposal'
 import Toast from '../../components/toasts'
-import {senderChatMessage, getChatConversation, readChatConversationMessages} from '../../backend/requests/chat';
-import {SendChatMessageType, GetChatConversationType, ReadChatConversationMessagesType} from '../../backend/requests/types';
 import { colors } from '../../assets/colors/main'
 import { createProposal } from '../../backend/requests/job'
 import { CreateProposalType } from '../../backend/requests/types'
@@ -187,7 +183,6 @@ class JobDetail extends React.Component<Props, State> {
 		toggleJobFavorite(data)
 		.then((response:any) => {
 			//console.log(response.data)
-			console.log('toggle favorite request done....')
 			this.setState({isUserFavorite:!this.state.isUserFavorite})
 		})
 		.catch( (error:any)=>  {
@@ -275,6 +270,7 @@ class JobDetail extends React.Component<Props, State> {
 		
 		return (
 			<View style={styles.container}>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ProposalModal
 					modalIsVisible={this.state.proposalModalIsVisible}
 					requestIsLoading={this.state.requestIsLoading}
