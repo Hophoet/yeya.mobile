@@ -1,25 +1,21 @@
 import React from "react";
 import {
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   View,
   StatusBar,
-  Animated,
   Text,
-  TouchableOpacity,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'; 
 
-import { bgLinearGradient, sideBarLinearGradient} from '../../assets/colors/main';
-import Icon from "react-native-vector-icons/Ionicons";
 import {connect} from 'react-redux';
 import StepHeader from '../../components/StepHeader';
 import CButton from '../../components/CButton';
 import Toast from '../../components/toasts';
 import {getGeolocation} from '../../utils/geolocation'
 import { createJob } from '../../backend/requests/job'
-import { CreateJobType, Geolocation } from '../../backend/requests/types'
+import { CreateJobType } from '../../backend/requests/types'
+import { colors } from '../../assets/colors/main'
 
 type Props ={
   navigation:any,
@@ -162,7 +158,6 @@ class AddJobStep2 extends React.Component<Props, State>{
 						if (error.response) {
 						  // The request was made and the server responded with a status code
 						  // that falls out of the range of 2xx
-						  console.log(error.response.data);
 						  let errorData = error.response.data;
 						  if(errorData.code == 'auth/username-and-password-required'){
 								Toast._show_bottom_toast("Entrer votre nom d'utlisateur et mot de passe pour continuer");	
@@ -190,11 +185,10 @@ class AddJobStep2 extends React.Component<Props, State>{
 
 
   render(){
-    console.log(this.job)
-
 
   return (
       <View style={styles.container}>
+          <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
       <View style={styles.row1}>
         <Text style={styles.title}>Localiser le lieu de la realisation de votre tache</Text>
       </View>
