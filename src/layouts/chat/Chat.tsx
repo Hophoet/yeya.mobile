@@ -1,12 +1,12 @@
 import React from 'react';
-import {StatusBar, FlatList, Text, View, StyleSheet, Dimensions} from 'react-native';
+import {StatusBar, FlatList, View, StyleSheet, Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import ChatUserItem from '../../components/chats/ChatUserItem';
 import {getUserChatConversations} from '../../backend/requests/chat'
 import {GetUserChatConversationType} from '../../backend/requests/types';
 import  {SET_CHATS} from '../../redux/store/actions'
-import BorderButton from '../../components/CButton';
 import ScreenHeader from '../../components/ScreenHeader'
+import { colors } from '../../assets/colors/main'
 
 type Props = {
 	navigation:any,
@@ -190,7 +190,7 @@ class Chat extends React.Component<Props, State> {
 	render() {
 		return (
 			<View style={styles.container}>
-				<StatusBar backgroundColor='black' />
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScreenHeader
 					title='Boite de réception'	
 					description='Consulter vos messages'	
