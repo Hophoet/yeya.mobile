@@ -53,7 +53,7 @@ export default class CategoryPickerModal extends React.Component<Props, State>{
 	}
 
 	
-	onClosed = () =>{ console.log('close key pressed')}
+	onClosed = () =>{ }
 
 	onSelected =  (item:any) => { 
 		this.setState({selectedItem:item}) 
@@ -61,7 +61,7 @@ export default class CategoryPickerModal extends React.Component<Props, State>{
 	}
 	
 
-	onBackButtonPressed = () => { console.log('back key pressed') }
+	onBackButtonPressed = () => { }
 
 
 	render(){
