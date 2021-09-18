@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {TextInput, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
 import Icon from "react-native-vector-icons/Ionicons";
-import { colors } from '../assets/colors/main'
 
 
 const CTextInput = ({focus, onSubmitEditing, password, label, textInputProps, onChangeText, keyboardType, autoFocus, placeholderTextColor, selectionColor, iconColor, textInputStyle, textInputContainerStyle, placeholder}:any) => {
