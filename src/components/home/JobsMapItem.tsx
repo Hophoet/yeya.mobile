@@ -2,7 +2,6 @@
 import React from 'react'
 import {StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { colors } from '../../assets/colors/main'
 import moment from 'moment';
 import { connect } from 'react-redux'
 import { toggleJobFavorite } from '../../backend/requests/job'
@@ -94,7 +93,6 @@ class JobsMapItem  extends React.Component<Props, State>{
 
 		let item = this.props.item
 		let index = this.props.index
-		//console.log(authUser, authUserToken)
 		return(
 			<View key={index.toString()} style={styles.card} >
 				<View style={styles.cardRow1}>
