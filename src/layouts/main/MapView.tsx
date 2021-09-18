@@ -1,5 +1,5 @@
 import React from 'react';
-import {StatusBar, Dimensions, Animated, View, StyleSheet} from 'react-native';
+import { BackHandler, StatusBar, Dimensions, Animated, View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
 import { getJobs } from '../../backend/requests/job'
@@ -55,11 +55,23 @@ class Map extends React.Component<Props, State> {
 		const date:string = moment.unix(created_at_timestamp).fromNow() //.format('ll')
 		return date;
 	}
+	_exitListener = () => {
+		this.props.navigation.addListener('beforeRemove', (e:any) => {
+			// Check if the event type is the device back press
+			if(e.data.action.type == 'GO_BACK'){
+				// Diseable the default action for the event
+				e.preventDefault();
+				// Exit the app if the user is authenticated
+				BackHandler.exitApp();
+			}
+		});
+	}
 
 	componentDidMount() { 
 		// Enable the component mount state
 		this._isMounted = true;
 		this._getJobs()
+		this._exitListener()
 		this.animation.addListener(({ value }:any) => {
 			if(this.state.jobs.length > 0){
 				let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
