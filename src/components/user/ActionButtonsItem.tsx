@@ -4,8 +4,6 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main'
 
 const ActionButtonsItem = ({item, width, height, navigate}:any) => {
-  const [isFavorite, toggleFavorite] = useState(true);
-
 
 	return(
 		<View style={[styles.container]}>
