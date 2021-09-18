@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {TextInput, Image, ScrollView, FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react';
+import { Image, Text, View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../../assets/colors/main'
 
 const PresentationItem = ({item, it,  index, scrollX, currentIndex}:any) => {
