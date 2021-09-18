@@ -1,9 +1,7 @@
 import React,{useEffect} from 'react';
-import {Dimensions, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Dimensions, View, Text, StyleSheet} from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import {colors} from '../assets/colors/main'
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { bgLinearGradient, sideBarLinearGradient} from '../assets/colors/main';
 
 const StepHeader = (
 		{
