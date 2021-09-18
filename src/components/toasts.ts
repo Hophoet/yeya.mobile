@@ -1,4 +1,3 @@
-import React from 'react'
 import {Dimensions, ToastAndroid } from 'react-native'
 
 export default class Toast {
@@ -40,7 +39,4 @@ export default class Toast {
       Dimensions.get('window').height/2
     )
   }
-
-
-
 }
