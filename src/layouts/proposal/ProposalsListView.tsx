@@ -103,6 +103,7 @@ class ProposalsListView extends React.Component<Props, State> {
 		this.props.navigation.navigate('App')
 	}
 
+
 	_renderActivityIndicator = () => {
 		if(this.state.requestIsLoading){
 			return (
@@ -119,8 +120,8 @@ class ProposalsListView extends React.Component<Props, State> {
 			<View style={styles.container}>
                 <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScreenHeader
-					title='Vos taches'	
-					description='Ici vous avez vos taches et leurs et leur demandes'	
+					title='Postulations de vos taches'	
+					description='Ici vous avez vos taches et leurs et leur postulation'	
 				/>
 				<View style={styles.row3}>
 					<FlatList
