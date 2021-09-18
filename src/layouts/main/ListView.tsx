@@ -46,7 +46,7 @@ class ListView extends React.Component<Props, State> {
 		this._isMounted = false;
 		this.filters = [
 			{id:3, code:'mr', name:'Plus Récentes'},
-			{id:2, code:'mp', name:'Plus Visités'},
+			{id:2, code:'mp', name:'Plus Visitées'},
 		]
 		// Set the state
 		this.state = {
