@@ -2,7 +2,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from "react-native-vector-icons/Ionicons";
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../layouts/main/Home'
 import {colors} from '../assets/colors/main'
 
 import ListView from '../layouts/main/ListView'

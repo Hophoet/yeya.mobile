@@ -183,7 +183,7 @@ class EditPersonalInfo extends React.Component<Props, State>{
 	render() {
 		return (
 			<View style={styles.container}>
-				<StatusBar barStyle='light-content' />
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScrollView>
 					{this._renderLoadingIndicator()}
 					<View style={styles.row1}>

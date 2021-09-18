@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Alert, Dimensions, FlatList, StyleSheet, StatusBar, View, Text, TouchableOpacity} from 'react-native'
+import {  Alert, Dimensions, FlatList, StyleSheet, StatusBar, View, Text, TouchableOpacity} from 'react-native'
 import { connect } from 'react-redux'
 import { colors } from '../../assets/colors/main'
 import ProfileHeader from '../../components/user/ProfileHeader';

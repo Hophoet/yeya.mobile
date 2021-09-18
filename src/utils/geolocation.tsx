@@ -1,6 +1,4 @@
-import React from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
-
 import Geolocation from 'react-native-geolocation-service';
 
 const getGeolocation = () => {
