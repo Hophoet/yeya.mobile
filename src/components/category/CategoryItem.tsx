@@ -1,7 +1,6 @@
 
 import React,{useState, useEffect} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
-import Icon from "react-native-vector-icons/Ionicons";
 import {colors} from '../../assets/colors/main'
 
 type Prop = {
@@ -19,7 +18,6 @@ const CategoryItem = ({category, selectCategory}:Prop) => {
 		setIsSelected(!isSelected);
 		selectCategory(category);
 	}
-
 
     
     return(
