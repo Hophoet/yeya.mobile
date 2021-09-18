@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, ActivityIndicator, Dimensions, StatusBar, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { ScrollView, ActivityIndicator, Dimensions, StatusBar, View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import MainHeader from '../../components/MainHeader';
 import toasts from '../../components/toasts'
@@ -97,7 +97,6 @@ class ImproveApp extends React.Component<Props, State> {
 					// Something happened in setting up the request that triggered an Error
 					console.log('Error', error.message);
 				}
-				console.log(error.config);
 			});
 		}
 
