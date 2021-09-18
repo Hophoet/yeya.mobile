@@ -55,7 +55,6 @@ class SignIn extends React.Component<Props, State> {
     }
 
 	onSubmit = () => {
-		console.log('submit')
 		if(this.email && this.password){
 			if(mailFormatIsValid(this.email)){
 				// can sign in
@@ -161,10 +160,7 @@ class SignIn extends React.Component<Props, State> {
 	render(){
 		return(
 			<View style={styles.container}>
-				<StatusBar 
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
-				/>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScrollView
 					style={styles.contentContainer}
 				>
