@@ -1,11 +1,9 @@
 
-import React, {useState} from 'react'
+import React from 'react'
 import {Image, StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main'
 import moment from 'moment';
-import { toggleJobFavorite } from '../../backend/requests/job'
-import { ToggleJobFavoriteRequestType } from '../../backend/requests/types'
 import { connect } from 'react-redux'
 
 type Props = {
