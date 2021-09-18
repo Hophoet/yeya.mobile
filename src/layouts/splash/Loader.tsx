@@ -54,7 +54,7 @@ class Loader extends React.Component<Prop, State>{
     render(){
         return (
             <View style={styles.container}>
-				<StatusBar backgroundColor='white' />
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<Image source={require('../../assets/images/logo.png')} style={styles.logo}/>
 				<Text style={styles.title}>yeya</Text>
             </View>
