@@ -1,26 +1,21 @@
 import React from "react";
 import {
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   View,
   StatusBar,
-  Animated,
   Text,
-  TouchableOpacity,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'; 
 
-import { bgLinearGradient, sideBarLinearGradient} from '../../assets/colors/main';
-import Icon from "react-native-vector-icons/Ionicons";
 import {connect} from 'react-redux';
 import StepHeader from '../../components/StepHeader';
 import CButton from '../../components/CButton';
 import Toast from '../../components/toasts';
 import {getGeolocation} from '../../utils/geolocation'
 import { updateJob } from '../../backend/requests/job'
-import { UpdateJobType, Geolocation } from '../../backend/requests/types'
-import UpdateJobStep1 from "./UpdateJobStep1";
+import { UpdateJobType } from '../../backend/requests/types'
+import {colors} from '../../assets/colors/main'
 
 type Props ={
   navigation:any,
@@ -141,7 +136,6 @@ class UpdateJobStep2 extends React.Component<Props, State>{
 			)
 			.catch((error:any)=> {
         this.setState({locationIsLoading:false})
-				console.log('geolocation request error');
 				console.log(error);
 
 			})
@@ -223,6 +217,7 @@ class UpdateJobStep2 extends React.Component<Props, State>{
 
   return (
       <View style={styles.container}>
+        <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
       <View style={styles.row1}>
         <Text style={styles.title}>Localiser le lieu de la realisation de votre tache</Text>
       </View>

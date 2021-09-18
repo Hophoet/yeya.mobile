@@ -1,18 +1,14 @@
 import React from "react";
 import {
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   View,
   StatusBar,
   Text,
-  TouchableOpacity,
 } from "react-native";
-
-import { bgLinearGradient, colors, sideBarLinearGradient} from '../../assets/colors/main';
+import { colors} from '../../assets/colors/main';
 import Icon from "react-native-vector-icons/Ionicons";
 import StepHeader from '../../components/StepHeader';
-import Toast from '../../components/toasts';
 
 type Props ={
   navigation:any,
@@ -72,6 +68,7 @@ class UpdateJobStep3 extends React.Component<Props, State>{
   render(){
     return (
         <View style={styles.container}>
+          <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
           <View style={styles.row1}>
             <Icon name='checkbox-outline' size={40} color={colors.main}/>
             <Text style={styles.message}>Votre tache a été mise à jour avec succes</Text>
