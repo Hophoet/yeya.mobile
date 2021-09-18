@@ -2,8 +2,6 @@
 
 import React from 'react';
 import { ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-import Icon from "react-native-vector-icons/Ionicons";
-
 import MainHeader from '../../components/MainHeader';
 import Toast from '../../components/toasts'
 import { mailFormatIsValid } from '../../utils/mail'
@@ -12,7 +10,7 @@ import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
 import { connect } from 'react-redux'
 import { sendPasswordResetCode } from '../../backend/requests/auth'
-import { SendPasswordResetCodeRequestType, SignUpRequestType } from '../../backend/requests/types'
+import { SendPasswordResetCodeRequestType } from '../../backend/requests/types'
 
 type Props = {
 	navigation:any,
@@ -144,11 +142,7 @@ class ResetPassword extends React.Component<Props, State> {
 	render(){
 		return(
 			<View style={styles.container}>
-				<StatusBar 
-					hidden={false}
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
-				/>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScrollView
 					style={styles.contentContainer}
 				>
