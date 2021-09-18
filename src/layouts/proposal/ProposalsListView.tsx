@@ -1,11 +1,8 @@
 
 import React from 'react';
-import { FlatList, ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-import MainHeader from '../../components/MainHeader';
-import Toast from '../../components/toasts'
-import { mailFormatIsValid } from '../../utils/mail'
-import { getJobs, getUserJobsProposalsAndConversations } from '../../backend/requests/job'
-import { GetJobsRequestType, GetUserJobsProposalsAndConversationsType } from '../../backend/requests/types'
+import { FlatList, ActivityIndicator,  StatusBar, View, StyleSheet, Dimensions} from 'react-native'
+import { getUserJobsProposalsAndConversations } from '../../backend/requests/job'
+import { GetUserJobsProposalsAndConversationsType } from '../../backend/requests/types'
 import ProposalsListViewItem from '../../components/proposal/ProposalsListViewItem';
 import { colors } from '../../assets/colors/main'
 import  {SET_PROPOSALS} from '../../redux/store/actions'
