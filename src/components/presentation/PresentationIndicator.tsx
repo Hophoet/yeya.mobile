@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {TextInput, Image, ScrollView, FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import React from 'react';
+import {View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../../assets/colors/main'
 
 
