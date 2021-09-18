@@ -1,10 +1,7 @@
 import React from 'react';
-import { ScrollView, ActivityIndicator, Dimensions, TextInput, StatusBar, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import { Dimensions, StatusBar, Text, View, StyleSheet } from 'react-native';
 import {connect} from 'react-redux';
 import MainHeader from '../../components/MainHeader';
-import toasts from '../../components/toasts'
-import CTextInput from '../../components/CTextInput';
-import CButton from '../../components/CButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors} from '../../assets/colors/main'
 
@@ -75,8 +72,7 @@ class ImproveAppDone extends React.Component<Props, State> {
 		let authUser = this.props.authUser
 		return (
 			<View style={styles.container}>
-				<StatusBar barStyle='light-content' />
-
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<View style={styles.row1}>
 					<Ionicons 
 						size={width/6}
