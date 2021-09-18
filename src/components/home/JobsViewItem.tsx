@@ -100,11 +100,18 @@ class JobsViewItem  extends React.Component<Props, State>{
 		// console.log(item.favorite_users_ids)
 		return(
 			<View style={[styles.container]}>
-				<View style={styles.row1}>
+				<TouchableOpacity 
+				
+					onPress={()=>{
+						if(this.props.navigate){
+							this.props.navigate('JobDetail', {'job':item})
+						}
+					}}	
+				style={styles.row2}>
 					<View style={styles.row1Row1}>
 						<Image resizeMode='center' style={styles.image} source={require('../../assets/images/job4.png')} />
 					</View>
-				</View>
+				</TouchableOpacity>
 				<TouchableOpacity 
 				
 					onPress={()=>{
