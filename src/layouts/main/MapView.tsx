@@ -1,15 +1,13 @@
 import React from 'react';
-import {ActivityIndicator, Image, Dimensions, Animated, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {StatusBar, Dimensions, Animated, View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
 import { getJobs } from '../../backend/requests/job'
 import { GetJobsRequestType } from '../../backend/requests/types'
-import toasts from '../../components/toasts'
 import JobsMapItem from '../../components/home/JobsMapItem'
 import IconButton from '../../components/buttons/IconButton'
 import  {SET_JOBS} from '../../redux/store/actions'
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main';
 import  {sortByMostRecent} from '../../utils/filters'
 
@@ -116,13 +114,11 @@ class Map extends React.Component<Props, State> {
 		this._isMounted = false;
 	}
 
-
 	navigateTo = (screen:any, data:any) => {
 		this.props.navigation.navigate(
 			screen,
 			data
 		);
-
 	}
 	navigateToListView = () => {
 		this.props.navigation.navigate('ListView')
@@ -228,6 +224,7 @@ class Map extends React.Component<Props, State> {
 		//console.log(userStoreGeolocation);
 		return (
 			<View style={styles.container}>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<MapView
 					provider={PROVIDER_GOOGLE}
 					ref={(map) => (this.map = map)}
