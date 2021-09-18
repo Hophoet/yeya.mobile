@@ -1,4 +1,4 @@
-import {createStore, combineReducers} from 'redux';
+import {createStore} from 'redux';
 import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
 import authentificationReducer from './reducers/authentification';
