@@ -1,10 +1,9 @@
 
 import React, {useState} from 'react'
-import {Image, StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'react-native'
+import {Image, StyleSheet, View , Text, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from '../../assets/colors/main'
 import moment from 'moment';
-import { create } from 'react-test-renderer';
 
 const ChatMessagesItem = ({item, authUser, width, height, navigate}:any) => {
   const [isFavorite, toggleFavorite] = useState(true);
