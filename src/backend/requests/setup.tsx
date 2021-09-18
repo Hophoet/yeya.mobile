@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const HOST ='http://127.0.0.1:8000';//'https://byiapi.herokuapp.com';
+// const HOST ='http://127.0.0.1:8000';
+const HOST ='https://yeyaapi.herokuapp.com';
 
 // Authentication urls 
 const SIGN_UP_URL = `${HOST}/auth/register`;
