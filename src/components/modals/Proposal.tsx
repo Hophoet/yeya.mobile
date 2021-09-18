@@ -1,4 +1,4 @@
-import React, { PureComponent, useRef } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Modal,
   Platform,
