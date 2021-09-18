@@ -1,16 +1,8 @@
 
 import React from 'react';
-import { FlatList, ActivityIndicator,  StatusBar, ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
-import MainHeader from '../../components/MainHeader';
-import Toast from '../../components/toasts'
-import { mailFormatIsValid } from '../../utils/mail'
-import { signIn } from '../../backend/requests/auth'
-import { SignInRequestType } from '../../backend/requests/types'
-import CButton from '../../components/CButton';
+import { FlatList, ActivityIndicator,  StatusBar,  View, StyleSheet, Dimensions} from 'react-native'
 import JobsViewItem from '../../components/home/JobsViewItem';
-import CTextInput from '../../components/CTextInput';
 import { colors } from '../../assets/colors/main'
-import Icon from "react-native-vector-icons/Ionicons";
 import { getUserFavorite } from '../../backend/requests/job'
 import  {SET_FAVORITES} from '../../redux/store/actions'
 import { GetUserFavoriteJobsRequestType } from '../../backend/requests/types'
@@ -143,11 +135,7 @@ class Favorite extends React.Component<Props, State> {
 	render(){
 		return(
 			<View style={styles.container}>
-				<StatusBar 
-					hidden={false}
-					barStyle={'dark-content'}
-					backgroundColor={'white'}
-				/>
+                <StatusBar  barStyle='light-content' backgroundColor={colors.main}/>
 				<ScreenHeader
 					title='Vos favoris'	
 					description='Collecter les taches que vous souhaiterez revoir consulter plus tard en cliquant sur le coeur'	
